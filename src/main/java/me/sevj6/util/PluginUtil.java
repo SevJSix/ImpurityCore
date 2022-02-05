@@ -18,7 +18,6 @@ import me.sevj6.listeners.playtimes.PlaytimeListeners;
 import me.sevj6.runnables.AutoRestart;
 import me.sevj6.runnables.EntityPerChunk;
 import me.sevj6.runnables.TabList;
-import me.sevj6.util.fileutil.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
@@ -33,8 +32,8 @@ public class PluginUtil extends Utils implements Data {
     public static void registerEventListeners() {
         plugin.getLogger().info("Registering Events...");
         PluginManager pl = plugin.getServer().getPluginManager();
-        plugin.getBukkitListeners().forEach(listener -> pl.registerEvents(listener, plugin));
-        plugin.getNmsPacketListeners().forEach(nmsPacketListener -> Impurity.EVENT_BUS.subscribe(nmsPacketListener));
+        getBukkitListeners().forEach(listener -> pl.registerEvents(listener, plugin));
+        getNMSPacketListeners().forEach(nmsPacketListener -> Impurity.EVENT_BUS.subscribe(nmsPacketListener));
     }
 
     public static void setupEntityMap() {
@@ -57,7 +56,7 @@ public class PluginUtil extends Utils implements Data {
         // run the auto restart runnable every 60 seconds to check if its a new day, then restart the server if it is.
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new AutoRestart(), 20L, 20 * 60L);
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new TabList(), 20L, 20 * ConfigManager.getInstance().getTablist().getLong("updateSeconds"));
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new TabList(), 20L, 20L);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new EntityPerChunk(), 20L, 20 * plugin.getConfig().getLong("EntityLimit.removal.rate"));
     }
 
@@ -65,7 +64,7 @@ public class PluginUtil extends Utils implements Data {
         return plugin.getConfig();
     }
 
-    public static List<NMSPacketListener> setUpNMSPacketListeners() {
+    public static List<NMSPacketListener> getNMSPacketListeners() {
         List<NMSPacketListener> nmsListeners = new ArrayList<>();
         nmsListeners.add(new PacketAutoRecipe());
         nmsListeners.add(new PacketTabComplete());
@@ -83,7 +82,7 @@ public class PluginUtil extends Utils implements Data {
         return nmsListeners;
     }
 
-    public static List<Listener> setUpBukkitListeners() {
+    public static List<Listener> getBukkitListeners() {
         List<Listener> bukkitListeners = new ArrayList<>();
         bukkitListeners.add(new AnvilColoredName());
         bukkitListeners.add(new PlayerJoinListener());

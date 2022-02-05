@@ -2,17 +2,16 @@
 #current placeholders are %tps%, %ping%, %players%, and %uptime%
 #Placeholder API is not supported.
 
-#time to update the tablist in seconds
-updateSeconds: 1
-
 TabList:
   Header:
     - ""
-    - "&7impurity anarchy"
+    - "&bimpurity"
     - ""
-    - "&6Reset #7? i dont even know anymore lmao"
+    - "&6%meta%"
     - "&r"
   Footer:
     - ""
     - "  %tps% &3tps — &b%ping% &3ping — &b%players% &3players — &b%uptime% &3uptime  "
+    - ""
+    - "&7Server Age: %age%"
     - ""

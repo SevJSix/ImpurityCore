@@ -2,7 +2,6 @@ package me.sevj6;
 
 import me.sevj6.command.CommandHandler;
 import me.sevj6.event.EventBus;
-import me.sevj6.event.NMSPacketListener;
 import me.sevj6.listeners.meta.MetaManager;
 import me.sevj6.listeners.meta.MetaType;
 import me.sevj6.listeners.playtimes.PlaytimeManager;
@@ -12,7 +11,6 @@ import me.sevj6.util.ViolationManager;
 import me.sevj6.util.fileutil.ConfigManager;
 import me.sevj6.util.fileutil.Configuration;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.DayOfWeek;
@@ -35,8 +33,6 @@ public final class Impurity extends JavaPlugin implements Instance {
     private PlaytimeManager playtimeManager;
     private List<ViolationManager> violationManagers;
     private ScheduledExecutorService service;
-    private List<Listener> bukkitListeners;
-    private List<NMSPacketListener> nmsPacketListeners;
     private MetaManager metaManager;
     private DayOfWeek day;
 
@@ -50,14 +46,6 @@ public final class Impurity extends JavaPlugin implements Instance {
 
     public MetaManager getMetaManager() {
         return metaManager;
-    }
-
-    public List<Listener> getBukkitListeners() {
-        return bukkitListeners;
-    }
-
-    public List<NMSPacketListener> getNmsPacketListeners() {
-        return nmsPacketListeners;
     }
 
     public List<ViolationManager> getViolationManagers() {
@@ -80,8 +68,6 @@ public final class Impurity extends JavaPlugin implements Instance {
         violationManagers = new ArrayList<>();
         service = Executors.newScheduledThreadPool(4);
         playtimeManager = new PlaytimeManager(this);
-        nmsPacketListeners = PluginUtil.setUpNMSPacketListeners();
-        bukkitListeners = PluginUtil.setUpBukkitListeners();
 
         //register
         PluginUtil.startBukkitSchedulers();
