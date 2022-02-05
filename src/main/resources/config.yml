@@ -99,10 +99,6 @@ RandomSpawn:
 PistonDupe:
   Enabled: false
 
-#This is the eliteanarchy.org dupe.
-MinecartDupe:
-  Enabled: false
-
 #Salc1 dupe
 SalC1Dupe:
   Enabled: true
@@ -166,6 +162,3 @@ CommandWhitelist:
     - "tpy"
     - "tpn"
     - "nc"
-
-#Returns 0 if the ping value of a player is a negative integer (KEEP TRUE).
-disableNegative: true #NEVER SET THIS TO FALSE.
