@@ -18,11 +18,6 @@ Plugin:
   discord-link: "https://discord.gg/N82mz9qq"
   use-kill-command: true
 
-AutoRestart:
-  # time in milliseconds to wait until restarting
-  # default: 24 hours
-  DelayAtStartup: 1728000
-
 Exploits:
   #stop players from using boatfly modules.
   boatfly: true
