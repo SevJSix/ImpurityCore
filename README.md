@@ -1,5 +1,3 @@
 # ImpurityCore
 
-plugin for impurity.me
-has a lot of shit code
-"# ImpurityCore" 
+1.12.2 Bukkit plugin for impurity.me
