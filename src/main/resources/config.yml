@@ -36,8 +36,6 @@ Exploits:
 
   #prevent the future client packet elytra fly module
   future-packet-elytrafly-patch: true
-  #stop players from elytra flying on the nether roof and bottom (prevent nether chunk load lag)
-  nether-roof-elytra-disable: true
 
   #prevent larpers from using NBT command signs
   abusive-nbt-tile-entity: true #recommended to never turn off, since these can be really dangerous
