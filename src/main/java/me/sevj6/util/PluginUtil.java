@@ -118,7 +118,6 @@ public class PluginUtil extends Utils implements Data {
         bukkitListeners.add(new LavaDupe());
         bukkitListeners.add(new PlaytimeListeners(plugin));
         bukkitListeners.add(new AntiAfkBedTrapKilling());
-        bukkitListeners.add(new TileEntityLimit());
         bukkitListeners.add(new ArmorStandAiDisable());
         return bukkitListeners;
     }

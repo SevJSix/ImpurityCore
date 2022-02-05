@@ -49,7 +49,7 @@ Exploits:
 #AntiChunkBan config options.
 AntiChunkBan:
   Enabled: true
-  amount-per-chunk: 256
+  amount-per-chunk: 150
 
 #delete witherskulls, because they are laggy pieces of shit
 WitherSkullHandling:
