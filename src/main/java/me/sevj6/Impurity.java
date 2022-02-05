@@ -6,21 +6,19 @@ import me.sevj6.event.NMSPacketListener;
 import me.sevj6.listeners.meta.MetaManager;
 import me.sevj6.listeners.meta.MetaType;
 import me.sevj6.listeners.playtimes.PlaytimeManager;
-import me.sevj6.runnables.EntityPerChunk;
-import me.sevj6.runnables.TabList;
 import me.sevj6.util.PluginUtil;
 import me.sevj6.util.Utils;
 import me.sevj6.util.ViolationManager;
 import me.sevj6.util.fileutil.ConfigManager;
 import me.sevj6.util.fileutil.Configuration;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -32,17 +30,13 @@ import java.util.logging.Level;
 
 public final class Impurity extends JavaPlugin implements Instance {
 
-    public static final HashMap<TimerTask, Long> TIMER_TASKS = new HashMap<>();
-    public static final List<Timer> TIMERS = new ArrayList<>();
     public static long startTime;
     public static EventBus EVENT_BUS = new EventBus();
     private PlaytimeManager playtimeManager;
-    private List<Material> throwables;
     private List<ViolationManager> violationManagers;
     private ScheduledExecutorService service;
     private List<Listener> bukkitListeners;
     private List<NMSPacketListener> nmsPacketListeners;
-    private List<Configuration> configs;
     private MetaManager metaManager;
     private DayOfWeek day;
 
@@ -75,10 +69,6 @@ public final class Impurity extends JavaPlugin implements Instance {
         violationManagers.add(manager);
     }
 
-    public List<Material> getThrowables() {
-        return throwables;
-    }
-
     @Override
     public void onEnable() {
 
@@ -90,8 +80,6 @@ public final class Impurity extends JavaPlugin implements Instance {
         violationManagers = new ArrayList<>();
         service = Executors.newScheduledThreadPool(4);
         playtimeManager = new PlaytimeManager(this);
-        throwables = PluginUtil.setupThrowableList();
-        playtimeManager = new PlaytimeManager(this);
         nmsPacketListeners = PluginUtil.setUpNMSPacketListeners();
         bukkitListeners = PluginUtil.setUpBukkitListeners();
 
@@ -101,17 +89,7 @@ public final class Impurity extends JavaPlugin implements Instance {
         PluginUtil.registerEventListeners();
         new CommandHandler(this);
 
-        if (Bukkit.getOnlinePlayers().size() > 0) {
-            Bukkit.getOnlinePlayers().forEach(Utils::inject);
-        }
-
-        TIMER_TASKS.put(new TabList(), 1000L);
-        TIMER_TASKS.put(new EntityPerChunk(), 60000L);
-        for (Map.Entry<TimerTask, Long> task : Impurity.TIMER_TASKS.entrySet()) {
-            Timer timer = new Timer(task.getKey().getClass().getSimpleName());
-            TIMERS.add(timer);
-            timer.scheduleAtFixedRate(task.getKey(), 0L, task.getValue());
-        }
+        if (Bukkit.getOnlinePlayers().size() > 0) Bukkit.getOnlinePlayers().forEach(Utils::inject);
 
         LocalDateTime time = LocalDateTime.now();
         day = time.getDayOfWeek();
@@ -149,11 +127,10 @@ public final class Impurity extends JavaPlugin implements Instance {
     public void onDisable() {
         getLogger().log(Level.WARNING, "Unloading all plugin data...");
         try {
-            TIMERS.forEach(Timer::cancel);
-            TIMERS.clear();
             if (Bukkit.getOnlinePlayers().isEmpty()) return;
             Bukkit.getOnlinePlayers().forEach(Utils::removeHook);
             ConfigManager.getInstance().getConfigs().forEach(Configuration::saveConfig);
+            this.reloadConfig();
         } catch (Throwable t) {
             t.printStackTrace();
         }

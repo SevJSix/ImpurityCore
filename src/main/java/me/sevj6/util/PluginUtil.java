@@ -16,15 +16,16 @@ import me.sevj6.listeners.packet.*;
 import me.sevj6.listeners.patches.*;
 import me.sevj6.listeners.playtimes.PlaytimeListeners;
 import me.sevj6.runnables.AutoRestart;
+import me.sevj6.runnables.EntityPerChunk;
+import me.sevj6.runnables.TabList;
+import me.sevj6.util.fileutil.ConfigManager;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class PluginUtil extends Utils implements Data {
@@ -49,24 +50,15 @@ public class PluginUtil extends Utils implements Data {
         }
     }
 
-    public static List<Material> setupThrowableList() {
-        List<Material> materials = new ArrayList<>();
-        List<Material> knownMaterials = Arrays.asList(Material.values());
-        itemList.forEach(s -> {
-            if (knownMaterials.contains(Material.getMaterial(s.toUpperCase()))) {
-                materials.add(Material.getMaterial(s.toUpperCase()));
-            } else {
-                MessageUtil.log("&cInvalid Throwable " + s + ". Change in your config at Exploits.throwables");
-            }
-        });
-        return materials;
-    }
-
     public static void startBukkitSchedulers() {
         if (config.getBoolean("WitherSkullHandling.Enabled") && config.getBoolean("WitherSkullHandling.DeleteAllOnStartup.Enabled")) {
             Bukkit.getScheduler().runTaskLater(plugin, new WitherSkullRemover(), config.getLong("WitherSkullHandling.DeleteAllOnStartup.delay-on-start") * 20);
-            Bukkit.getScheduler().runTaskTimer(plugin, new AutoRestart(), 20L, 20 * 60L);
         }
+        // run the auto restart runnable every 60 seconds to check if its a new day, then restart the server if it is.
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new AutoRestart(), 20L, 20 * 60L);
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new TabList(), 20L, 20 * ConfigManager.getInstance().getTablist().getLong("updateSeconds"));
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new EntityPerChunk(), 20L, 20 * plugin.getConfig().getLong("EntityLimit.removal.rate"));
     }
 
     public static FileConfiguration config() {

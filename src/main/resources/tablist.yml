@@ -2,6 +2,9 @@
 #current placeholders are %tps%, %ping%, %players%, and %uptime%
 #Placeholder API is not supported.
 
+#time to update the tablist in seconds
+updateSeconds: 1
+
 TabList:
   Header:
     - ""
