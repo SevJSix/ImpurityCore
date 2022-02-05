@@ -1,0 +1,134 @@
+package me.sevj6.util;
+
+import me.sevj6.Impurity;
+import me.sevj6.dev.serversided.CustomPayload;
+import me.sevj6.event.NMSPacketListener;
+import me.sevj6.event.listener.PlayerJoinListener;
+import me.sevj6.listeners.dupe.LavaDupe;
+import me.sevj6.listeners.dupe.PistonDupe;
+import me.sevj6.listeners.dupe.SalC1Dupe;
+import me.sevj6.listeners.meta.metalisteners.Meta113BedAura;
+import me.sevj6.listeners.meta.metalisteners.Meta32k;
+import me.sevj6.listeners.meta.metalisteners.MetaFastCA;
+import me.sevj6.listeners.meta.metalisteners.MetaOffhand;
+import me.sevj6.listeners.misc.*;
+import me.sevj6.listeners.packet.*;
+import me.sevj6.listeners.patches.*;
+import me.sevj6.listeners.playtimes.PlaytimeListeners;
+import me.sevj6.runnables.AutoRestart;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class PluginUtil extends Utils implements Data {
+
+    public static void registerEventListeners() {
+        plugin.getLogger().info("Registering Events...");
+        PluginManager pl = plugin.getServer().getPluginManager();
+        plugin.getBukkitListeners().forEach(listener -> pl.registerEvents(listener, plugin));
+        plugin.getNmsPacketListeners().forEach(nmsPacketListener -> Impurity.EVENT_BUS.subscribe(nmsPacketListener));
+    }
+
+    public static void setupEntityMap() {
+        if (config().getBoolean("EntityLimit.Enabled")) {
+            plugin.getLogger().info("Setting up EntityPerChunkLimit...");
+            entityMap.put(EntityType.WITHER, config().getInt("EntityLimit.wither"));
+            entityMap.put(EntityType.DROPPED_ITEM, config().getInt("EntityLimit.item-drops"));
+            entityMap.put(EntityType.ENDER_CRYSTAL, config().getInt("EntityLimit.end-crystal"));
+            entityMap.put(EntityType.ARMOR_STAND, config().getInt("EntityLimit.armor-stand"));
+            entityMap.put(EntityType.PRIMED_TNT, config().getInt("EntityLimit.primed-tnt"));
+            entityMap.put(EntityType.WITHER_SKULL, config().getInt("EntityLimit.wither-skull"));
+            entityMap.put(EntityType.FALLING_BLOCK, config().getInt("EntityLimit.falling-block"));
+        }
+    }
+
+    public static List<Material> setupThrowableList() {
+        List<Material> materials = new ArrayList<>();
+        List<Material> knownMaterials = Arrays.asList(Material.values());
+        itemList.forEach(s -> {
+            if (knownMaterials.contains(Material.getMaterial(s.toUpperCase()))) {
+                materials.add(Material.getMaterial(s.toUpperCase()));
+            } else {
+                MessageUtil.log("&cInvalid Throwable " + s + ". Change in your config at Exploits.throwables");
+            }
+        });
+        return materials;
+    }
+
+    public static void startBukkitSchedulers() {
+        if (config.getBoolean("WitherSkullHandling.Enabled") && config.getBoolean("WitherSkullHandling.DeleteAllOnStartup.Enabled")) {
+            Bukkit.getScheduler().runTaskLater(plugin, new WitherSkullRemover(), config.getLong("WitherSkullHandling.DeleteAllOnStartup.delay-on-start") * 20);
+            Bukkit.getScheduler().runTaskTimer(plugin, new AutoRestart(), 20L, 20 * 60L);
+        }
+    }
+
+    public static FileConfiguration config() {
+        return plugin.getConfig();
+    }
+
+    public static List<NMSPacketListener> setUpNMSPacketListeners() {
+        List<NMSPacketListener> nmsListeners = new ArrayList<>();
+        nmsListeners.add(new PacketAutoRecipe());
+        nmsListeners.add(new PacketTabComplete());
+        nmsListeners.add(new PacketBlockDig());
+        nmsListeners.add(new PacketBlockPlace());
+        nmsListeners.add(new PacketWindowClick());
+        nmsListeners.add(new PacketPlayFlying());
+        nmsListeners.add(new NocomExploit());
+        nmsListeners.add(new BoatFly());
+        nmsListeners.add(new PacketCreativeSlot());
+        nmsListeners.add(new TeleportAcceptPackets());
+        nmsListeners.add(new CustomPayload());
+        nmsListeners.add(new NBTLimitBan());
+        nmsListeners.add(new AuraSpeedLimit());
+        return nmsListeners;
+    }
+
+    public static List<Listener> setUpBukkitListeners() {
+        List<Listener> bukkitListeners = new ArrayList<>();
+        bukkitListeners.add(new AnvilColoredName());
+        bukkitListeners.add(new PlayerJoinListener());
+        bukkitListeners.add(new PlayerListener());
+        bukkitListeners.add(new GreenText());
+        bukkitListeners.add(new BurrowPatchRewrite());
+        bukkitListeners.add(new BowOppStoppa());
+        bukkitListeners.add(new BlockPhysicsLag());
+        bukkitListeners.add(new PVPExploits());
+        bukkitListeners.add(new BlockPerChunkLimit());
+        bukkitListeners.add(new GodmodePatch());
+        bukkitListeners.add(new RedstoneEvents());
+        bukkitListeners.add(new PreventCommandSigns());
+        bukkitListeners.add(new TeleportCoordLog());
+        bukkitListeners.add(new InteractEventNerf());
+        bukkitListeners.add(new EndGatewayCrashPatch());
+        bukkitListeners.add(new BoatFly());
+        bukkitListeners.add(new DispenserExploits());
+        bukkitListeners.add(new WitherSkullRemover());
+        bukkitListeners.add(new EntityThroughPortalLag());
+        bukkitListeners.add(new ElytraFlyExploits());
+        bukkitListeners.add(new ThrownEntityDelete());
+        bukkitListeners.add(new NoEndPortalGrief());
+        bukkitListeners.add(new CommandWhitelist());
+        bukkitListeners.add(new PistonDupe());
+        bukkitListeners.add(new RandomSpawn());
+        bukkitListeners.add(new SalC1Dupe());
+        bukkitListeners.add(new NameColorJoinListener());
+        bukkitListeners.add(new Meta32k());
+        bukkitListeners.add(new MetaFastCA());
+        bukkitListeners.add(new MetaOffhand());
+        bukkitListeners.add(new Meta113BedAura());
+        bukkitListeners.add(new LavaDupe());
+        bukkitListeners.add(new PlaytimeListeners(plugin));
+        bukkitListeners.add(new AntiAfkBedTrapKilling());
+        bukkitListeners.add(new TileEntityLimit());
+        bukkitListeners.add(new ArmorStandAiDisable());
+        return bukkitListeners;
+    }
+}

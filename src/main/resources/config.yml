@@ -1,0 +1,171 @@
+#______                                              __    __                 ______
+#  |      \                                            |  \  |  \               /      \
+#    \$$$$$$ ______ ____    ______   __    __   ______   \$$ _| $$_    __    __ |  $$$$$$\  ______    ______    ______
+#     | $$  |      \    \  /      \ |  \  |  \ /      \ |  \|   $$ \  |  \  |  \| $$   \$$ /      \  /      \  /      \
+#     | $$  | $$$$$$\$$$$\|  $$$$$$\| $$  | $$|  $$$$$$\| $$ \$$$$$$  | $$  | $$| $$      |  $$$$$$\|  $$$$$$\|  $$$$$$\
+#     | $$  | $$ | $$ | $$| $$  | $$| $$  | $$| $$   \$$| $$  | $$ __ | $$  | $$| $$   __ | $$  | $$| $$   \$$| $$    $$
+#    _| $$_ | $$ | $$ | $$| $$__/ $$| $$__/ $$| $$      | $$  | $$|  \| $$__/ $$| $$__/  \| $$__/ $$| $$      | $$$$$$$$
+#    |   $$ \| $$ | $$ | $$| $$    $$ \$$    $$| $$      | $$   \$$  $$ \$$    $$ \$$    $$ \$$    $$| $$       \$$     \
+#    \$$$$$$ \$$  \$$  \$$| $$$$$$$   \$$$$$$  \$$       \$$    \$$$$  _\$$$$$$$  \$$$$$$   \$$$$$$  \$$        \$$$$$$$
+#                         | $$                                        |  \__| $$
+#                         | $$                                         \$$    $$
+#                          \$$                                          \$$$$$$
+# By SevJ6
+
+#overall settings for the plugin
+Plugin:
+  plugin-prefix: "&e[SERVER]&r "
+  discord-link: "https://discord.gg/N82mz9qq"
+  use-kill-command: true
+
+AutoRestart:
+  # time in milliseconds to wait until restarting
+  # default: 24 hours
+  DelayAtStartup: 1728000
+
+Exploits:
+  #stop players from using boatfly modules.
+  boatfly: true
+
+  #prevent players from going into entity desync godmode.
+  #as far as I know, this patches every godmode variant exploit.
+  godmode: true #recommended to never turn off
+
+  #stop retards from coord logging when teleportation happens
+  tp-coord-log: true
+
+  #disable redstone physics.
+  piston-events: true #includes BlockPistonExtendEvent, and BlockPistonRetractEvent
+  piston-tps-disable: 18 #server TPS to disable pistons at
+  redstone-tps-disable: 17 #server TPS to disable all redstone at
+
+  #prevent the future client packet elytra fly module
+  future-packet-elytrafly-patch: true
+  #stop players from elytra flying on the nether roof and bottom (prevent nether chunk load lag)
+  nether-roof-elytra-disable: true
+
+  #prevent larpers from using NBT command signs
+  abusive-nbt-tile-entity: true #recommended to never turn off, since these can be really dangerous
+
+  #end dimension related things
+  prevent-end-portal-grief: true #stop players from destroying end portals. Although its a vanilla feature, its dumb in my opinion.
+  end-gateway-crash-fix: true #doesnt really patch the exploit itself, it just stops it from actually happening in any case.
+  #kick message for braindead 2021 players who try and do the exploit. its a fake kick message by default kek.
+  gateway-crash-kick-msg: "io.netty.channel.AbstractChannel$AnnotatedConnectException: Connection Refused: no further information:"
+
+#AntiChunkBan config options.
+AntiChunkBan:
+  Enabled: true
+  amount-per-chunk: 256
+
+#delete witherskulls, because they are laggy pieces of shit
+WitherSkullHandling:
+  Enabled: true
+  DeleteOnChunkLoad:
+    Enabled: true
+    log-console: false
+  TraveledTooLong:
+    Enabled: true
+    log-console: true
+    amount-per-console-log: 400 #amount of skulls to be deleted to notify console
+    time-limit: 30 #in seconds
+  DeleteAllOnStartup:
+    Enabled: true
+    log-console: true #probably shouldn't turn console logging off, makes it easier to notice bugs
+    delay-on-start: 5 #in seconds, recommended to not change to not cause issues with worlds loading on startup
+
+#Entity limit shit
+EntityLimit:
+  Enabled: true
+  # time in seconds to remove entities
+  removal-rate: 60
+  # all entities to limit
+  wither: 1
+  item-drops: 60
+  end-crystal: 20
+  armor-stand: 20
+  primed-tnt: 40
+  wither-skull: 2
+  falling-block: 1
+
+#Randomspawn stuff
+RandomSpawn:
+  Enabled: true
+  spawn-range: 500
+  world: "world"
+
+#Enable the piston dupe (the dupe used on impurity.me).
+#Amount-Range is the cap at which the random number generator will dupe the items at.
+PistonDupe:
+  Enabled: false
+
+#This is the eliteanarchy.org dupe.
+MinecartDupe:
+  Enabled: false
+
+#Salc1 dupe
+SalC1Dupe:
+  Enabled: true
+  addDelay: true
+  # delay in milliseconds to wait until the player can dupe next
+  # default: 10 seconds
+  delay: 4000
+
+#help command configuration
+HelpCommand:
+  Enabled: true
+  hover-text: "&3Click to suggest &b%cmd%"
+  lines: "&6-----------------------------------------------------"
+  help-message:
+    - "&b/ignore <name> &3— ignore a player."
+    - "&b/ignorelist &3— list ignored players."
+    - "&b/r &3— reply to the last person who messaged you."
+    - "&b/l &3— pm a player you last messaged."
+    - "&b/tell &3— pm a player."
+    - "&b/togglechat &3— toggle the default chat."
+    - "&b/toggletells &3— toggle all incoming pms."
+    - "&b/kill &3— commit suicide"
+    - "&b/ping <name> &3— show your, or another player's ping."
+    - "&b/bed &3— get coordinates to your bed location."
+    - "&b/jd <name> &3— get a player's joindate."
+    - "&b/stats &3— see the world size, age, and unique joins."
+    - "&b/tpa <player> &3— teleport to a player."
+    - "&b/nc &3— change your name color."
+
+#CommandWhitelist.
+CommandWhitelist:
+  Enabled: true
+  unknown-command: "&cInvalid command. Type /help for all commands."
+  command-list:
+    - "help"
+    - "tps"
+    - "ignore"
+    - "ignorelist"
+    - "w"
+    - "msg"
+    - "tell"
+    - "r"
+    - "reply"
+    - "whisper"
+    - "l"
+    - "last"
+    - "pm"
+    - "tell"
+    - "togglewhispering"
+    - "jd"
+    - "togglechat"
+    - "worldstats"
+    - "toggletells"
+    - "stats"
+    - "kill"
+    - "ping"
+    - "info"
+    - "bed"
+    - "discord"
+    - "tpa"
+    - "tpy"
+    - "tpn"
+    - "nc"
+
+#Returns 0 if the ping value of a player is a negative integer (KEEP TRUE).
+disableNegative: true #NEVER SET THIS TO FALSE.

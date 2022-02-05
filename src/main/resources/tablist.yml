@@ -1,0 +1,15 @@
+#customize the way the tablist looks on the server
+#current placeholders are %tps%, %ping%, %players%, and %uptime%
+#Placeholder API is not supported.
+
+TabList:
+  Header:
+    - ""
+    - "&7impurity anarchy"
+    - ""
+    - "&6Reset #7? i dont even know anymore lmao"
+    - "&r"
+  Footer:
+    - ""
+    - "  %tps% &3tps — &b%ping% &3ping — &b%players% &3players — &b%uptime% &3uptime  "
+    - ""

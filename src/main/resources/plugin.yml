@@ -1,0 +1,8 @@
+name: ImpurityCore
+version: ${project.version}
+main: me.sevj6.Impurity
+authors: [ SevJ6 ]
+description: plugin for Impurity
+depend:
+  - NBTAPI
+load: POSTWORLD
