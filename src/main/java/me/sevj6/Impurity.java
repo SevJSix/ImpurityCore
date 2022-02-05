@@ -142,7 +142,7 @@ public final class Impurity extends JavaPlugin implements Instance {
 
         // setup violation manager
         service.scheduleAtFixedRate(() -> violationManagers.forEach(ViolationManager::decrementAll), 0, 1, TimeUnit.SECONDS);
-        getLogger().log(Level.ALL, "ImpurityPlus loaded. Ver. 4.0 by SevJ6");
+        getLogger().log(Level.ALL, "ImpurityPlus loaded. Version" + this.getDescription().getVersion() + " by SevJ6");
     }
 
     @Override
