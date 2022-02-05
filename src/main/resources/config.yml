@@ -77,10 +77,8 @@ WitherSkullHandling:
 #Entity limit shit
 EntityLimit:
   Enabled: true
-  # time in seconds to remove entities
-  removal-rate: 60
-  # all entities to limit
-  wither: 1
+  # all entities to limit per chunk
+  wither: 4
   item-drops: 60
   end-crystal: 20
   armor-stand: 20
@@ -97,11 +95,11 @@ RandomSpawn:
 #Enable the piston dupe (the dupe used on impurity.me).
 #Amount-Range is the cap at which the random number generator will dupe the items at.
 PistonDupe:
-  Enabled: false
+  Enabled: true
 
 #Salc1 dupe
 SalC1Dupe:
-  Enabled: true
+  Enabled: false
   addDelay: true
   # delay in milliseconds to wait until the player can dupe next
   # default: 10 seconds
@@ -125,13 +123,15 @@ HelpCommand:
     - "&b/bed &3— get coordinates to your bed location."
     - "&b/jd <name> &3— get a player's joindate."
     - "&b/stats &3— see the world size, age, and unique joins."
-    - "&b/tpa <player> &3— teleport to a player."
+    - "&b/serverinfo &3— get some information about the server."
+    - "&b/playtime &3— get a players playime"
+    - "&b/toptimes &3— see who has the most playtimes."
     - "&b/nc &3— change your name color."
 
 #CommandWhitelist.
 CommandWhitelist:
   Enabled: true
-  unknown-command: "&cInvalid command. Type /help for all commands."
+  unknown-command: "&4Bad Command. Type /help for all server commands."
   command-list:
     - "help"
     - "tps"
@@ -155,10 +155,9 @@ CommandWhitelist:
     - "stats"
     - "kill"
     - "ping"
-    - "info"
     - "bed"
     - "discord"
-    - "tpa"
-    - "tpy"
-    - "tpn"
     - "nc"
+    - "toptimes"
+    - "playtime"
+    - "serverinfo"

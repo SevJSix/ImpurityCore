@@ -54,10 +54,10 @@ public class PluginUtil extends Utils implements Data {
             Bukkit.getScheduler().runTaskLater(plugin, new WitherSkullRemover(), config.getLong("WitherSkullHandling.DeleteAllOnStartup.delay-on-start") * 20);
         }
         // run the auto restart runnable every 60 seconds to check if its a new day, then restart the server if it is.
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new AutoRestart(), 20L, 20 * 60L);
+        Bukkit.getScheduler().runTaskTimer(plugin, new AutoRestart(), 20L, (20L * 60L));
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new TabList(), 20L, 20L);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new EntityPerChunk(), 20L, 20 * plugin.getConfig().getLong("EntityLimit.removal.rate"));
+        Bukkit.getScheduler().runTaskTimer(plugin, new TabList(), 20L, 20L);
+        Bukkit.getScheduler().runTaskTimer(plugin, new EntityPerChunk(), 20L, (20L * 30L));
     }
 
     public static FileConfiguration config() {
