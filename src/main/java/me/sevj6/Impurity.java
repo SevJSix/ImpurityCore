@@ -61,12 +61,10 @@ public final class Impurity extends JavaPlugin implements Instance {
     public void onEnable() {
         this.saveDefaultConfig();
         fileConfig.init();
-        // initialize
         startTime = System.currentTimeMillis();
         violationManagers = new ArrayList<>();
         service = Executors.newScheduledThreadPool(4);
         playtimeManager = new PlaytimeManager(this);
-        //register
         PluginUtil.startBukkitSchedulers();
         PluginUtil.setupEntityMap();
         PluginUtil.registerEventListeners();
