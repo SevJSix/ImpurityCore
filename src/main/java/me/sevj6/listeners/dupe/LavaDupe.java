@@ -18,6 +18,7 @@ public class LavaDupe implements Listener {
 
     @EventHandler
     public void onEntityDamageEvent(EntityDamageEvent event) {
+        if (!Impurity.getPlugin().getConfig().getBoolean("LavaDupe.Enabled")) return;
         if (!(event.getEntity() instanceof Item)) return;
         EntityDamageEvent.DamageCause cause = event.getCause();
         Item item = (Item) event.getEntity();

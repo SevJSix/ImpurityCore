@@ -92,6 +92,10 @@ RandomSpawn:
 PistonDupe:
   Enabled: true
 
+#enable lava dupe. no this isnt a joke lol
+LavaDupe:
+  Enabled: true
+
 #Salc1 dupe
 SalC1Dupe:
   Enabled: false
