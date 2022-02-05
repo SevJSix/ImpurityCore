@@ -30,6 +30,8 @@ public class BlockPerChunkLimit implements Listener, Instance {
 
         TileEntity tileEntity = ((CraftWorld) block.getWorld()).getHandle().getTileEntity(new BlockPosition(block.getX(), block.getY(), block.getZ()));
         if (tileEntity != null) {
+            net.minecraft.server.v1_12_R1.Block b = tileEntity.getBlock();
+            if (!b.isTileEntity()) return;
             Material material = event.getBlock().getType();
             Chunk chunk = event.getBlock().getChunk();
             if (Utils.countBlockPerChunk(chunk, material) > PluginUtil.config().getInt("AntiChunkBan.amount-per-chunk")) {
