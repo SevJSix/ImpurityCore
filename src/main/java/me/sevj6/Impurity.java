@@ -59,24 +59,19 @@ public final class Impurity extends JavaPlugin implements Instance {
 
     @Override
     public void onEnable() {
-
         this.saveDefaultConfig();
         fileConfig.init();
-
         // initialize
         startTime = System.currentTimeMillis();
         violationManagers = new ArrayList<>();
         service = Executors.newScheduledThreadPool(4);
         playtimeManager = new PlaytimeManager(this);
-
         //register
         PluginUtil.startBukkitSchedulers();
         PluginUtil.setupEntityMap();
         PluginUtil.registerEventListeners();
         new CommandHandler(this);
-
         if (Bukkit.getOnlinePlayers().size() > 0) Bukkit.getOnlinePlayers().forEach(Utils::inject);
-
         LocalDateTime time = LocalDateTime.now();
         day = time.getDayOfWeek();
         MetaType type;
@@ -101,12 +96,9 @@ public final class Impurity extends JavaPlugin implements Instance {
             default:
                 throw new IllegalStateException("Unexpected value: " + time.getDayOfWeek());
         }
-
         metaManager = new MetaManager(type);
-
         // setup violation manager
         service.scheduleAtFixedRate(() -> violationManagers.forEach(ViolationManager::decrementAll), 0, 1, TimeUnit.SECONDS);
-        getLogger().log(Level.ALL, "ImpurityPlus loaded. Version" + this.getDescription().getVersion() + " by SevJ6");
     }
 
     @Override
