@@ -8,9 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-
 public class AutoRestart extends BukkitRunnable implements Instance {
 
     TimerUtil time = new TimerUtil();
@@ -21,8 +18,8 @@ public class AutoRestart extends BukkitRunnable implements Instance {
 
     @Override
     public void run() {
-        DayOfWeek day = LocalDateTime.now().getDayOfWeek();
-        if (day.toString().equalsIgnoreCase(Impurity.getPlugin().day.toString())) return;
+        long millis = (System.currentTimeMillis() - Impurity.startTime);
+        if (millis < 43200000) return;
         Thread t = new Thread(() -> {
             broadCast("&eServer restarting in 1 minute...");
             time.delay(30000);

@@ -70,7 +70,6 @@ public class MetaManager {
 
     public static String getTablistPlaceholder() {
         StringBuilder builder = new StringBuilder();
-        builder.append("&6Current Meta: ");
         switch (getTypeAccordingToDay()) {
             case NO_OFFHAND_32K:
                 builder.append("Mainhand CA Only With 32k's Enabled");
