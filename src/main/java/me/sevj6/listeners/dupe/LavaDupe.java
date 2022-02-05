@@ -18,6 +18,7 @@ public class LavaDupe implements Listener {
 
     @EventHandler
     public void onEntityDamageEvent(EntityDamageEvent event) {
+        int i = 0;
         if (!(event.getEntity() instanceof Item)) return;
         EntityDamageEvent.DamageCause cause = event.getCause();
         Item item = (Item) event.getEntity();
