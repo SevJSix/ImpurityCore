@@ -1,8 +1,6 @@
 package me.sevj6.listeners.patches;
 
 import me.sevj6.Instance;
-import me.sevj6.util.MessageUtil;
-import me.sevj6.util.Utils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -31,7 +29,6 @@ public class NoEndPortalGrief implements Listener, Instance {
             for (BlockFace face : BlockFace.values()) {
                 if (portal.contains(block.getRelative(face).getType())) {
                     event.setCancelled(true);
-                    MessageUtil.log("&3Prevented&r&a " + event.getPlayer().getName() + " &r&3in " + Utils.formatLocation(block.getLocation()) + " &r&3from destroying an end portal");
                     break;
                 }
             }
@@ -46,7 +43,6 @@ public class NoEndPortalGrief implements Listener, Instance {
             if (buckets.contains(type)) {
                 for (BlockFace face : BlockFace.values()) {
                     if (portal.contains(block.getRelative(face).getType())) {
-                        MessageUtil.log("&3Prevented an EndPortal from being destroyed in " + Utils.formatLocation(block.getLocation()));
                         event.setCancelled(true);
                         break;
                     }
