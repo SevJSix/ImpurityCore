@@ -1,6 +1,7 @@
 package me.sevj6.util;
 
 import me.sevj6.Impurity;
+import me.sevj6.listeners.meta.MetaManager;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -71,7 +72,7 @@ public class MessageUtil extends Utils {
                 replace("%players%", String.valueOf(Bukkit.getOnlinePlayers().size())).
                 replace("%ping%", String.valueOf(PlayerUtil.getPlayerPing(player))).
                 replace("%uptime%", getFormattedInterval(System.currentTimeMillis() - Impurity.startTime))).
-                replace("%meta%", Impurity.getPlugin().metaTablistPlaceholder()).
+                replace("%meta%", MetaManager.getTablistPlaceholder()).
                 replace("%age%", Objects.requireNonNull(getServerAge()));
     }
 

@@ -10,7 +10,7 @@ public class Meta32k implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
-        if (!Impurity.getPlugin().getMetaManager().getSettings().is32kEnabled()) {
+        if (!Impurity.getPlugin().getMetaManager().getSettings().is32kEnabled() || Impurity.getPlugin().getMetaManager().getSettings().isFastCA()) {
             if (event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
                 if (event.getDamage() > 50) event.setCancelled(true);
             }
