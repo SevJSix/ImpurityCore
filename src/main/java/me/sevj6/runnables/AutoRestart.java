@@ -22,7 +22,7 @@ public class AutoRestart extends BukkitRunnable implements Instance {
     @Override
     public void run() {
         DayOfWeek day = LocalDateTime.now().getDayOfWeek();
-        if (day.toString().equalsIgnoreCase(Impurity.getPlugin().getDay().toString())) return;
+        if (day.toString().equalsIgnoreCase(Impurity.getPlugin().day.toString())) return;
         Thread t = new Thread(() -> {
             broadCast("&eServer restarting in 1 minute...");
             time.delay(30000);

@@ -12,6 +12,8 @@ import me.sevj6.util.fileutil.Configuration;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -31,6 +33,7 @@ public final class Impurity extends JavaPlugin implements Instance {
     private List<ViolationManager> violationManagers;
     private ScheduledExecutorService service;
     private MetaManager metaManager;
+    public DayOfWeek day;
 
     public static Impurity getPlugin() {
         return getPlugin(Impurity.class);
@@ -68,6 +71,7 @@ public final class Impurity extends JavaPlugin implements Instance {
         metaManager = new MetaManager(MetaManager.getTypeAccordingToDay());
         service = Executors.newScheduledThreadPool(4);
         service.scheduleAtFixedRate(() -> violationManagers.forEach(ViolationManager::decrementAll), 0, 1, TimeUnit.SECONDS);
+        day = LocalDateTime.now().getDayOfWeek();
     }
 
     @Override
