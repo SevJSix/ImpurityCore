@@ -6,9 +6,10 @@ import me.sevj6.util.MessageUtil;
 import me.sevj6.util.TimerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.scheduler.BukkitRunnable;
 
-public class AutoRestart extends BukkitRunnable implements Instance {
+import java.util.TimerTask;
+
+public class AutoRestart extends TimerTask implements Instance {
 
     TimerUtil time = new TimerUtil();
 

@@ -6,11 +6,10 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-public class EntityPerChunk extends BukkitRunnable implements Data {
+public class EntityPerChunk extends TimerTask implements Data {
 
     HashMap<EntityType, Integer> map;
 

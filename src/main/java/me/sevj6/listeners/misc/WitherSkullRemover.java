@@ -10,17 +10,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 import java.util.logging.Level;
 
 /**
  * @author SevJ6
  */
 
-public class WitherSkullRemover extends BukkitRunnable implements Listener, Instance {
+public class WitherSkullRemover extends TimerTask implements Listener, Instance {
 
     private final int maxPerLog = config.getInt("WitherSkullHandling.TraveledTooLong.amount-per-console-log");
     private int amount = 0;
