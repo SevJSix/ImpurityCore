@@ -74,8 +74,9 @@ public final class Impurity extends JavaPlugin implements Instance {
     public void onDisable() {
         getLogger().log(Level.WARNING, "Unloading all plugin data...");
         try {
-            if (Bukkit.getOnlinePlayers().isEmpty()) return;
-            Bukkit.getOnlinePlayers().forEach(Utils::removeHook);
+            if (Bukkit.getOnlinePlayers().size() > 0) {
+                Bukkit.getOnlinePlayers().forEach(Utils::removeHook);
+            }
             ConfigManager.getInstance().getConfigs().forEach(Configuration::saveConfig);
             this.reloadConfig();
         } catch (Throwable t) {
