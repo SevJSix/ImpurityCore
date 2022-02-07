@@ -27,7 +27,6 @@ public class PacketBlockPlace extends ViolationManager implements NMSPacketListe
         Packet<?> packet = event.getPacket();
         if (exploit.getBoolean("Packets.Enabled") && packet instanceof PacketPlayInBlockPlace) {
             Player player = event.getPlayer();
-            PacketPlayInBlockPlace packetPlayInBlockPlace = (PacketPlayInBlockPlace) packet;
             increment(player.getUniqueId());
             if (getVLS(player.getUniqueId()) > exploit.getInt("BlockPlace.maxVLS")) {
                 event.setCancelled(true);

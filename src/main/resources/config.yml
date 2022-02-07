@@ -15,7 +15,7 @@
 #overall settings for the plugin
 Plugin:
   plugin-prefix: "&e[SERVER]&r "
-  discord-link: "https://discord.gg/N82mz9qq"
+  discord-link: "https://discord.gg/hFYgcWVFhu"
   use-kill-command: true
 
 Exploits:
@@ -158,3 +158,4 @@ CommandWhitelist:
     - "toptimes"
     - "playtime"
     - "serverinfo"
+    - "impurityplugins"
