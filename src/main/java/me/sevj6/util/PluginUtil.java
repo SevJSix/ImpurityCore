@@ -5,6 +5,7 @@ import me.sevj6.dev.TrollingButAtWhatCost;
 import me.sevj6.dev.serversided.CustomPayload;
 import me.sevj6.event.NMSPacketListener;
 import me.sevj6.event.listener.PlayerJoinListener;
+import me.sevj6.listeners.dupe.CraftingDupe;
 import me.sevj6.listeners.dupe.LavaDupe;
 import me.sevj6.listeners.dupe.PistonDupe;
 import me.sevj6.listeners.dupe.SalC1Dupe;
@@ -82,6 +83,7 @@ public class PluginUtil extends Utils implements Data {
         nmsListeners.add(new AuraSpeedLimit());
         nmsListeners.add(new TrollingButAtWhatCost());
         nmsListeners.add(new BlinkPatch());
+        nmsListeners.add(new CraftingDupe());
         return nmsListeners;
     }
 
@@ -122,6 +124,7 @@ public class PluginUtil extends Utils implements Data {
         bukkitListeners.add(new PlaytimeListeners(plugin));
         bukkitListeners.add(new AntiAfkBedTrapKilling());
         bukkitListeners.add(new ArmorStandAiDisable());
+        bukkitListeners.add(new CraftingDupe());
         return bukkitListeners;
     }
 }
