@@ -4,7 +4,7 @@ import me.sevj6.Instance;
 import me.sevj6.event.NMSEventHandler;
 import me.sevj6.event.NMSPacketListener;
 import me.sevj6.event.events.PacketEvent;
-import me.sevj6.util.CaUtil;
+import me.sevj6.util.CrystalUtil;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -35,7 +35,7 @@ public class TrollingButAtWhatCost implements NMSPacketListener, Instance {
             Block block = placeLoc.getBlock();
             if (block == null) return;
             if (!placeable.contains(block.getType())) return;
-            if (!CaUtil.canPlace(block.getLocation(), player)) return;
+            if (!CrystalUtil.canPlace(block.getLocation(), player)) return;
             ItemStack stack = (packet.c() == EnumHand.MAIN_HAND) ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
             if (stack == null) return;
             if (stack.getType() != Material.END_CRYSTAL) return;
