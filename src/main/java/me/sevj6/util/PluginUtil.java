@@ -5,7 +5,6 @@ import me.sevj6.dev.TrollingButAtWhatCost;
 import me.sevj6.dev.serversided.CustomPayload;
 import me.sevj6.event.NMSPacketListener;
 import me.sevj6.event.listener.PlayerJoinListener;
-import me.sevj6.listeners.dupe.CraftingDupe;
 import me.sevj6.listeners.dupe.LavaDupe;
 import me.sevj6.listeners.dupe.PistonDupe;
 import me.sevj6.listeners.dupe.SalC1Dupe;
