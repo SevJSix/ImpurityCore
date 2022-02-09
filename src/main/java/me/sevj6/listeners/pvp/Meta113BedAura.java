@@ -1,4 +1,4 @@
-package me.sevj6.listeners.meta.metalisteners;
+package me.sevj6.listeners.pvp;
 
 import me.sevj6.Impurity;
 import net.minecraft.server.v1_12_R1.World;

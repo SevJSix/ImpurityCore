@@ -2,7 +2,6 @@ package me.sevj6;
 
 import me.sevj6.command.CommandHandler;
 import me.sevj6.event.EventBus;
-import me.sevj6.listeners.meta.MetaManager;
 import me.sevj6.listeners.playtimes.PlaytimeManager;
 import me.sevj6.util.PluginUtil;
 import me.sevj6.util.Utils;
@@ -30,7 +29,6 @@ public final class Impurity extends JavaPlugin implements Instance {
     private PlaytimeManager playtimeManager;
     private List<ViolationManager> violationManagers;
     private ScheduledExecutorService service;
-    private MetaManager metaManager;
 
     public static Impurity getPlugin() {
         return getPlugin(Impurity.class);
@@ -38,10 +36,6 @@ public final class Impurity extends JavaPlugin implements Instance {
 
     public PlaytimeManager getPlaytimeManager() {
         return playtimeManager;
-    }
-
-    public MetaManager getMetaManager() {
-        return metaManager;
     }
 
     public List<ViolationManager> getViolationManagers() {
@@ -65,7 +59,6 @@ public final class Impurity extends JavaPlugin implements Instance {
         PluginUtil.registerEventListeners();
         new CommandHandler(this);
         if (Bukkit.getOnlinePlayers().size() > 0) Bukkit.getOnlinePlayers().forEach(Utils::inject);
-        metaManager = new MetaManager(MetaManager.getTypeAccordingToDay());
         service = Executors.newScheduledThreadPool(4);
         service.scheduleAtFixedRate(() -> violationManagers.forEach(ViolationManager::decrementAll), 0, 1, TimeUnit.SECONDS);
     }
