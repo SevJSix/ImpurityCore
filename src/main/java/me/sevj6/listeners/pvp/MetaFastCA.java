@@ -62,7 +62,6 @@ public class MetaFastCA implements Listener {
         Bukkit.getServer().getPluginManager().callEvent(entityDamageByEntityEvent);
         EntityEnderCrystal crystal = ((CraftEnderCrystal) first.get()).getHandle();
         EntityHuman human = ((CraftPlayer) event.getPlayer()).getHandle();
-        if (entityDamageByEntityEvent.isCancelled()) return;
         crystal.damageEntity(DamageSource.playerAttack(human), 1.0F);
     }
 }
