@@ -88,7 +88,6 @@ public class ServersidedAuto32k {
         Location dispenserLocation;
         Location redstoneLocation = null;
         Location hopperLocation;
-        Location shulkerLocation;
         boolean doPlaceObsidian = false;
 
         Block hopperAttemptBlock = null;
@@ -116,38 +115,8 @@ public class ServersidedAuto32k {
         }
 
         dispenserLocation = obsidianLocation.clone().add(0, 1, 0);
-
-        if (isNotViablePlacePos(dispenserLocation.clone().add(0, 1, 0))) {
-            switch (opposite) {
-                case EAST:
-                case WEST:
-                    redstoneLocation = dispenserLocation.clone().add(0, 0, -1);
-                    break;
-                case NORTH:
-                case SOUTH:
-                    redstoneLocation = dispenserLocation.clone().add(1, 0, 0);
-                    break;
-            }
-        } else {
-            redstoneLocation = dispenserLocation.clone().add(0, 1, 0);
-        }
-
-        switch (opposite) {
-            case EAST:
-                hopperLocation = dispenserLocation.clone().add(1, -1, 0);
-                break;
-            case WEST:
-                hopperLocation = dispenserLocation.clone().add(-1, -1, 0);
-                break;
-            case NORTH:
-                hopperLocation = dispenserLocation.clone().add(0, -1, -1);
-                break;
-            case SOUTH:
-                hopperLocation = dispenserLocation.clone().add(0, -1, 1);
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + opposite);
-        }
+        redstoneLocation = CustomPayload.redstonePos(dispenserLocation, opposite);
+        hopperLocation = CustomPayload.getHopperBlock(dispenserLocation, opposite).getLocation();
 
         if (doPlaceObsidian) {
             player.getInventory().setHeldItemSlot(obsidianSlot);
@@ -160,9 +129,9 @@ public class ServersidedAuto32k {
             playSoundAtLocation(Sound.BLOCK_STONE_PLACE, dispenserLocation);
             if (dispenserLocation.getBlock() == null) {
                 player.getWorld().getBlockAt(dispenserLocation).setType(Material.DISPENSER);
-                TileEntityDispenser tileEntityDispenser = (TileEntityDispenser) entityPlayer.world.getTileEntity(new BlockPosition(dispenserLocation.getBlockX(), dispenserLocation.getBlockY(), dispenserLocation.getBlockZ()));
-                rotateTileEntity(tileEntityDispenser, (CraftPlayer) player);
             }
+            TileEntityDispenser tileEntityDispenser = (TileEntityDispenser) entityPlayer.world.getTileEntity(new BlockPosition(dispenserLocation.getBlockX(), dispenserLocation.getBlockY(), dispenserLocation.getBlockZ()));
+            rotateTileEntity(tileEntityDispenser, (CraftPlayer) player);
             IInventory dispInv = ((CraftInventory) ((Dispenser) dispenserLocation.getBlock().getState()).getInventory()).getInventory();
             entityPlayer.openContainer(dispInv);
             dispInv.setItem(5, CraftItemStack.asNMSCopy(get32kShulkerFromInv(player)));
@@ -189,10 +158,6 @@ public class ServersidedAuto32k {
             return;
         }
 
-        shulkerLocation = hopperLocation.clone().add(0, 1, 0);
-        while (shulkerLocation.getBlock() == null) {
-            shulkerLocation = hopperLocation.clone().add(0, 1, 0);
-        }
         ItemStack bukkit32kCopy = null;
         for (net.minecraft.server.v1_12_R1.ItemStack itemStack : nmsItemArray) {
             if (itemStack == null) return;
