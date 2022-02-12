@@ -4,7 +4,9 @@ import me.sevj6.util.MessageUtil;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.Dispenser;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
@@ -148,48 +150,49 @@ public class ServersidedAuto32k {
         }
 
         if (doPlaceObsidian) {
-            obsidianLocation.getBlock().setType(Material.OBSIDIAN);
-            player.getInventory().getItem(obsidianSlot).subtract();
+            player.getInventory().setHeldItemSlot(obsidianSlot);
+            placeBlock(player, obsidianLocation, EnumDirection.UP);
+            playSoundAtLocation(Sound.BLOCK_STONE_PLACE, obsidianLocation);
         }
         if (!isNotViablePlacePos(dispenserLocation)) {
-            dispenserLocation.getBlock().setType(Material.DISPENSER);
-            player.getInventory().getItem(dispenserSlot).subtract();
+            player.getInventory().setHeldItemSlot(dispenserSlot);
+            placeBlock(player, dispenserLocation, opposite);
+            playSoundAtLocation(Sound.BLOCK_STONE_PLACE, dispenserLocation);
+            if (dispenserLocation.getBlock() == null) {
+                player.getWorld().getBlockAt(dispenserLocation).setType(Material.DISPENSER);
+                TileEntityDispenser tileEntityDispenser = (TileEntityDispenser) entityPlayer.world.getTileEntity(new BlockPosition(dispenserLocation.getBlockX(), dispenserLocation.getBlockY(), dispenserLocation.getBlockZ()));
+                rotateTileEntity(tileEntityDispenser, (CraftPlayer) player);
+            }
+            IInventory dispInv = ((CraftInventory) ((Dispenser) dispenserLocation.getBlock().getState()).getInventory()).getInventory();
+            entityPlayer.openContainer(dispInv);
+            dispInv.setItem(5, CraftItemStack.asNMSCopy(get32kShulkerFromInv(player)));
+            player.getInventory().getItem(getItemSlotFromInv(player, get32kShulkerFromInv(player).getType())).subtract();
+            entityPlayer.closeInventory();
         } else {
             MessageUtil.sendMessage(player, "&cInvalid dispenser location!");
             return;
         }
         if (!isNotViablePlacePos(redstoneLocation)) {
-            redstoneLocation.getBlock().setType(Material.REDSTONE_BLOCK);
-            player.getInventory().getItem(redstoneSlot).subtract();
+            player.getInventory().setHeldItemSlot(redstoneSlot);
+            placeBlock(player, redstoneLocation, EnumDirection.UP);
+            playSoundAtLocation(Sound.BLOCK_METAL_PLACE, redstoneLocation);
         } else {
             MessageUtil.sendMessage(player, "&cInvalid redstone location!");
             return;
         }
         if (!isNotViablePlacePos(hopperLocation)) {
-            hopperLocation.getBlock().setType(Material.HOPPER);
-            player.getInventory().getItem(hopperSlot).subtract();
+            player.getInventory().setHeldItemSlot(hopperSlot);
+            placeBlock(player, hopperLocation, opposite);
+            playSoundAtLocation(Sound.BLOCK_METAL_PLACE, hopperLocation);
         } else {
             MessageUtil.sendMessage(player, "&cInvalid hopper location!");
             return;
         }
 
-        World world = entityPlayer.getWorld();
-        BlockPosition dispenserPos = new BlockPosition(dispenserLocation.getBlockX(), dispenserLocation.getBlockY(), dispenserLocation.getBlockZ());
-        TileEntityDispenser dispenser = (TileEntityDispenser) world.getTileEntity(dispenserPos);
-        if (dispenser == null) return;
-        rotateTileEntity(dispenser, (CraftPlayer) player);
-
         shulkerLocation = hopperLocation.clone().add(0, 1, 0);
-
-        ShulkerBox shulkerBox = genShulker(shulkerLocation, player);
-        TileEntityShulkerBox tileEntityShulkerBox = (TileEntityShulkerBox) world.getTileEntity(new BlockPosition(shulkerBox.getX(), shulkerBox.getY(), shulkerBox.getZ()));
-        if (tileEntityShulkerBox == null) return;
-        for (int i = 0; i < tileEntityShulkerBox.getSize(); i++) {
-            tileEntityShulkerBox.setItem(i, nmsItemArray[i]);
+        while (shulkerLocation.getBlock() == null) {
+            shulkerLocation = hopperLocation.clone().add(0, 1, 0);
         }
-        tileEntityShulkerBox.setCustomName(shulkerFromInv.getCustomName());
-        tileEntityShulkerBox.update();
-        player.getInventory().getItem(getItemSlotFromInv(player, get32kShulkerFromInv(player).getType())).subtract();
         ItemStack bukkit32kCopy = null;
         for (net.minecraft.server.v1_12_R1.ItemStack itemStack : nmsItemArray) {
             if (itemStack == null) return;
@@ -217,67 +220,6 @@ public class ServersidedAuto32k {
         meta.setDisplayName("Alpha's Stacked 32k's");
         item.setItemMeta(meta);
         return item;
-    }
-
-    private ShulkerBox genShulker(Location loc, Player player) {
-        ItemStack shulkerFromInv = get32kShulkerFromInv(player);
-        ItemMeta meta = shulkerFromInv.getItemMeta();
-        BlockStateMeta bsm = (BlockStateMeta) meta;
-        ShulkerBox itemShulker = (ShulkerBox) bsm.getBlockState();
-        Block block = loc.getBlock();
-        switch (itemShulker.getColor()) {
-            case RED:
-                block.setType(Material.RED_SHULKER_BOX);
-                break;
-            case BLUE:
-                block.setType(Material.BLUE_SHULKER_BOX);
-                break;
-            case CYAN:
-                block.setType(Material.CYAN_SHULKER_BOX);
-                break;
-            case GRAY:
-                block.setType(Material.GRAY_SHULKER_BOX);
-                break;
-            case LIME:
-                block.setType(Material.LIME_SHULKER_BOX);
-                break;
-            case PINK:
-                block.setType(Material.PINK_SHULKER_BOX);
-                break;
-            case BLACK:
-                block.setType(Material.BLACK_SHULKER_BOX);
-                break;
-            case BROWN:
-                block.setType(Material.BROWN_SHULKER_BOX);
-                break;
-            case GREEN:
-                block.setType(Material.GREEN_SHULKER_BOX);
-                break;
-            case WHITE:
-                block.setType(Material.WHITE_SHULKER_BOX);
-                break;
-            case ORANGE:
-                block.setType(Material.ORANGE_SHULKER_BOX);
-                break;
-            case PURPLE:
-                block.setType(Material.PURPLE_SHULKER_BOX);
-                break;
-            case SILVER:
-                block.setType(Material.SILVER_SHULKER_BOX);
-                break;
-            case YELLOW:
-                block.setType(Material.YELLOW_SHULKER_BOX);
-                break;
-            case MAGENTA:
-                block.setType(Material.MAGENTA_SHULKER_BOX);
-                break;
-            case LIGHT_BLUE:
-                block.setType(Material.LIGHT_BLUE_SHULKER_BOX);
-                break;
-        }
-        ShulkerBox shulkerBox = (ShulkerBox) block.getState();
-        shulkerBox.update(true, true);
-        return shulkerBox;
     }
 
     private boolean isNotViablePlacePos(Location location) {
@@ -330,6 +272,15 @@ public class ServersidedAuto32k {
             }
         }
         return -1;
+    }
+
+    public void playSoundAtLocation(Sound sound, Location location) {
+        location.getNearbyPlayers(10).forEach(p -> p.playSound(location, sound, 3.0F, 0.8F));
+    }
+
+    public void placeBlock(Player player, Location location, EnumDirection direction) {
+        EntityHuman human = ((CraftPlayer) player).getHandle();
+        human.getItemInMainHand().placeItem(human, human.world, new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ()), EnumHand.MAIN_HAND, direction, 255.0F, 255.0F, 255.0F);
     }
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, EnumDirection direction) {
