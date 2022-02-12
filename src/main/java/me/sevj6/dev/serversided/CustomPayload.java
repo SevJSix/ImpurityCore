@@ -7,7 +7,6 @@ import me.sevj6.event.events.PacketEvent;
 import net.minecraft.server.v1_12_R1.BlockPosition;
 import net.minecraft.server.v1_12_R1.PacketPlayInCustomPayload;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,20 +14,7 @@ import org.bukkit.entity.Player;
 public class CustomPayload implements NMSPacketListener {
     private final ServersidedAuto32k serversidedAuto32k = new ServersidedAuto32k();
 
-    private final int PLACE_RANGE = 6;
-
-    public static int countBlockPerChunk(Chunk chunk, Material material) {
-        int count = 0;
-        for (int x = 0; x < 16; ++x) {
-            for (int z = 0; z < 16; ++z) {
-                for (int y = 0; y < 256; ++y) {
-                    if (chunk.getBlock(x, y, z).getType() != material) continue;
-                    ++count;
-                }
-            }
-        }
-        return count;
-    }
+    private final int PLACE_RANGE = 3;
 
     @NMSEventHandler
     public void onPacket(PacketEvent.Incoming event) {
