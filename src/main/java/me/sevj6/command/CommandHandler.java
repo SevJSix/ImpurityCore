@@ -26,6 +26,7 @@ public class CommandHandler {
         registerCommand(new TopPlaytimes(plugin));
         registerCommand(new Playtime(plugin));
         registerCommand(new Plugins(plugin));
+        registerCommand(new OpenInventory(plugin));
     }
 
     public void registerCommand(Command... commands) {
