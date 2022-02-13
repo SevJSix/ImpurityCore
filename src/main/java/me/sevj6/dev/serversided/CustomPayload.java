@@ -90,20 +90,22 @@ public class CustomPayload implements NMSPacketListener {
 
     @NMSEventHandler
     public void onPacket(PacketEvent.Incoming event) {
-        if (event.getPacket() instanceof PacketPlayInCustomPayload) {
-            PacketPlayInCustomPayload packet = (PacketPlayInCustomPayload) event.getPacket();
-            if (packet.a().equals("auto32k")) {
-                Bukkit.getScheduler().runTask(Impurity.getPlugin(), () -> {
-                    BlockPosition pos = getAutoPlace32kPos(event.getPlayer());
-                    serversidedAuto32k.doPlace(event.getPlayer(), pos);
-                });
-            } else if (packet.a().equals("manual32k")) {
-                Bukkit.getScheduler().runTask(Impurity.getPlugin(), () -> {
-                    PacketDataSerializer serializer = packet.b();
-                    BlockPosition pos = serializer.e();
-                    serversidedAuto32k.doPlace(event.getPlayer(), pos);
-                });
-            }
+        if (event.getPacket() instanceof PacketPlayInCustomPayload) handlePacket(event);
+    }
+
+    protected void handlePacket(PacketEvent.Incoming event) {
+        PacketPlayInCustomPayload packet = (PacketPlayInCustomPayload) event.getPacket();
+        if (packet.a().equals("auto32k")) {
+            Bukkit.getScheduler().runTask(Impurity.getPlugin(), () -> {
+                BlockPosition pos = getAutoPlace32kPos(event.getPlayer());
+                serversidedAuto32k.doPlace(event.getPlayer(), pos);
+            });
+        } else if (packet.a().equals("manual32k")) {
+            Bukkit.getScheduler().runTask(Impurity.getPlugin(), () -> {
+                PacketDataSerializer serializer = packet.b();
+                BlockPosition pos = serializer.e();
+                serversidedAuto32k.doPlace(event.getPlayer(), pos);
+            });
         }
     }
 
