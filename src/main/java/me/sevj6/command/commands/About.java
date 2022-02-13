@@ -29,7 +29,6 @@ public class About extends Command {
     }
 
     public static String getJoinDate(Object object) {
-        int i = 0;
         DateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM dd, yyyy");
         String jd = null;
         if (object instanceof Player) {
