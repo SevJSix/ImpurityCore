@@ -20,7 +20,7 @@ public class NameColorJoinListener implements Listener, Instance {
         Player player = event.getPlayer();
         String displayName = fileConfig.getNamecolor().getString(String.valueOf(player.getUniqueId()));
         if (fileConfig.getNamecolor().contains(String.valueOf(player.getUniqueId()))) {
-            if (displayName.equals("null")) {
+            if (displayName.equals("null") || displayName.contains("§k")) {
                 player.setDisplayName(null);
                 event.setJoinMessage(ChatColor.GRAY + player.getName() + " joined");
             } else {
@@ -37,7 +37,7 @@ public class NameColorJoinListener implements Listener, Instance {
         Player player = event.getPlayer();
         String displayName = fileConfig.getNamecolor().getString(String.valueOf(player.getUniqueId()));
         if (fileConfig.getNamecolor().contains(String.valueOf(player.getUniqueId()))) {
-            if (displayName.equals("null")) {
+            if (displayName.equals("null") || displayName.contains("§k")) {
                 event.setQuitMessage(ChatColor.GRAY + player.getName() + " left");
             } else {
                 event.setQuitMessage(ChatColor.translateAlternateColorCodes('&', displayName + " &r&7left"));

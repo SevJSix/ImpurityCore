@@ -52,6 +52,10 @@ public class NameColor extends Command implements Instance {
                 case "codes":
                     try {
                         if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', args[1])).equals(player.getName())) {
+                            if (args[1].contains("&k")) {
+                                MessageUtil.sendMessage(player, "&4You cannot use obfuscated text in your name!");
+                                return;
+                            }
                             setDisplayName(player, args[1]);
                         } else {
                             MessageUtil.sendMessage(player, "&4Invalid color code or username processing. Please type /nc for help");
