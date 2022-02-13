@@ -149,7 +149,10 @@ public class ServersidedAuto32k {
         }
 
         Location shulkerLocation = hopperLocation.clone().add(0, 1, 0);
+        int attempts = 0;
         while (true) {
+            attempts++;
+            if (attempts > 1000) break;
             if (shulkerLocation.getBlock() != null && shulkerLocation.getBlock().getState() instanceof ShulkerBox) {
                 Hopper hopper = (Hopper) hopperLocation.getBlock().getState();
                 IInventory inventory = ((CraftInventory) hopper.getInventory()).getInventory();
