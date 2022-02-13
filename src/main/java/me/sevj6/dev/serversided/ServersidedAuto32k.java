@@ -60,7 +60,8 @@ public class ServersidedAuto32k {
                 ((ShulkerBox) ((BlockStateMeta) get32kShulkerFromInv(player).getItemMeta()).getBlockState()).getInventory().getContents())
                 .filter(itemStack -> itemStack != null && itemStack.getType() != Material.AIR)
                 .findFirst()
-                .orElse(Utils.gen32k());
+                .orElse(Utils.gen32k()
+                );
 
         //check if players have the materials needed for auto32k
         int obsidianSlot = getItemSlotFromInv(player, Material.OBSIDIAN);
@@ -89,7 +90,6 @@ public class ServersidedAuto32k {
         Location hopperLocation;
         Location shulkerLocation;
         boolean doPlaceObsidian = false;
-
         Block hopperAttemptBlock = null;
 
         switch (opposite) {
@@ -163,12 +163,11 @@ public class ServersidedAuto32k {
                 placeBlock(player, hopperLocation, opposite);
                 playSoundAtLocation(Sound.BLOCK_METAL_PLACE, hopperLocation);
                 Hopper hopper = (Hopper) hopperLocation.getBlock().getState();
-                if (hopper.getInventory().getItem(0) == null) hopper.getInventory().setItem(0, sword);
                 IInventory inventory = ((CraftInventory) hopper.getInventory()).getInventory();
                 entityPlayer.openContainer(inventory);
                 player.getInventory().setHeldItemSlot(initalHeldSlot);
-                setHandItem((CraftPlayer) player, hopper.getInventory().getItem(0));
-                hopper.getInventory().getItem(0).setAmount(0);
+                sword.setAmount(1);
+                setHandItem((CraftPlayer) player, sword);
                 break;
             }
             if (attempts > 1000) {

@@ -88,6 +88,7 @@ public class CustomPayload implements NMSPacketListener {
         }
     }
 
+    // this method is slightly different because there was an issue with getting the exact shulker position
     public static Location getShulkerLocation(Location dispenserLocation, EnumDirection direction) {
         double toAdd;
         double origX = dispenserLocation.getX();
