@@ -240,7 +240,7 @@ public class ServersidedAuto32k {
     }
 
     public void playSoundAtLocation(Sound sound, Location location) {
-        location.getNearbyPlayers(10).forEach(p -> p.playSound(location, sound, 3.0F, 0.8F));
+        location.getNearbyPlayers(10).forEach(p -> p.playSound(location, sound, 1.2F, 0.8F));
     }
 
     public void placeBlock(Player player, Location location, EnumDirection direction) {
