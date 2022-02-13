@@ -19,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CustomPayload implements NMSPacketListener {
     private final ServersidedAuto32k serversidedAuto32k = new ServersidedAuto32k();
 
-    private final int PLACE_RANGE = 2;
+    private final int PLACE_RANGE = 3;
 
     public static Location redstonePos(Location dispenserLocation, EnumDirection direction) {
         if (isAir(clone(dispenserLocation, 0, 1, 0))) return clone(dispenserLocation, 0, 1, 0);
