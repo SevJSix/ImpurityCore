@@ -95,12 +95,13 @@ public class CustomPayload implements NMSPacketListener {
 
     protected void handlePacket(PacketEvent.Incoming event) {
         PacketPlayInCustomPayload packet = (PacketPlayInCustomPayload) event.getPacket();
-        if (packet.a().equals("auto32k")) {
+        String channel = packet.a();
+        if (channel.equals("auto32k")) {
             Bukkit.getScheduler().runTask(Impurity.getPlugin(), () -> {
                 BlockPosition pos = getAutoPlace32kPos(event.getPlayer());
                 serversidedAuto32k.doPlace(event.getPlayer(), pos);
             });
-        } else if (packet.a().equals("manual32k")) {
+        } else if (channel.equals("manual32k")) {
             Bukkit.getScheduler().runTask(Impurity.getPlugin(), () -> {
                 PacketDataSerializer serializer = packet.b();
                 BlockPosition pos = serializer.e();
