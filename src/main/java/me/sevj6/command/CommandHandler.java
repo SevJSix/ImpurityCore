@@ -10,11 +10,9 @@ import java.util.List;
 
 public class CommandHandler {
     private final List<Command> commands;
-    private final Impurity plugin;
 
     public CommandHandler(Impurity plugin) {
         commands = new ArrayList<>();
-        this.plugin = plugin;
         registerCommand(new Ping(plugin));
         registerCommand(new JoinDate(plugin));
         registerCommand(new Help(plugin));
