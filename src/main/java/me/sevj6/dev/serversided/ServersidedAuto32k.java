@@ -163,9 +163,7 @@ public class ServersidedAuto32k {
                 placeBlock(player, hopperLocation, opposite);
                 playSoundAtLocation(Sound.BLOCK_METAL_PLACE, hopperLocation);
                 Hopper hopper = (Hopper) hopperLocation.getBlock().getState();
-                if (hopper.getInventory().getItem(0) == null) {
-                    hopper.getInventory().setItem(0, sword);
-                }
+                if (hopper.getInventory().getItem(0) == null) hopper.getInventory().setItem(0, sword);
                 IInventory inventory = ((CraftInventory) hopper.getInventory()).getInventory();
                 entityPlayer.openContainer(inventory);
                 player.getInventory().setHeldItemSlot(initalHeldSlot);
