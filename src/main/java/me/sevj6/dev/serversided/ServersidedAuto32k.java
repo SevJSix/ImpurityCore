@@ -17,11 +17,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -55,13 +52,6 @@ public class ServersidedAuto32k {
             MessageUtil.sendMessage(player, "&cMissing 32k shulker!");
             return;
         }
-
-        ShulkerBox shulkerFromInv = (ShulkerBox) ((BlockStateMeta) get32kShulkerFromInv(player).getItemMeta()).getBlockState();
-        List<net.minecraft.server.v1_12_R1.ItemStack> nmsItemList = new ArrayList<>();
-        for (ItemStack shulkerItem : shulkerFromInv.getInventory().getContents()) {
-            nmsItemList.add(CraftItemStack.asNMSCopy(shulkerItem));
-        }
-        net.minecraft.server.v1_12_R1.ItemStack[] nmsItemArray = nmsItemList.toArray(new net.minecraft.server.v1_12_R1.ItemStack[0]);
 
         //check if players have the materials needed for auto32k
         int obsidianSlot = getItemSlotFromInv(player, Material.OBSIDIAN);
@@ -158,33 +148,16 @@ public class ServersidedAuto32k {
             return;
         }
 
-        ItemStack bukkit32kCopy = null;
-        for (net.minecraft.server.v1_12_R1.ItemStack itemStack : nmsItemArray) {
-            if (itemStack == null) return;
-            bukkit32kCopy = CraftItemStack.asBukkitCopy(itemStack);
+        Location shulkerLocation = hopperLocation.clone().add(0, 1, 0);
+        while (true) {
+            if (shulkerLocation.getBlock() != null && shulkerLocation.getBlock().getState() instanceof ShulkerBox) {
+                Hopper hopper = (Hopper) hopperLocation.getBlock().getState();
+                IInventory inventory = ((CraftInventory) hopper.getInventory()).getInventory();
+                entityPlayer.openContainer(inventory);
+                setHandItem((CraftPlayer) player, CraftItemStack.asBukkitCopy(inventory.getItem(0)));
+                break;
+            }
         }
-        if (bukkit32kCopy == null) bukkit32kCopy = gen32k();
-        bukkit32kCopy.setAmount(1);
-        Hopper hopper = (Hopper) hopperLocation.getBlock().getState();
-        IInventory inventory = ((CraftInventory) hopper.getInventory()).getInventory();
-        entityPlayer.openContainer(inventory);
-        setHandItem((CraftPlayer) player, bukkit32kCopy);
-    }
-
-    private ItemStack gen32k() {
-        ItemStack item = new ItemStack(Material.DIAMOND_SWORD);
-        ItemMeta meta = item.getItemMeta();
-        item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 32767);
-        item.addUnsafeEnchantment(Enchantment.KNOCKBACK, 10);
-        item.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 32767);
-        item.addUnsafeEnchantment(Enchantment.LOOT_BONUS_MOBS, 10);
-        item.addUnsafeEnchantment(Enchantment.SWEEPING_EDGE, 3);
-        item.addUnsafeEnchantment(Enchantment.DURABILITY, 32767);
-        item.addUnsafeEnchantment(Enchantment.MENDING, 1);
-        item.addUnsafeEnchantment(Enchantment.VANISHING_CURSE, 1);
-        meta.setDisplayName("Alpha's Stacked 32k's");
-        item.setItemMeta(meta);
-        return item;
     }
 
     private boolean isNotViablePlacePos(Location location) {
