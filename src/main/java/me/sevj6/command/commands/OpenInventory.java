@@ -26,6 +26,8 @@ public class OpenInventory extends Command {
                 } else {
                     MessageUtil.sendMessage(sender, "&4Player is offline");
                 }
+            } else {
+                MessageUtil.sendMessage(sender, "&4Specify a player");
             }
         }
     }
