@@ -2,6 +2,7 @@ package me.sevj6.command.commands;
 
 import me.sevj6.Impurity;
 import me.sevj6.command.Command;
+import me.sevj6.util.MessageUtil;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -22,6 +23,8 @@ public class OpenInventory extends Command {
                 if (target != null && target.isOnline()) {
                     EntityPlayer entityTarget = ((CraftPlayer) target).getHandle();
                     player.openContainer(entityTarget.inventory);
+                } else {
+                    MessageUtil.sendMessage(sender, "&4Player is offline");
                 }
             }
         }
