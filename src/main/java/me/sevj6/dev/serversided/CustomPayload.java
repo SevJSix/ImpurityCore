@@ -8,7 +8,7 @@ import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
+import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -73,19 +73,43 @@ public class CustomPayload implements NMSPacketListener {
         return location.clone().add(x, y, z);
     }
 
-    public static Block getHopperBlock(Location dispenserLocation, EnumDirection direction) {
+    public static Location getHopperLocation(Location dispenserLocation, EnumDirection direction) {
         switch (direction) {
             case EAST:
-                return dispenserLocation.getWorld().getBlockAt(dispenserLocation.clone().add(1, -1, 0));
+                return dispenserLocation.clone().add(1, -1, 0);
             case WEST:
-                return dispenserLocation.getWorld().getBlockAt(dispenserLocation.clone().add(-1, -1, 0));
+                return dispenserLocation.clone().add(-1, -1, 0);
             case NORTH:
-                return dispenserLocation.getWorld().getBlockAt(dispenserLocation.clone().add(0, -1, -1));
+                return dispenserLocation.clone().add(0, -1, -1);
             case SOUTH:
-                return dispenserLocation.getWorld().getBlockAt(dispenserLocation.clone().add(0, -1, 1));
+                return dispenserLocation.clone().add(0, -1, 1);
             default:
                 throw new IllegalStateException("Unexpected value: " + direction);
         }
+    }
+
+    public static Location getShulkerLocation(Location dispenserLocation, EnumDirection direction) {
+        double toAdd;
+        double origX = dispenserLocation.getX();
+        double origY = dispenserLocation.getY();
+        double origZ = dispenserLocation.getZ();
+        World world = dispenserLocation.getWorld();
+        Location shulkerLoc;
+        switch (direction) {
+            case EAST:
+            case WEST:
+                toAdd = origX + 0.5;
+                shulkerLoc = new Location(world, toAdd, origY, origZ);
+                break;
+            case NORTH:
+            case SOUTH:
+                toAdd = origZ + 0.5;
+                shulkerLoc = new Location(world, origX, origY, toAdd);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + direction);
+        }
+        return shulkerLoc;
     }
 
     @NMSEventHandler
@@ -140,13 +164,13 @@ public class CustomPayload implements NMSPacketListener {
         Location obsidian = location.clone().add(0, 1, 0);
         Location dispenser = obsidian.clone().add(0, 1, 0);
         Location redstone = redstonePos(dispenser, direction);
-        Block hopper = getHopperBlock(dispenser, direction);
-        Location shulker = hopper.getLocation().clone().add(0, 1, 0);
+        Location hopper = getHopperLocation(dispenser, direction);
+        Location shulker = hopper.clone().add(0, 1, 0);
         return location.getBlock().getType() != Material.AIR
                 && obsidian.getBlock().getType() == Material.AIR
                 && dispenser.getBlock().getType() == Material.AIR
                 && (redstone != null && redstone.getBlock().getType() == Material.AIR)
-                && hopper.getType() == Material.AIR
+                && hopper.getBlock().getType() == Material.AIR
                 && shulker.getBlock().getType() == Material.AIR
                 && location.getNearbyPlayers(1.5).isEmpty();
     }

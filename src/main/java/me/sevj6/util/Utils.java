@@ -6,7 +6,10 @@ import me.sevj6.Instance;
 import me.sevj6.event.listener.NettyInjector;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.text.DecimalFormat;
 
@@ -62,4 +65,19 @@ public class Utils implements Instance {
         return count;
     }
 
+    public static ItemStack gen32k() {
+        org.bukkit.inventory.ItemStack item = new org.bukkit.inventory.ItemStack(Material.DIAMOND_SWORD);
+        ItemMeta meta = item.getItemMeta();
+        item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 32767);
+        item.addUnsafeEnchantment(Enchantment.KNOCKBACK, 10);
+        item.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 32767);
+        item.addUnsafeEnchantment(Enchantment.LOOT_BONUS_MOBS, 10);
+        item.addUnsafeEnchantment(Enchantment.SWEEPING_EDGE, 3);
+        item.addUnsafeEnchantment(Enchantment.DURABILITY, 32767);
+        item.addUnsafeEnchantment(Enchantment.MENDING, 1);
+        item.addUnsafeEnchantment(Enchantment.VANISHING_CURSE, 1);
+        meta.setDisplayName("Alpha's Stacked 32k's");
+        item.setItemMeta(meta);
+        return item;
+    }
 }

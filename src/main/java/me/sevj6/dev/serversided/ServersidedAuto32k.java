@@ -1,6 +1,7 @@
 package me.sevj6.dev.serversided;
 
 import me.sevj6.util.MessageUtil;
+import me.sevj6.util.Utils;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -37,6 +39,7 @@ public class ServersidedAuto32k {
         EnumDirection facing = entityPlayer.getDirection();
         Location looking = block.getLocation();
         EnumDirection opposite = facing.opposite();
+        int initalHeldSlot = player.getInventory().getHeldItemSlot();
 
         if (block.getType() == Material.AIR) {
             MessageUtil.sendMessage(player, "&cCannot place on air!");
@@ -52,6 +55,12 @@ public class ServersidedAuto32k {
             MessageUtil.sendMessage(player, "&cMissing 32k shulker!");
             return;
         }
+
+        ItemStack sword = Arrays.stream(
+                ((ShulkerBox) ((BlockStateMeta) get32kShulkerFromInv(player).getItemMeta()).getBlockState()).getInventory().getContents())
+                .filter(itemStack -> itemStack != null && itemStack.getType() != Material.AIR)
+                .findFirst()
+                .orElse(Utils.gen32k());
 
         //check if players have the materials needed for auto32k
         int obsidianSlot = getItemSlotFromInv(player, Material.OBSIDIAN);
@@ -78,6 +87,7 @@ public class ServersidedAuto32k {
         Location dispenserLocation;
         Location redstoneLocation = null;
         Location hopperLocation;
+        Location shulkerLocation;
         boolean doPlaceObsidian = false;
 
         Block hopperAttemptBlock = null;
@@ -105,8 +115,9 @@ public class ServersidedAuto32k {
         }
 
         dispenserLocation = obsidianLocation.clone().add(0, 1, 0);
+        shulkerLocation = CustomPayload.getShulkerLocation(dispenserLocation, opposite);
         redstoneLocation = CustomPayload.redstonePos(dispenserLocation, opposite);
-        hopperLocation = CustomPayload.getHopperBlock(dispenserLocation, opposite).getLocation();
+        hopperLocation = CustomPayload.getHopperLocation(dispenserLocation, opposite);
 
         if (doPlaceObsidian) {
             player.getInventory().setHeldItemSlot(obsidianSlot);
@@ -131,7 +142,7 @@ public class ServersidedAuto32k {
             MessageUtil.sendMessage(player, "&cInvalid dispenser location!");
             return;
         }
-        if (!isNotViablePlacePos(redstoneLocation)) {
+        if (redstoneLocation != null && !isNotViablePlacePos(redstoneLocation)) {
             player.getInventory().setHeldItemSlot(redstoneSlot);
             placeBlock(player, redstoneLocation, EnumDirection.UP);
             playSoundAtLocation(Sound.BLOCK_METAL_PLACE, redstoneLocation);
@@ -139,26 +150,30 @@ public class ServersidedAuto32k {
             MessageUtil.sendMessage(player, "&cInvalid redstone location!");
             return;
         }
-        if (!isNotViablePlacePos(hopperLocation)) {
-            player.getInventory().setHeldItemSlot(hopperSlot);
-            placeBlock(player, hopperLocation, opposite);
-            playSoundAtLocation(Sound.BLOCK_METAL_PLACE, hopperLocation);
-        } else {
+        if (isNotViablePlacePos(hopperLocation)) {
             MessageUtil.sendMessage(player, "&cInvalid hopper location!");
             return;
         }
 
-        Location shulkerLocation = hopperLocation.clone().add(0, 1, 0);
         int attempts = 0;
         while (true) {
             attempts++;
-            if (attempts > 1000) break;
-            if (shulkerLocation.getBlock() != null && shulkerLocation.getBlock().getState() instanceof ShulkerBox) {
+            if (shulkerLocation.getBlock().getType() != Material.AIR) {
+                player.getInventory().setHeldItemSlot(hopperSlot);
+                placeBlock(player, hopperLocation, opposite);
+                playSoundAtLocation(Sound.BLOCK_METAL_PLACE, hopperLocation);
                 Hopper hopper = (Hopper) hopperLocation.getBlock().getState();
+                if (hopper.getInventory().getItem(0) == null) {
+                    hopper.getInventory().setItem(0, sword);
+                }
                 IInventory inventory = ((CraftInventory) hopper.getInventory()).getInventory();
                 entityPlayer.openContainer(inventory);
-                setHandItem((CraftPlayer) player, CraftItemStack.asBukkitCopy(inventory.getItem(0)));
-                inventory.getItem(0).setCount(0);
+                player.getInventory().setHeldItemSlot(initalHeldSlot);
+                setHandItem((CraftPlayer) player, hopper.getInventory().getItem(0));
+                hopper.getInventory().getItem(0).setAmount(0);
+                break;
+            }
+            if (attempts > 1000) {
                 break;
             }
         }
