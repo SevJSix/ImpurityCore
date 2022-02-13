@@ -155,6 +155,7 @@ public class ServersidedAuto32k {
                 IInventory inventory = ((CraftInventory) hopper.getInventory()).getInventory();
                 entityPlayer.openContainer(inventory);
                 setHandItem((CraftPlayer) player, CraftItemStack.asBukkitCopy(inventory.getItem(0)));
+                inventory.getItem(0).setCount(0);
                 break;
             }
         }
