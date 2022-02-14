@@ -30,6 +30,7 @@ import java.util.Objects;
 public class ServersidedAuto32k {
 
     public void doPlace(Player player, BlockPosition pos) {
+        int i = 0;
         if (pos == null) {
             MessageUtil.sendMessage(player, "&cInvalid block position!");
             return;
