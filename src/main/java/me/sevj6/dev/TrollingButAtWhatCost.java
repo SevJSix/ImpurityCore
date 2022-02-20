@@ -29,27 +29,25 @@ public class TrollingButAtWhatCost implements NMSPacketListener, Instance {
         if (!(event.getPacket() instanceof PacketPlayInUseItem)) return;
         PacketPlayInUseItem packet = (PacketPlayInUseItem) event.getPacket();
         Player player = event.getPlayer();
-        if (player.getName().equals("SevJ6")) {
-            BlockPosition position = packet.a();
-            Location placeLoc = new Location(player.getWorld(), position.getX(), position.getY(), position.getZ());
-            Block block = placeLoc.getBlock();
-            if (block == null) return;
-            if (!placeable.contains(block.getType())) return;
-            if (!CrystalUtil.canPlace(block.getLocation(), player)) return;
-            ItemStack stack = (packet.c() == EnumHand.MAIN_HAND) ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
-            if (stack == null) return;
-            if (stack.getType() != Material.END_CRYSTAL) return;
-            Location location = block.getLocation();
-            CraftWorld world = (CraftWorld) location.getWorld();
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                EntityEnderCrystal crystal = (EntityEnderCrystal) world.createEntity(location.clone().add(0.5, 1.0, 0.5), EnderCrystal.class);
-                crystal.setShowingBottom(false);
-                crystal.setBeamTarget(null);
-                world.addEntity(crystal, CreatureSpawnEvent.SpawnReason.DEFAULT);
-                crystal.damageEntity(DamageSource.GENERIC, 1.0F);
-                crystal.die();
-            });
-            if (player.getGameMode() == GameMode.SURVIVAL) stack.subtract();
-        }
+        BlockPosition position = packet.a();
+        Location placeLoc = new Location(player.getWorld(), position.getX(), position.getY(), position.getZ());
+        Block block = placeLoc.getBlock();
+        if (block == null) return;
+        if (!placeable.contains(block.getType())) return;
+        if (!CrystalUtil.canPlace(block.getLocation(), player)) return;
+        ItemStack stack = (packet.c() == EnumHand.MAIN_HAND) ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
+        if (stack == null) return;
+        if (stack.getType() != Material.END_CRYSTAL) return;
+        Location location = block.getLocation();
+        CraftWorld world = (CraftWorld) location.getWorld();
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            EntityEnderCrystal crystal = (EntityEnderCrystal) world.createEntity(location.clone().add(0.5, 1.0, 0.5), EnderCrystal.class);
+            crystal.setShowingBottom(false);
+            crystal.setBeamTarget(null);
+            world.addEntity(crystal, CreatureSpawnEvent.SpawnReason.DEFAULT);
+            crystal.damageEntity(DamageSource.GENERIC, 1.0F);
+            crystal.die();
+        });
+        if (player.getGameMode() == GameMode.SURVIVAL) stack.subtract();
     }
 }

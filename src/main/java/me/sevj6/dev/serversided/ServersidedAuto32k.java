@@ -1,8 +1,10 @@
 package me.sevj6.dev.serversided;
 
+import me.sevj6.Impurity;
 import me.sevj6.util.MessageUtil;
 import me.sevj6.util.Utils;
 import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -19,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Objects;
@@ -29,8 +32,7 @@ import java.util.Objects;
  */
 public class ServersidedAuto32k {
 
-    public void doPlace(Player player, BlockPosition pos) {
-        int i = 0;
+    public void doPlace(Player player, BlockPosition pos) throws IOException {
         if (pos == null) {
             MessageUtil.sendMessage(player, "&cInvalid block position!");
             return;
@@ -160,15 +162,14 @@ public class ServersidedAuto32k {
         while (true) {
             attempts++;
             if (shulkerLocation.getBlock().getType() != Material.AIR) {
-                player.getInventory().setHeldItemSlot(hopperSlot);
-                placeBlock(player, hopperLocation, opposite);
-                playSoundAtLocation(Sound.BLOCK_METAL_PLACE, hopperLocation);
-                Hopper hopper = (Hopper) hopperLocation.getBlock().getState();
-                IInventory inventory = ((CraftInventory) hopper.getInventory()).getInventory();
-                entityPlayer.openContainer(inventory);
-                player.getInventory().setHeldItemSlot(initalHeldSlot);
-                sword.setAmount(1);
-                setHandItem((CraftPlayer) player, sword);
+                Bukkit.getScheduler().runTaskLater(Impurity.getPlugin(), () -> {
+                    player.getInventory().setHeldItemSlot(hopperSlot);
+                    placeBlock(player, hopperLocation, opposite);
+                    playSoundAtLocation(Sound.BLOCK_METAL_PLACE, hopperLocation);
+                    Hopper hopper = (Hopper) hopperLocation.getBlock().getState();
+                    IInventory inventory = ((CraftInventory) hopper.getInventory()).getInventory();
+                    entityPlayer.openContainer(inventory);
+                }, 4L);
                 break;
             }
             if (attempts > 1000) {

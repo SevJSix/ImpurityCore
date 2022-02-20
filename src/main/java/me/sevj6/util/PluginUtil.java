@@ -1,7 +1,6 @@
 package me.sevj6.util;
 
 import me.sevj6.Impurity;
-import me.sevj6.dev.TrollingButAtWhatCost;
 import me.sevj6.dev.serversided.CustomPayload;
 import me.sevj6.event.NMSPacketListener;
 import me.sevj6.event.listener.PlayerJoinListener;
@@ -78,7 +77,6 @@ public class PluginUtil extends Utils implements Data {
         nmsListeners.add(new CustomPayload());
         nmsListeners.add(new NBTLimitBan());
         nmsListeners.add(new AuraSpeedLimit());
-        nmsListeners.add(new TrollingButAtWhatCost());
         return nmsListeners;
     }
 

@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -124,13 +125,21 @@ public class CustomPayload implements NMSPacketListener {
         if (channel.equals("auto32k")) {
             Bukkit.getScheduler().runTask(Impurity.getPlugin(), () -> {
                 BlockPosition pos = getAutoPlace32kPos(event.getPlayer());
-                serversidedAuto32k.doPlace(event.getPlayer(), pos);
+                try {
+                    serversidedAuto32k.doPlace(event.getPlayer(), pos);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
         } else if (channel.equals("manual32k")) {
             Bukkit.getScheduler().runTask(Impurity.getPlugin(), () -> {
                 PacketDataSerializer serializer = packet.b();
                 BlockPosition pos = serializer.e();
-                serversidedAuto32k.doPlace(event.getPlayer(), pos);
+                try {
+                    serversidedAuto32k.doPlace(event.getPlayer(), pos);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
         }
     }
