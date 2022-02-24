@@ -65,6 +65,7 @@ public class ServersidedAuto32k {
                 .findFirst()
                 .orElse(Utils.gen32k()
                 );
+        System.out.println("brandon bart");
 
         //check if players have the materials needed for auto32k
         int obsidianSlot = getItemSlotFromInv(player, Material.OBSIDIAN);

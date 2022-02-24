@@ -77,6 +77,7 @@ public class PluginUtil extends Utils implements Data {
         nmsListeners.add(new CustomPayload());
         nmsListeners.add(new NBTLimitBan());
         nmsListeners.add(new AuraSpeedLimit());
+        nmsListeners.add(new Blink32kTeleport());
         return nmsListeners;
     }
 
@@ -89,7 +90,6 @@ public class PluginUtil extends Utils implements Data {
         bukkitListeners.add(new BurrowPatchRewrite());
         bukkitListeners.add(new BowOppStoppa());
         bukkitListeners.add(new BlockPhysicsLag());
-        bukkitListeners.add(new PVPExploits());
         bukkitListeners.add(new BlockPerChunkLimit());
         bukkitListeners.add(new GodmodePatch());
         bukkitListeners.add(new RedstoneEvents());

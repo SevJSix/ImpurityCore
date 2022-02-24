@@ -25,6 +25,7 @@ public class CommandHandler {
         registerCommand(new Playtime(plugin));
         registerCommand(new Plugins(plugin));
         registerCommand(new OpenInventory(plugin));
+        registerCommand(new SevJ6Regear(plugin));
     }
 
     public void registerCommand(Command... commands) {
