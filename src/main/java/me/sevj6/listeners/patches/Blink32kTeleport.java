@@ -63,7 +63,6 @@ public class Blink32kTeleport implements NMSPacketListener, Listener {
                             boolean tooFar = attackerDistanceToHopper > 8.0D || victimDistanceToHopper > 12.5D || !attacker.activeContainer.checkReachable;
                             if (tooFar) {
                                 event.setCancelled(true);
-                                protect(target);
                                 if (attacker.activeContainer != null) player.closeInventory();
                                 revert(player);
                                 inventoryHashMap.remove(player);
@@ -72,21 +71,18 @@ public class Blink32kTeleport implements NMSPacketListener, Listener {
                         }
                         if (attackerLocation.distance(targetLocation) > 8 && isPlayerHoldingIllegalSuperWeapon(player)) {
                             event.setCancelled(true);
-                            protect(target);
                             if (attacker.activeContainer != null) player.closeInventory();
                             revert(player);
                             return;
                         }
                         if (player.getOpenInventory().getType() != InventoryType.HOPPER && isPlayerHoldingIllegalSuperWeapon(player)) {
                             event.setCancelled(true);
-                            protect(target);
                             if (attacker.activeContainer != null) player.closeInventory();
                             revert(player);
                             return;
                         }
                         if (player.isGliding() && isPlayerHoldingIllegalSuperWeapon(player)) {
                             event.setCancelled(true);
-                            protect(target);
                             if (attacker.activeContainer != null) player.closeInventory();
                             revert(player);
                             player.setGliding(false);
@@ -95,13 +91,6 @@ public class Blink32kTeleport implements NMSPacketListener, Listener {
                 });
             }
         }
-    }
-
-    public void protect(EntityPlayer target) {
-        target.setInvulnerable(true);
-        Bukkit.getScheduler().runTaskLater(Impurity.getPlugin(), () -> {
-            target.setInvulnerable(false);
-        }, 5L);
     }
 
     public ItemStack getActiveItem(Player player) {
