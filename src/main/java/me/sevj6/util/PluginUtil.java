@@ -115,7 +115,6 @@ public class PluginUtil extends Utils implements Data {
         bukkitListeners.add(new LavaDupe());
         bukkitListeners.add(new PlaytimeListeners(plugin));
         bukkitListeners.add(new ArmorStandAiDisable());
-        bukkitListeners.add(new LongJumpFix());
         return bukkitListeners;
     }
 }

@@ -10,17 +10,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.util.NumberConversions;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 
 public class BlinkPatchRewrite implements NMSPacketListener {
-
-    public static final HashMap<Player, Location> lastPacketLocationMap;
-
-    static {
-        lastPacketLocationMap = new HashMap<>();
-    }
 
     private Field hasPos;
     private Field packetX;
@@ -37,7 +31,6 @@ public class BlinkPatchRewrite implements NMSPacketListener {
             this.packetY.setAccessible(true);
             this.packetZ = PacketPlayInFlying.class.getDeclaredField("z");
             this.packetZ.setAccessible(true);
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(Impurity.getPlugin(), lastPacketLocationMap::clear, 20L, (20L * 30L));
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -52,13 +45,11 @@ public class BlinkPatchRewrite implements NMSPacketListener {
                     Player player = event.getPlayer();
                     EntityPlayer ep = getEntityPlayer(player);
                     Location packetLocation = new Location(player.getWorld(), packetX.getDouble(packet), packetY.getDouble(packet), packetZ.getDouble(packet), ep.yaw, ep.pitch);
-                    if (BlinkPatchRewrite.lastPacketLocationMap.containsKey(player)) {
-                        double dist = BlinkPatchRewrite.lastPacketLocationMap.get(player).distance(packetLocation);
+                    double dist = getDistanceOn2DPlaneAxis(player.getLocation(), packetLocation);
                         if (tooFar(dist, ep)) {
-                            handleTask(() -> player.teleport(BlinkPatchRewrite.lastPacketLocationMap.get(player)));
+                            event.setCancelled(true);
+                            handleTask(() -> player.teleport(player.getLocation()));
                         }
-                    }
-                    put(player, packetLocation, BlinkPatchRewrite.lastPacketLocationMap.containsKey(player));
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -69,27 +60,28 @@ public class BlinkPatchRewrite implements NMSPacketListener {
     private boolean tooFar(double dist, EntityPlayer ep) {
         boolean og = ep.onGround;
         float fd = ep.fallDistance;
-        if (dist > 30) return false;
-        return dist > 1.0D && og
-                || dist > 1.0D && !og && fd < 4.5F
-                || dist > 1.5D && !og && fd < 8.5F
-                || dist > 2.0D && !og && fd < 12.5F
-                || dist > 3.0D && !og && fd < 20.0F;
+        if (dist > 30 || ep.getBukkitEntity().isGliding()) return false;
+        return dist > 1.5D && og
+                || dist > 2.0D && !og && fd < 4.5F
+                || dist > 2.5D && !og && fd < 8.5F
+                || dist > 3.0D && !og && fd < 12.5F
+                || dist > 3.5D && !og && fd < 20.0F;
     }
 
     public void handleTask(Runnable task) {
         Bukkit.getScheduler().runTask(Impurity.getPlugin(), task);
     }
 
-    private EntityPlayer getEntityPlayer(Player player) {
-        return ((CraftPlayer) player).getHandle();
+    public double getDistanceOn2DPlaneAxis(Location l1, Location l2) {
+        double x1 = l1.getX();
+        double x2 = l2.getX();
+        double z1 = l1.getZ();
+        double z2 = l2.getZ();
+        double dSquared = NumberConversions.square((x2 - x1)) + NumberConversions.square((z2 - z1));
+        return Math.sqrt(dSquared);
     }
 
-    public void put(Player player, Location location, boolean replace) {
-        if (replace) {
-            BlinkPatchRewrite.lastPacketLocationMap.replace(player, location);
-        } else {
-            BlinkPatchRewrite.lastPacketLocationMap.put(player, location);
-        }
+    private EntityPlayer getEntityPlayer(Player player) {
+        return ((CraftPlayer) player).getHandle();
     }
 }
