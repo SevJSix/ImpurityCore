@@ -53,9 +53,9 @@ public class BlinkTeleport implements NMSPacketListener {
                     Location packetLocation = new Location(player.getWorld(), packetX.getDouble(packet), packetY.getDouble(packet), packetZ.getDouble(packet), player.getLocation().getYaw(), player.getLocation().getPitch());
                     boolean wasCancelled = false;
                     if (BlinkTeleport.lastPacketLocationMap.containsKey(player)) {
-                        if (packetLocation.distance(BlinkTeleport.lastPacketLocationMap.get(player)) > 5 && (!ep.onGround) ? ep.fallDistance < 12 : ep.onGround) {
+                        if (packetLocation.distance(BlinkTeleport.lastPacketLocationMap.get(player)) > 4 && (!ep.onGround) ? ep.fallDistance < 12 : ep.onGround) {
                             event.setCancelled(true);
-                            player.teleport(BlinkTeleport.lastPacketLocationMap.get(player));
+                            handleTask(() -> player.teleport(BlinkTeleport.lastPacketLocationMap.get(player)));
                             BlinkTeleport.lastPacketLocationMap.remove(player);
                             wasCancelled = true;
                         }
@@ -68,6 +68,10 @@ public class BlinkTeleport implements NMSPacketListener {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void handleTask(Runnable task) {
+        Bukkit.getScheduler().runTask(Impurity.getPlugin(), task);
     }
 
     private EntityPlayer getEntityPlayer(Player player) {
