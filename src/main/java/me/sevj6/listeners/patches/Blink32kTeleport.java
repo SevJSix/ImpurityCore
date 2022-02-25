@@ -48,49 +48,60 @@ public class Blink32kTeleport implements NMSPacketListener, Listener {
         if (event.getPacket() instanceof PacketPlayInUseEntity) {
             PacketPlayInUseEntity packet = (PacketPlayInUseEntity) event.getPacket();
             if (packet.a().equals(PacketPlayInUseEntity.EnumEntityUseAction.ATTACK)) {
-                Bukkit.getScheduler().runTask(Impurity.getPlugin(), () -> {
-                    Player player = event.getPlayer();
-                    Location attackerLocation = player.getLocation();
-                    Entity entity = packet.a(((CraftWorld) attackerLocation.getWorld()).getHandle());
-                    if (entity instanceof EntityPlayer) {
-                        EntityPlayer target = (EntityPlayer) entity;
-                        EntityPlayer attacker = ((CraftPlayer) player).getHandle();
-                        Location targetLocation = new Location(attackerLocation.getWorld(), target.locX, target.locY, target.locZ);
-                        if (inventoryHashMap.containsKey(player) && inventoryHashMap.get(player).getType() == InventoryType.HOPPER) {
-                            Inventory inventory = inventoryHashMap.get(player);
-                            double attackerDistanceToHopper = inventory.getLocation().distance(player.getLocation());
-                            double victimDistanceToHopper = inventory.getLocation().distance(targetLocation);
-                            boolean tooFar = attackerDistanceToHopper > 8.0D || victimDistanceToHopper > 12.5D || !attacker.activeContainer.checkReachable;
-                            if (tooFar) {
-                                event.setCancelled(true);
+                Player player = event.getPlayer();
+                Location attackerLocation = player.getLocation();
+                Entity entity = packet.a(((CraftWorld) attackerLocation.getWorld()).getHandle());
+                if (entity instanceof EntityPlayer) {
+                    EntityPlayer target = (EntityPlayer) entity;
+                    EntityPlayer attacker = ((CraftPlayer) player).getHandle();
+                    Location targetLocation = new Location(attackerLocation.getWorld(), target.locX, target.locY, target.locZ);
+
+                    // Check for blink 32k tp
+                    if (inventoryHashMap.containsKey(player) && inventoryHashMap.get(player).getType() == InventoryType.HOPPER) {
+                        Inventory inventory = inventoryHashMap.get(player);
+                        double attackerDistanceToHopper = inventory.getLocation().distance(player.getLocation());
+                        double victimDistanceToHopper = inventory.getLocation().distance(targetLocation);
+                        boolean tooFar = attackerDistanceToHopper > 8.0D
+                                || victimDistanceToHopper > 12.5D
+                                || !attacker.activeContainer.checkReachable
+                                || attackerLocation.distance(targetLocation) > 7.5;
+                        if (tooFar) {
+                            event.setCancelled(true);
+                            handleTask(() -> {
                                 if (attacker.activeContainer != null) player.closeInventory();
                                 revert(player);
-                                inventoryHashMap.remove(player);
-                                return;
-                            }
-                        }
-                        if (attackerLocation.distance(targetLocation) > 8 && isPlayerHoldingIllegalSuperWeapon(player)) {
-                            event.setCancelled(true);
-                            if (attacker.activeContainer != null) player.closeInventory();
-                            revert(player);
+                            });
+                            inventoryHashMap.remove(player);
                             return;
                         }
-                        if (player.getOpenInventory().getType() != InventoryType.HOPPER && isPlayerHoldingIllegalSuperWeapon(player)) {
-                            event.setCancelled(true);
+                    }
+
+                    // Stop free roaming with 32ks
+                    if (player.getOpenInventory().getType() != InventoryType.HOPPER && isPlayerHoldingIllegalSuperWeapon(player)) {
+                        event.setCancelled(true);
+                        handleTask(() -> {
                             if (attacker.activeContainer != null) player.closeInventory();
                             revert(player);
-                            return;
-                        }
-                        if (player.isGliding() && isPlayerHoldingIllegalSuperWeapon(player)) {
-                            event.setCancelled(true);
+                        });
+                        return;
+                    }
+
+                    // Stop people from flying with an elytra with 32ks
+                    if (player.isGliding() && isPlayerHoldingIllegalSuperWeapon(player)) {
+                        event.setCancelled(true);
+                        handleTask(() -> {
                             if (attacker.activeContainer != null) player.closeInventory();
                             revert(player);
                             player.setGliding(false);
-                        }
+                        });
                     }
-                });
+                }
             }
         }
+    }
+
+    public void handleTask(Runnable task) {
+        Bukkit.getScheduler().runTask(Impurity.getPlugin(), task);
     }
 
     public ItemStack getActiveItem(Player player) {
