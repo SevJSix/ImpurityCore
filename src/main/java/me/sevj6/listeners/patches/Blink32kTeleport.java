@@ -27,6 +27,7 @@ public class Blink32kTeleport implements NMSPacketListener, Listener {
 
     @EventHandler
     public void onOpen(InventoryOpenEvent event) {
+        if (event.getInventory().getType() != InventoryType.HOPPER) return;
         Player player = (Player) event.getPlayer();
         put(player, event.getInventory(), inventoryHashMap.containsKey(player));
     }
