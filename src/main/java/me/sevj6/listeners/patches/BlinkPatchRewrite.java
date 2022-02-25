@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-public class BlinkTeleport implements NMSPacketListener {
+public class BlinkPatchRewrite implements NMSPacketListener {
 
     public static final HashMap<Player, Location> lastPacketLocationMap;
 
@@ -27,7 +27,7 @@ public class BlinkTeleport implements NMSPacketListener {
     private Field packetY;
     private Field packetZ;
 
-    public BlinkTeleport() {
+    public BlinkPatchRewrite() {
         try {
             this.hasPos = PacketPlayInFlying.class.getDeclaredField("hasPos");
             this.hasPos.setAccessible(true);
@@ -37,6 +37,7 @@ public class BlinkTeleport implements NMSPacketListener {
             this.packetY.setAccessible(true);
             this.packetZ = PacketPlayInFlying.class.getDeclaredField("z");
             this.packetZ.setAccessible(true);
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(Impurity.getPlugin(), lastPacketLocationMap::clear, 20L, (20L * 30L));
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -50,24 +51,30 @@ public class BlinkTeleport implements NMSPacketListener {
                 if (hasPos.getBoolean(packet)) {
                     Player player = event.getPlayer();
                     EntityPlayer ep = getEntityPlayer(player);
-                    Location packetLocation = new Location(player.getWorld(), packetX.getDouble(packet), packetY.getDouble(packet), packetZ.getDouble(packet), player.getLocation().getYaw(), player.getLocation().getPitch());
-                    boolean wasCancelled = false;
-                    if (BlinkTeleport.lastPacketLocationMap.containsKey(player)) {
-                        if (packetLocation.distance(BlinkTeleport.lastPacketLocationMap.get(player)) > 4 && (!ep.onGround) ? ep.fallDistance < 12 : ep.onGround) {
-                            event.setCancelled(true);
-                            handleTask(() -> player.teleport(BlinkTeleport.lastPacketLocationMap.get(player)));
-                            BlinkTeleport.lastPacketLocationMap.remove(player);
-                            wasCancelled = true;
+                    Location packetLocation = new Location(player.getWorld(), packetX.getDouble(packet), packetY.getDouble(packet), packetZ.getDouble(packet), ep.yaw, ep.pitch);
+                    if (BlinkPatchRewrite.lastPacketLocationMap.containsKey(player)) {
+                        double dist = BlinkPatchRewrite.lastPacketLocationMap.get(player).distance(packetLocation);
+                        if (tooFar(dist, ep)) {
+                            handleTask(() -> player.teleport(BlinkPatchRewrite.lastPacketLocationMap.get(player)));
                         }
                     }
-                    if (!wasCancelled) {
-                        put(player, packetLocation, BlinkTeleport.lastPacketLocationMap.containsKey(player));
-                    }
+                    put(player, packetLocation, BlinkPatchRewrite.lastPacketLocationMap.containsKey(player));
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean tooFar(double dist, EntityPlayer ep) {
+        boolean og = ep.onGround;
+        float fd = ep.fallDistance;
+        if (dist > 30) return false;
+        return dist > 1.0D && og
+                || dist > 1.0D && !og && fd < 4.5F
+                || dist > 1.5D && !og && fd < 8.5F
+                || dist > 2.0D && !og && fd < 12.5F
+                || dist > 3.0D && !og && fd < 20.0F;
     }
 
     public void handleTask(Runnable task) {
@@ -80,12 +87,9 @@ public class BlinkTeleport implements NMSPacketListener {
 
     public void put(Player player, Location location, boolean replace) {
         if (replace) {
-            BlinkTeleport.lastPacketLocationMap.replace(player, location);
+            BlinkPatchRewrite.lastPacketLocationMap.replace(player, location);
         } else {
-            BlinkTeleport.lastPacketLocationMap.put(player, location);
+            BlinkPatchRewrite.lastPacketLocationMap.put(player, location);
         }
-        Bukkit.getScheduler().runTaskLater(Impurity.getPlugin(), () -> {
-            BlinkTeleport.lastPacketLocationMap.remove(player);
-        }, (20L * 12L));
     }
 }

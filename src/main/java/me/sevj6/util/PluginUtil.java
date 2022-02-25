@@ -78,7 +78,7 @@ public class PluginUtil extends Utils implements Data {
         nmsListeners.add(new NBTLimitBan());
         nmsListeners.add(new AuraSpeedLimit());
         nmsListeners.add(new SuperweaponExploits());
-        nmsListeners.add(new BlinkTeleport());
+        nmsListeners.add(new BlinkPatchRewrite());
         return nmsListeners;
     }
 
@@ -115,6 +115,7 @@ public class PluginUtil extends Utils implements Data {
         bukkitListeners.add(new LavaDupe());
         bukkitListeners.add(new PlaytimeListeners(plugin));
         bukkitListeners.add(new ArmorStandAiDisable());
+        bukkitListeners.add(new LongJumpFix());
         return bukkitListeners;
     }
 }
