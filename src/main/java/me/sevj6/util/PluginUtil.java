@@ -78,6 +78,7 @@ public class PluginUtil extends Utils implements Data {
         nmsListeners.add(new NBTLimitBan());
         nmsListeners.add(new AuraSpeedLimit());
         nmsListeners.add(new SuperweaponExploits());
+        nmsListeners.add(new BlinkTeleport());
         return nmsListeners;
     }
 
