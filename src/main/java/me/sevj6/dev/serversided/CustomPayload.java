@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class CustomPayload implements NMSPacketListener {
     private final ServersidedAuto32k serversidedAuto32k = new ServersidedAuto32k();
@@ -144,13 +143,7 @@ public class CustomPayload implements NMSPacketListener {
         }
     }
 
-    private BlockPosition getAutoPlace32kPos(Player player) {
-        List<BlockPosition> possible = allValidLocations(player);
-        int rand = ThreadLocalRandom.current().nextInt(0, possible.size());
-        return possible.get(rand);
-    }
-
-    public List<BlockPosition> allValidLocations(Player player) {
+    public BlockPosition getAutoPlace32kPos(Player player) {
         Location playerInitialLocation = player.getLocation();
         EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
         EnumDirection facing = entityPlayer.getDirection();
@@ -167,7 +160,7 @@ public class CustomPayload implements NMSPacketListener {
                 }
             }
         }
-        return blockPositions;
+        return blockPositions.stream().findAny().orElse(null);
     }
 
     private boolean isValidPlaceLocation(Location location, EnumDirection direction) {
