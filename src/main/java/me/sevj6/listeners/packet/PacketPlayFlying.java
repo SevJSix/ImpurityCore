@@ -37,7 +37,7 @@ public class PacketPlayFlying implements SevListener, Instance {
     Configuration exploit = fileConfig.getExploits();
 
     @SevHandler
-    public void onPacket(PacketEvent.Incoming event) {
+    public void onPacket(PacketEvent.ClientToServer event) {
         if (event.getPacket() instanceof PacketPlayInTeleportAccept) {
             Player player = event.getPlayer();
             ItemStack item = (player.getInventory().getItemInOffHand().getType() == Material.CHORUS_FRUIT) ? player.getEquipment().getItemInOffHand() : (player.getInventory().getItemInMainHand().getType() == Material.CHORUS_FRUIT) ? player.getEquipment().getItemInMainHand() : null;
@@ -48,7 +48,7 @@ public class PacketPlayFlying implements SevListener, Instance {
     }
 
     @SevHandler
-    public void onMove(PacketEvent.Incoming event) {
+    public void onMove(PacketEvent.ClientToServer event) {
         if (event.getPacket() instanceof PacketPlayInFlying && exploit.getBoolean("PacketFlyPhaseWalk.Enabled")) {
             Player player = event.getPlayer();
             if (set.contains(player)) {

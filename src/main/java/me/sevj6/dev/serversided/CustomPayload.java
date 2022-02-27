@@ -115,11 +115,11 @@ public class CustomPayload implements SevListener {
     }
 
     @SevHandler
-    public void onPacket(PacketEvent.Incoming event) {
+    public void onPacket(PacketEvent.ClientToServer event) {
         if (event.getPacket() instanceof PacketPlayInCustomPayload) handlePacket(event);
     }
 
-    protected void handlePacket(PacketEvent.Incoming event) {
+    protected void handlePacket(PacketEvent.ClientToServer event) {
         PacketPlayInCustomPayload packet = (PacketPlayInCustomPayload) event.getPacket();
         String channel = packet.a();
         if (channel.equals("auto32k")) {

@@ -18,7 +18,7 @@ public class PacketAutoRecipe implements SevListener, Instance {
     Configuration exploit = fileConfig.getExploits();
 
     @SevHandler
-    public void onPacket(PacketEvent.Incoming event) {
+    public void onPacket(PacketEvent.ClientToServer event) {
         if (event.getPacket() instanceof PacketPlayInAutoRecipe && exploit.getBoolean("AutoRecipeLagFix.Enabled")) {
             if (delay.hasReached(exploit.getLong("AutoRecipeLagFix.delay"))) delay.reset();
             else event.setCancelled(true);

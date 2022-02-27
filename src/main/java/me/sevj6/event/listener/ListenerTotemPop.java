@@ -31,7 +31,7 @@ public class ListenerTotemPop implements SevListener {
     }
 
     @SevHandler
-    public void onTotemPop(PacketEvent.Outgoing event) {
+    public void onTotemPop(PacketEvent.ServerToClient event) {
         if (event.getPacket() instanceof PacketPlayOutEntityStatus) {
             PacketPlayOutEntityStatus packet = (PacketPlayOutEntityStatus) event.getPacket();
             try {

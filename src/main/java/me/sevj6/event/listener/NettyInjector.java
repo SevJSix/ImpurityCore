@@ -17,15 +17,15 @@ public class NettyInjector extends ChannelDuplexHandler {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        PacketEvent.Incoming incoming = new PacketEvent.Incoming((Packet<?>) msg, player);
-        Impurity.EVENT_BUS.post(incoming);
-        if (!incoming.isCancelled()) super.channelRead(ctx, incoming.getPacket());
+        PacketEvent.ClientToServer clientToServer = new PacketEvent.ClientToServer((Packet<?>) msg, player);
+        Impurity.EVENT_BUS.post(clientToServer);
+        if (!clientToServer.isCancelled()) super.channelRead(ctx, clientToServer.getPacket());
     }
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        PacketEvent.Outgoing outgoing = new PacketEvent.Outgoing((Packet<?>) msg, player);
-        Impurity.EVENT_BUS.post(outgoing);
-        if (!outgoing.isCancelled()) super.write(ctx, outgoing.getPacket(), promise);
+        PacketEvent.ServerToClient serverToClient = new PacketEvent.ServerToClient((Packet<?>) msg, player);
+        Impurity.EVENT_BUS.post(serverToClient);
+        if (!serverToClient.isCancelled()) super.write(ctx, serverToClient.getPacket(), promise);
     }
 }

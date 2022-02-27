@@ -23,7 +23,7 @@ public class PacketBlockDig extends ViolationManager implements SevListener, Ins
     }
 
     @SevHandler
-    public void onIncoming(PacketEvent.Incoming event) {
+    public void onIncoming(PacketEvent.ClientToServer event) {
         Packet<?> packet = event.getPacket();
         Player player = event.getPlayer();
         if (exploit.getBoolean("Packets.Enabled") && packet instanceof PacketPlayInBlockDig) {

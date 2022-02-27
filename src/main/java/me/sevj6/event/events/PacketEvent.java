@@ -37,16 +37,16 @@ public class PacketEvent extends Event implements Cancellable {
         this.cancel = cancel;
     }
 
-    public static class Incoming extends PacketEvent {
+    public static class ClientToServer extends PacketEvent {
 
-        public Incoming(Packet<?> packet, Player player) {
+        public ClientToServer(Packet<?> packet, Player player) {
             super(packet, player);
         }
     }
 
-    public static class Outgoing extends PacketEvent {
+    public static class ServerToClient extends PacketEvent {
 
-        public Outgoing(Packet<?> packet, Player player) {
+        public ServerToClient(Packet<?> packet, Player player) {
             super(packet, player);
         }
     }

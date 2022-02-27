@@ -15,7 +15,7 @@ public class AuraSpeedLimit extends ViolationManager implements SevListener, Ins
     }
 
     @SevHandler
-    public void onPacket(PacketEvent.Incoming event) {
+    public void onPacket(PacketEvent.ClientToServer event) {
         if (event.getPacket() instanceof PacketPlayInUseEntity) {
             PacketPlayInUseEntity packet = (PacketPlayInUseEntity) event.getPacket();
             if (packet.a().equals(PacketPlayInUseEntity.EnumEntityUseAction.ATTACK)) {

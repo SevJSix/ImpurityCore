@@ -25,7 +25,7 @@ public class PacketTabComplete implements SevListener, Instance {
     Configuration exploit = fileConfig.getExploits();
 
     @SevHandler
-    public void onPacket(PacketEvent.Incoming event) {
+    public void onPacket(PacketEvent.ClientToServer event) {
         if (event.getPacket() instanceof PacketPlayInTabComplete && exploit.getBoolean("TabCompletePluginViewingFix.Enabled")) {
             PacketPlayInTabComplete packetPlayInTabComplete = (PacketPlayInTabComplete) event.getPacket();
             String a = packetPlayInTabComplete.a().toLowerCase();
@@ -53,7 +53,7 @@ public class PacketTabComplete implements SevListener, Instance {
     }
 
     @SevHandler
-    public void onTabOut(PacketEvent.Outgoing event) {
+    public void onTabOut(PacketEvent.ServerToClient event) {
         if (event.getPacket() instanceof PacketPlayOutTabComplete && exploit.getBoolean("TabCompletePluginViewingFix.Enabled")) {
             if (!players.contains(event.getPlayer())) return;
             List<String> cmdList = config.getStringList("CommandWhitelist.command-list");

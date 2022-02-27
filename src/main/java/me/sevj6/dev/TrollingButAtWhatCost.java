@@ -25,7 +25,7 @@ public class TrollingButAtWhatCost implements SevListener, Instance {
     private final List<Material> placeable = Arrays.asList(org.bukkit.Material.BEDROCK, Material.OBSIDIAN);
 
     @SevHandler
-    public void onPacket(PacketEvent.Incoming event) {
+    public void onPacket(PacketEvent.ClientToServer event) {
         if (!(event.getPacket() instanceof PacketPlayInUseItem)) return;
         PacketPlayInUseItem packet = (PacketPlayInUseItem) event.getPacket();
         Player player = event.getPlayer();

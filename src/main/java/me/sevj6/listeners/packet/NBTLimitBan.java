@@ -25,7 +25,7 @@ public class NBTLimitBan implements SevListener {
     }
 
     @SevHandler
-    public void onPacket(PacketEvent.Outgoing event) {
+    public void onPacket(PacketEvent.ServerToClient event) {
         if (event.getPacket() instanceof PacketPlayOutMapChunk) {
             try {
                 PacketPlayOutMapChunk packet = (PacketPlayOutMapChunk) event.getPacket();

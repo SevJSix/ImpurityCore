@@ -11,7 +11,7 @@ import org.bukkit.GameMode;
 public class PacketCreativeSlot implements SevListener, Instance {
 
     @SevHandler
-    public void on(PacketEvent.Incoming event) {
+    public void on(PacketEvent.ClientToServer event) {
         if (event.getPacket() instanceof PacketPlayInSetCreativeSlot) {
             if (event.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 event.setCancelled(true);

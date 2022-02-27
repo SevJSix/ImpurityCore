@@ -14,7 +14,7 @@ public class TeleportAcceptPackets extends ViolationManager implements SevListen
     }
 
     @SevHandler
-    public void on(PacketEvent.Incoming event) {
+    public void on(PacketEvent.ClientToServer event) {
         if (event.getPacket() instanceof PacketPlayInTeleportAccept) {
             increment(event.getPlayer().getUniqueId());
             if (getVLS(event.getPlayer().getUniqueId()) > 30) {

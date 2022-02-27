@@ -26,7 +26,7 @@ public class PacketWindowClick extends ViolationManager implements SevListener, 
     }
 
     @SevHandler
-    public void onIncoming(PacketEvent.Incoming event) {
+    public void onIncoming(PacketEvent.ClientToServer event) {
         Packet<?> packet = event.getPacket();
         if (exploit.getBoolean("Packets.Enabled") && packet instanceof PacketPlayInWindowClick) {
             Player player = event.getPlayer();
