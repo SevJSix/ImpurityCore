@@ -25,7 +25,7 @@ public class Playtime extends Command {
             OfflinePlayer self = Bukkit.getOfflinePlayer(((Player) sender).getUniqueId());
             if (manager.getPlaytimes().contains(self.getUniqueId().toString())) {
                 String selfPlaytime = manager.getFormattedPlaytime(self.getUniqueId());
-                sendMessage(sender, "&3Your playtime is: &b" + selfPlaytime + "&r\n&3Your playtime will be updated the next time you leave.");
+                sendMessage(sender, "&3Your playtime is: &b" + selfPlaytime + "&r\n&3Your playtime will be updated the next time you leave.\n&r&bThis playtime may be different from the playtime you see using /pstats");
             } else {
                 sendMessage(sender, "&4Your playtime has not yet been calculated. Re-join to see your playtime.");
             }
@@ -38,6 +38,6 @@ public class Playtime extends Command {
             return;
         }
         String playtime = manager.getFormattedPlaytime(player.getUniqueId());
-        sendMessage(sender, "&3" + args[0] + "'s playtime: &b" + playtime + "&r\n&3Their playtime will be updated the next time they leave.");
+        sendMessage(sender, "&3" + args[0] + "'s playtime: &b" + playtime + "&r\n&3Their playtime will be updated the next time they leave.\n&r&bThis playtime may be different from the playtime you see using /pstats");
     }
 }

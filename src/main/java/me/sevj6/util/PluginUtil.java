@@ -3,6 +3,7 @@ package me.sevj6.util;
 import me.sevj6.Impurity;
 import me.sevj6.dev.serversided.CustomPayload;
 import me.sevj6.event.NMSPacketListener;
+import me.sevj6.event.listener.ListenerTotemPop;
 import me.sevj6.event.listener.PlayerJoinListener;
 import me.sevj6.listeners.dupe.LavaDupe;
 import me.sevj6.listeners.dupe.PistonDupe;
@@ -64,6 +65,8 @@ public class PluginUtil extends Utils implements Data {
 
     public static List<NMSPacketListener> getNMSPacketListeners() {
         List<NMSPacketListener> nmsListeners = new ArrayList<>();
+        nmsListeners.add(new ListenerTotemPop());
+        nmsListeners.add(new TotemPopStatistic());
         nmsListeners.add(new PacketAutoRecipe());
         nmsListeners.add(new PacketTabComplete());
         nmsListeners.add(new PacketBlockDig());
