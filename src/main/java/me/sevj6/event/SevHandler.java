@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface NMSEventHandler {
+public @interface SevHandler {
     int priority() default 0;
 }

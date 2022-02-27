@@ -1,8 +1,8 @@
 package me.sevj6.dev.serversided;
 
 import me.sevj6.Impurity;
-import me.sevj6.event.NMSEventHandler;
-import me.sevj6.event.NMSPacketListener;
+import me.sevj6.event.SevHandler;
+import me.sevj6.event.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Bukkit;
@@ -15,8 +15,9 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class CustomPayload implements NMSPacketListener {
+public class CustomPayload implements SevListener {
     private final ServersidedAuto32k serversidedAuto32k = new ServersidedAuto32k();
 
     private final int PLACE_RANGE = 3;
@@ -113,7 +114,7 @@ public class CustomPayload implements NMSPacketListener {
         return shulkerLoc;
     }
 
-    @NMSEventHandler
+    @SevHandler
     public void onPacket(PacketEvent.Incoming event) {
         if (event.getPacket() instanceof PacketPlayInCustomPayload) handlePacket(event);
     }
@@ -160,7 +161,7 @@ public class CustomPayload implements NMSPacketListener {
                 }
             }
         }
-        return blockPositions.stream().findAny().orElse(null);
+        return blockPositions.get(ThreadLocalRandom.current().nextInt(0, blockPositions.size()));
     }
 
     private boolean isValidPlaceLocation(Location location, EnumDirection direction) {
@@ -171,6 +172,7 @@ public class CustomPayload implements NMSPacketListener {
         Location shulker = hopper.clone().add(0, 1, 0);
         return location.getBlock().getType() != Material.AIR
                 && obsidian.getBlock().getType() == Material.AIR
+                && obsidian.getBlock().getType() != Material.REDSTONE_BLOCK
                 && dispenser.getBlock().getType() == Material.AIR
                 && (redstone != null && redstone.getBlock().getType() == Material.AIR)
                 && hopper.getBlock().getType() == Material.AIR

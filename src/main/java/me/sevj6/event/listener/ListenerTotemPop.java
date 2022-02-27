@@ -1,8 +1,8 @@
 package me.sevj6.event.listener;
 
 import me.sevj6.Impurity;
-import me.sevj6.event.NMSEventHandler;
-import me.sevj6.event.NMSPacketListener;
+import me.sevj6.event.SevHandler;
+import me.sevj6.event.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import me.sevj6.event.events.TotemPopEvent;
 import net.minecraft.server.v1_12_R1.Entity;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 
-public class ListenerTotemPop implements NMSPacketListener {
+public class ListenerTotemPop implements SevListener {
 
     public static Field opCode;
     public static Field entityId;
@@ -30,7 +30,7 @@ public class ListenerTotemPop implements NMSPacketListener {
         }
     }
 
-    @NMSEventHandler
+    @SevHandler
     public void onTotemPop(PacketEvent.Outgoing event) {
         if (event.getPacket() instanceof PacketPlayOutEntityStatus) {
             PacketPlayOutEntityStatus packet = (PacketPlayOutEntityStatus) event.getPacket();

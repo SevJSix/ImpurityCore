@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class EventBus {
-    private final ConcurrentHashMap<NMSPacketListener, List<Method>> listeners = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<SevListener, List<Method>> listeners = new ConcurrentHashMap<>();
 
-    public void subscribe(NMSPacketListener listener) {
+    public void subscribe(SevListener listener) {
         listeners.put(listener, listener.getMethodsByPrio());
     }
 
-    public void unSubscribe(NMSPacketListener listener) {
+    public void unSubscribe(SevListener listener) {
         listeners.remove(listener);
     }
 

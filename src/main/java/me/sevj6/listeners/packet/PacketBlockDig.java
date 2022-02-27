@@ -1,8 +1,8 @@
 package me.sevj6.listeners.packet;
 
 import me.sevj6.Instance;
-import me.sevj6.event.NMSEventHandler;
-import me.sevj6.event.NMSPacketListener;
+import me.sevj6.event.SevHandler;
+import me.sevj6.event.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import me.sevj6.util.PlayerUtil;
 import me.sevj6.util.ViolationManager;
@@ -15,14 +15,14 @@ import org.bukkit.entity.Player;
  * @author SevJ6
  */
 
-public class PacketBlockDig extends ViolationManager implements NMSPacketListener, Instance {
+public class PacketBlockDig extends ViolationManager implements SevListener, Instance {
     Configuration exploit = fileConfig.getExploits();
 
     public PacketBlockDig() {
         super(fileConfig.getExploits().getInt("BlockDig.incrementVLS"), fileConfig.getExploits().getInt("BlockDig.decrementVLS"));
     }
 
-    @NMSEventHandler
+    @SevHandler
     public void onIncoming(PacketEvent.Incoming event) {
         Packet<?> packet = event.getPacket();
         Player player = event.getPlayer();

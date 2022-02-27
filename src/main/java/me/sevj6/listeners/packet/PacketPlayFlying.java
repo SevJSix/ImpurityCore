@@ -1,8 +1,8 @@
 package me.sevj6.listeners.packet;
 
 import me.sevj6.Instance;
-import me.sevj6.event.NMSEventHandler;
-import me.sevj6.event.NMSPacketListener;
+import me.sevj6.event.SevHandler;
+import me.sevj6.event.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import me.sevj6.util.fileutil.Configuration;
 import net.minecraft.server.v1_12_R1.PacketPlayInFlying;
@@ -25,7 +25,7 @@ import java.util.Set;
  * TODO: make this patch less dogshit LMAO
  */
 
-public class PacketPlayFlying implements NMSPacketListener, Instance {
+public class PacketPlayFlying implements SevListener, Instance {
     private final List<Material> whitelist = Arrays.asList(Material.SIGN, Material.SIGN_POST, Material.WALL_SIGN, Material.GOLD_PLATE,
             Material.IRON_PLATE, Material.WOOD_PLATE, Material.STONE_PLATE, Material.BED, Material.BED_BLOCK, Material.SKULL,
             Material.TRAP_DOOR, Material.FENCE, Material.FENCE_GATE, Material.IRON_FENCE, Material.COBBLE_WALL, Material.BANNER,
@@ -36,7 +36,7 @@ public class PacketPlayFlying implements NMSPacketListener, Instance {
     private final Set<Player> set = new HashSet<>();
     Configuration exploit = fileConfig.getExploits();
 
-    @NMSEventHandler
+    @SevHandler
     public void onPacket(PacketEvent.Incoming event) {
         if (event.getPacket() instanceof PacketPlayInTeleportAccept) {
             Player player = event.getPlayer();
@@ -47,7 +47,7 @@ public class PacketPlayFlying implements NMSPacketListener, Instance {
         }
     }
 
-    @NMSEventHandler
+    @SevHandler
     public void onMove(PacketEvent.Incoming event) {
         if (event.getPacket() instanceof PacketPlayInFlying && exploit.getBoolean("PacketFlyPhaseWalk.Enabled")) {
             Player player = event.getPlayer();

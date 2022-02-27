@@ -1,7 +1,7 @@
 package me.sevj6.listeners.patches;
 
-import me.sevj6.event.NMSEventHandler;
-import me.sevj6.event.NMSPacketListener;
+import me.sevj6.event.SevHandler;
+import me.sevj6.event.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import me.sevj6.util.ViolationManager;
 import net.minecraft.server.v1_12_R1.Entity;
@@ -19,7 +19,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.ArrayList;
 
-public class BoatFly extends ViolationManager implements NMSPacketListener, Listener {
+public class BoatFly extends ViolationManager implements SevListener, Listener {
 
     private final ArrayList<Player> players;
     private int time;
@@ -30,7 +30,7 @@ public class BoatFly extends ViolationManager implements NMSPacketListener, List
     }
 
     // patch boatfly bypass
-    @NMSEventHandler
+    @SevHandler
     public void onPacket(PacketEvent.Incoming event) {
         if (event.getPacket() instanceof PacketPlayInUseEntity) {
             PacketPlayInUseEntity packet = (PacketPlayInUseEntity) event.getPacket();

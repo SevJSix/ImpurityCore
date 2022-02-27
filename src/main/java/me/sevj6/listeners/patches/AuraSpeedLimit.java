@@ -1,20 +1,20 @@
 package me.sevj6.listeners.patches;
 
 import me.sevj6.Instance;
-import me.sevj6.event.NMSEventHandler;
-import me.sevj6.event.NMSPacketListener;
+import me.sevj6.event.SevHandler;
+import me.sevj6.event.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import me.sevj6.util.ViolationManager;
 import net.minecraft.server.v1_12_R1.PacketPlayInUseEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class AuraSpeedLimit extends ViolationManager implements NMSPacketListener, Instance {
+public class AuraSpeedLimit extends ViolationManager implements SevListener, Instance {
     public AuraSpeedLimit() {
         super(1, 200);
     }
 
-    @NMSEventHandler
+    @SevHandler
     public void onPacket(PacketEvent.Incoming event) {
         if (event.getPacket() instanceof PacketPlayInUseEntity) {
             PacketPlayInUseEntity packet = (PacketPlayInUseEntity) event.getPacket();

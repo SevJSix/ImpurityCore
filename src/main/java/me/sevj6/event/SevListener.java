@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 //For tagging all event listeners
-public interface NMSPacketListener {
+public interface SevListener {
     default List<Method> getMethodsByPrio() {
         List<Method> methods = new ArrayList<>();
         for (Method method : this.getClass().getMethods()) {
             if (!method.isAccessible()) method.setAccessible(true);
-            if (method.isAnnotationPresent(NMSEventHandler.class)) {
+            if (method.isAnnotationPresent(SevHandler.class)) {
                 if (method.getParameterCount() == 1) {
                     Class<?> param = method.getParameters()[0].getType();
                     if (param.getSuperclass().equals(Event.class) || param.getSuperclass().getSuperclass().equals(Event.class)) {
@@ -23,7 +23,7 @@ public interface NMSPacketListener {
         }
         return methods
                 .stream()
-                .sorted(Comparator.comparing(m -> m.getAnnotation(NMSEventHandler.class).priority()))
+                .sorted(Comparator.comparing(m -> m.getAnnotation(SevHandler.class).priority()))
                 .collect(Collectors.toList()); //Return all methods tagged with @EventHandler sorted by priority
     }
 }

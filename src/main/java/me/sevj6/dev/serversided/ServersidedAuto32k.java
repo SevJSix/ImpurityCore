@@ -42,7 +42,6 @@ public class ServersidedAuto32k {
         EnumDirection facing = entityPlayer.getDirection();
         Location looking = block.getLocation();
         EnumDirection opposite = facing.opposite();
-        int initalHeldSlot = player.getInventory().getHeldItemSlot();
 
         if (block.getType() == Material.AIR) {
             MessageUtil.sendMessage(player, "&cCannot place on air!");

@@ -13,21 +13,75 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SevJ6Regear extends Command {
+
+    private final HashMap<Player, ItemStack[]> map = new HashMap<>();
+
     public SevJ6Regear(Impurity plugin) {
         super("reg", "&4/reg", plugin);
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (sender.getName().equalsIgnoreCase("SevJ6")) {
-            Player player = (Player) sender;
-            player.getInventory().setContents(generateContents());
+        Player player = (Player) sender;
+        if (player.isOp() || isInLocation(player)) {
+            ItemStack[] array;
+            if (args.length > 0) {
+                if (args[0].equalsIgnoreCase("set")) {
+                    if (map.containsKey(player)) {
+                        map.replace(player, player.getInventory().getContents());
+                    } else {
+                        map.put(player, player.getInventory().getContents());
+                    }
+                    sendMessage(player, "&6Updated your regear inventory set");
+                    return;
+                } else {
+                    sendMessage(player, "&4do /reg set");
+                }
+            }
+            if (map.containsKey(player)) {
+                array = map.get(player);
+            } else {
+                array = generateContents();
+            }
+            player.getInventory().setContents(array);
             player.updateInventory();
-            player.teleport(new Location(Bukkit.getWorld("world_nether"), 0, 50, 0));
+            if (player.isOp()) {
+                player.teleport(new Location(Bukkit.getWorld("world_nether"), 0, 15, 0));
+            }
+        } else {
+            player.sendMessage("You are not in range to use /reg");
         }
+    }
+
+    public boolean isInLocation(Player player) {
+        int range = 20;
+        int x = 3813900;
+        int y = 69;
+        int z = 313207;
+        List<Location> possible = new ArrayList<>();
+        for (int x1 = x - range; x1 <= x + range; x1++) {
+            for (int y1 = y - range; y1 <= y + range; y1++) {
+                for (int z1 = z - range; z1 <= z + range; z1++) {
+                    Location location = new Location(player.getWorld(), x1, y1, z1);
+                    possible.add(location);
+                }
+            }
+        }
+        Location p = player.getLocation();
+        for (Location location : possible) {
+            if (player.getWorld() == location.getWorld()) {
+                if (p.getBlockY() == location.getBlockY() && (p.getBlockX() == location.getBlockX() || p.getBlockZ() == location.getBlockZ())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private ItemStack[] generateContents() {

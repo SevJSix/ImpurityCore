@@ -1,8 +1,8 @@
 package me.sevj6.dev;
 
 import me.sevj6.Instance;
-import me.sevj6.event.NMSEventHandler;
-import me.sevj6.event.NMSPacketListener;
+import me.sevj6.event.SevHandler;
+import me.sevj6.event.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import me.sevj6.util.CrystalUtil;
 import net.minecraft.server.v1_12_R1.*;
@@ -20,11 +20,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.List;
 
-public class TrollingButAtWhatCost implements NMSPacketListener, Instance {
+public class TrollingButAtWhatCost implements SevListener, Instance {
 
     private final List<Material> placeable = Arrays.asList(org.bukkit.Material.BEDROCK, Material.OBSIDIAN);
 
-    @NMSEventHandler
+    @SevHandler
     public void onPacket(PacketEvent.Incoming event) {
         if (!(event.getPacket() instanceof PacketPlayInUseItem)) return;
         PacketPlayInUseItem packet = (PacketPlayInUseItem) event.getPacket();

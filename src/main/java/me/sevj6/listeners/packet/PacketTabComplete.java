@@ -1,8 +1,8 @@
 package me.sevj6.listeners.packet;
 
 import me.sevj6.Instance;
-import me.sevj6.event.NMSEventHandler;
-import me.sevj6.event.NMSPacketListener;
+import me.sevj6.event.SevHandler;
+import me.sevj6.event.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import me.sevj6.util.fileutil.Configuration;
 import net.minecraft.server.v1_12_R1.PacketPlayInTabComplete;
@@ -18,13 +18,13 @@ import java.util.Set;
  * @author SevJ6
  */
 
-public class PacketTabComplete implements NMSPacketListener, Instance {
+public class PacketTabComplete implements SevListener, Instance {
 
     private final Set<Player> players = new HashSet<>();
 
     Configuration exploit = fileConfig.getExploits();
 
-    @NMSEventHandler
+    @SevHandler
     public void onPacket(PacketEvent.Incoming event) {
         if (event.getPacket() instanceof PacketPlayInTabComplete && exploit.getBoolean("TabCompletePluginViewingFix.Enabled")) {
             PacketPlayInTabComplete packetPlayInTabComplete = (PacketPlayInTabComplete) event.getPacket();
@@ -52,7 +52,7 @@ public class PacketTabComplete implements NMSPacketListener, Instance {
         }
     }
 
-    @NMSEventHandler
+    @SevHandler
     public void onTabOut(PacketEvent.Outgoing event) {
         if (event.getPacket() instanceof PacketPlayOutTabComplete && exploit.getBoolean("TabCompletePluginViewingFix.Enabled")) {
             if (!players.contains(event.getPlayer())) return;

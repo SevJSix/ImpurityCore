@@ -1,8 +1,8 @@
 package me.sevj6.listeners.packet;
 
 import me.sevj6.Instance;
-import me.sevj6.event.NMSEventHandler;
-import me.sevj6.event.NMSPacketListener;
+import me.sevj6.event.SevHandler;
+import me.sevj6.event.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import me.sevj6.util.PlayerUtil;
 import me.sevj6.util.ViolationManager;
@@ -18,14 +18,14 @@ import org.bukkit.inventory.ItemStack;
  * @author SevJ6
  */
 
-public class PacketWindowClick extends ViolationManager implements NMSPacketListener, Instance {
+public class PacketWindowClick extends ViolationManager implements SevListener, Instance {
     Configuration exploit = fileConfig.getExploits();
 
     public PacketWindowClick() {
         super(fileConfig.getExploits().getInt("WindowClick.incrementVLS"), fileConfig.getExploits().getInt("WindowClick.decrementVLS"));
     }
 
-    @NMSEventHandler
+    @SevHandler
     public void onIncoming(PacketEvent.Incoming event) {
         Packet<?> packet = event.getPacket();
         if (exploit.getBoolean("Packets.Enabled") && packet instanceof PacketPlayInWindowClick) {
