@@ -59,6 +59,11 @@ public class SevJ6Regear extends Command {
         }
     }
 
+    @Override
+    public String[] onTabComplete() {
+        return new String[]{"set" };
+    }
+
     public boolean isInLocation(Player player) {
         int range = 20;
         int x = 3813900;

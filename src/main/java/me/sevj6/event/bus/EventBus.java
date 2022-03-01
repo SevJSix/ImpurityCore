@@ -1,4 +1,4 @@
-package me.sevj6.event;
+package me.sevj6.event.bus;
 
 import java.lang.reflect.Method;
 import java.util.List;

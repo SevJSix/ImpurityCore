@@ -1,4 +1,4 @@
-package me.sevj6.event;
+package me.sevj6.event.bus;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

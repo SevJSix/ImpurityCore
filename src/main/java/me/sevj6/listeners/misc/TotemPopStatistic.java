@@ -1,8 +1,8 @@
 package me.sevj6.listeners.misc;
 
 import me.sevj6.Impurity;
-import me.sevj6.event.SevHandler;
-import me.sevj6.event.SevListener;
+import me.sevj6.event.bus.SevHandler;
+import me.sevj6.event.bus.SevListener;
 import me.sevj6.event.events.TotemPopEvent;
 import me.sevj6.util.fileutil.Configuration;
 
@@ -20,11 +20,9 @@ public class TotemPopStatistic implements SevListener {
     public void onPop(TotemPopEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
         if (config.contains(uuid.toString())) {
-            config.set(uuid.toString(), (config.getLong(uuid.toString()) + 1L));
+            config.write(uuid.toString(), (config.getLong(uuid.toString()) + 1L));
         } else {
-            config.set(uuid.toString(), 1L);
+            config.write(uuid.toString(), 1L);
         }
-        config.saveConfig();
-        config.reloadConfig();
     }
 }

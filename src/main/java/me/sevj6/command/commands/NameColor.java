@@ -91,6 +91,16 @@ public class NameColor extends Command implements Instance {
         }
     }
 
+    private final String[] arguments = new String[]{"dark_red", "red", "gold", "yellow",
+            "dark_green", "green aqua", "dark_aqua", "dark_blue",
+            "blue", "light_purple", "dark_purple", "gray", "dark_gray",
+            "black", "bold", "strikethrough", "underline", "italic", "random", "reset", "codes" };
+
+    @Override
+    public String[] onTabComplete() {
+        return arguments;
+    }
+
     private void setDisplayName(Player player, String name) {
         name = name.replace("§k", "") + ChatColor.RESET;
         MessageUtil.sendMessage(player, "&3Your name is now: &r" + name);

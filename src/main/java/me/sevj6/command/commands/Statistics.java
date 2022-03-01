@@ -49,4 +49,10 @@ public class Statistics extends Command {
             }
         }
     }
+
+    @Override
+    public String[] onTabComplete() {
+        return new String[0];
+    }
+
 }

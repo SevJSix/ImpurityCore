@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandHandler {
-    private final List<Command> commands;
+    public static List<Command> commands;
 
     public CommandHandler(Impurity plugin) {
         commands = new ArrayList<>();
@@ -29,6 +29,10 @@ public class CommandHandler {
         registerCommand(new Statistics(plugin));
     }
 
+    public static boolean isCommand(String command) {
+        return commands.stream().anyMatch(c -> c.getName().equalsIgnoreCase(command));
+    }
+
     public void registerCommand(Command... commands) {
         for (Command command : commands) {
             Bukkit.getServer().getCommandMap().register(command.getName(), new org.bukkit.command.Command(command.getName()) {
@@ -38,7 +42,7 @@ public class CommandHandler {
                     return true;
                 }
             });
-            this.commands.add(command);
+            CommandHandler.commands.add(command);
         }
     }
 

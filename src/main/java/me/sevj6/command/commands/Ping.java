@@ -26,4 +26,10 @@ public class Ping extends Command {
         }
         sendMessage(player, "&3" + target.getName() + "'s &3ping is &b" + PlayerUtil.getPlayerPing(target));
     }
+
+    @Override
+    public String[] onTabComplete() {
+        return new String[0];
+    }
+
 }

@@ -47,4 +47,9 @@ public class TopPlaytimes extends Command {
 
         sendMessage(sender, "&5&l---------------------------");
     }
+
+    @Override
+    public String[] onTabComplete() {
+        return new String[0];
+    }
 }

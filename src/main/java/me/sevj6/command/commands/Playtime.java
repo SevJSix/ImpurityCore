@@ -40,4 +40,10 @@ public class Playtime extends Command {
         String playtime = manager.getFormattedPlaytime(player.getUniqueId());
         sendMessage(sender, "&3" + args[0] + "'s playtime: &b" + playtime + "&r\n&3Their playtime will be updated the next time they leave.\n&r&bThis playtime may be different from the playtime you see using /pstats");
     }
+
+    @Override
+    public String[] onTabComplete() {
+        return new String[0];
+    }
+
 }

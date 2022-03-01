@@ -1,8 +1,8 @@
 package me.sevj6.dev;
 
 import me.sevj6.Instance;
-import me.sevj6.event.SevHandler;
-import me.sevj6.event.SevListener;
+import me.sevj6.event.bus.SevHandler;
+import me.sevj6.event.bus.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import me.sevj6.util.CrystalUtil;
 import net.minecraft.server.v1_12_R1.*;

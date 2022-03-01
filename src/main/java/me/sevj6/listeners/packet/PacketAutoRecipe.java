@@ -1,8 +1,8 @@
 package me.sevj6.listeners.packet;
 
 import me.sevj6.Instance;
-import me.sevj6.event.SevHandler;
-import me.sevj6.event.SevListener;
+import me.sevj6.event.bus.SevHandler;
+import me.sevj6.event.bus.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import me.sevj6.util.TimerUtil;
 import me.sevj6.util.fileutil.Configuration;

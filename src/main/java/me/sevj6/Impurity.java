@@ -1,7 +1,7 @@
 package me.sevj6;
 
 import me.sevj6.command.CommandHandler;
-import me.sevj6.event.EventBus;
+import me.sevj6.event.bus.EventBus;
 import me.sevj6.listeners.playtimes.PlaytimeManager;
 import me.sevj6.util.PluginUtil;
 import me.sevj6.util.Utils;

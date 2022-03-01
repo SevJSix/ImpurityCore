@@ -1,7 +1,7 @@
 package me.sevj6.listeners.packet;
 
-import me.sevj6.event.SevHandler;
-import me.sevj6.event.SevListener;
+import me.sevj6.event.bus.SevHandler;
+import me.sevj6.event.bus.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import net.minecraft.server.v1_12_R1.PacketPlayOutMapChunk;

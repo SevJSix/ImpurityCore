@@ -3,7 +3,7 @@ package me.sevj6.util;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import me.sevj6.Instance;
-import me.sevj6.event.listener.NettyInjector;
+import me.sevj6.event.bus.NettyInjector;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
@@ -12,10 +12,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class Utils implements Instance {
 
     private static final DecimalFormat format = new DecimalFormat("#.##");
+
+    public static String[] getAllowedCommands() {
+        return config.getStringList("CommandWhitelist.command-list").stream().map(s -> "/" + s).toArray(String[]::new);
+    }
+
+    public static List<String> getAllowedCommandsAsListWithNoPrefix() {
+        return config.getStringList("CommandWhitelist.command-list");
+    }
 
     public static String formatLocation(Location location) {
         double x = location.getX();

@@ -2,9 +2,8 @@ package me.sevj6.util;
 
 import me.sevj6.Impurity;
 import me.sevj6.dev.serversided.CustomPayload;
-import me.sevj6.event.SevListener;
-import me.sevj6.event.listener.ListenerTotemPop;
-import me.sevj6.event.listener.PlayerJoinListener;
+import me.sevj6.event.ImpurityEventFactory;
+import me.sevj6.event.bus.SevListener;
 import me.sevj6.listeners.dupe.LavaDupe;
 import me.sevj6.listeners.dupe.PistonDupe;
 import me.sevj6.listeners.dupe.SalC1Dupe;
@@ -37,7 +36,6 @@ public class PluginUtil extends Utils implements Data {
 
     public static void setupEntityMap() {
         if (config().getBoolean("EntityLimit.Enabled")) {
-            plugin.getLogger().info("Setting up EntityPerChunkLimit...");
             entityMap.put(EntityType.WITHER, config().getInt("EntityLimit.wither"));
             entityMap.put(EntityType.DROPPED_ITEM, config().getInt("EntityLimit.item-drops"));
             entityMap.put(EntityType.ENDER_CRYSTAL, config().getInt("EntityLimit.end-crystal"));
@@ -65,10 +63,9 @@ public class PluginUtil extends Utils implements Data {
 
     public static List<SevListener> getNMSPacketListeners() {
         List<SevListener> nmsListeners = new ArrayList<>();
-        nmsListeners.add(new ListenerTotemPop());
+        nmsListeners.add(new ImpurityEventFactory());
         nmsListeners.add(new TotemPopStatistic());
         nmsListeners.add(new PacketAutoRecipe());
-        nmsListeners.add(new PacketTabComplete());
         nmsListeners.add(new PacketBlockDig());
         nmsListeners.add(new PacketBlockPlace());
         nmsListeners.add(new PacketWindowClick());
@@ -87,8 +84,8 @@ public class PluginUtil extends Utils implements Data {
 
     public static List<Listener> getBukkitListeners() {
         List<Listener> bukkitListeners = new ArrayList<>();
+        bukkitListeners.add(new ImpurityEventFactory());
         bukkitListeners.add(new AnvilColoredName());
-        bukkitListeners.add(new PlayerJoinListener());
         bukkitListeners.add(new PlayerListener());
         bukkitListeners.add(new GreenText());
         bukkitListeners.add(new BurrowPatchRewrite());

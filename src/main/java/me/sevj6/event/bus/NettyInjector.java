@@ -1,4 +1,4 @@
-package me.sevj6.event.listener;
+package me.sevj6.event.bus;
 
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;

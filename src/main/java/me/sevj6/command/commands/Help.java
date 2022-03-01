@@ -31,4 +31,9 @@ public class Help extends Command implements Instance {
         });
         player.sendMessage(line);
     }
+
+    @Override
+    public String[] onTabComplete() {
+        return new String[0];
+    }
 }

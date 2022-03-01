@@ -28,4 +28,9 @@ public class JoinDate extends Command {
             }
         }
     }
+
+    @Override
+    public String[] onTabComplete() {
+        return new String[0];
+    }
 }

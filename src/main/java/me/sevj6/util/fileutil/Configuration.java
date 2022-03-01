@@ -30,10 +30,6 @@ public class Configuration extends YamlConfiguration {
         }
     }
 
-    public String getResourceName() {
-        return resourceName;
-    }
-
     public Plugin getPlugin() {
         return plugin;
     }
@@ -68,5 +64,11 @@ public class Configuration extends YamlConfiguration {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public void write(String objPath, Object value) {
+        this.set(objPath, value);
+        this.saveConfig();
+        this.reloadConfig();
     }
 }

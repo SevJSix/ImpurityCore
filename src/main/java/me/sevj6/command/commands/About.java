@@ -52,6 +52,12 @@ public class About extends Command {
         MessageUtil.sendMessage(sender, "&bYou can view all of the players who have ever joined at this link: " + link);
     }
 
+    @Override
+    public String[] onTabComplete() {
+        return new String[0];
+    }
+
+
     private String getPasteBinLink(Player player) {
         try {
             URL url = new URL("https://pastebin.com/api/api_post.php");

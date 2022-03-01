@@ -31,4 +31,11 @@ public class OpenInventory extends Command {
             }
         }
     }
+
+    @Override
+    public String[] onTabComplete() {
+        return new String[0];
+    }
+
+
 }

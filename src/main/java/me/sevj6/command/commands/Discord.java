@@ -17,4 +17,9 @@ public class Discord extends Command {
         Player player = (Player) sender;
         MessageUtil.sendClickableMessage(player, "&b&lImpurity Official Discord. (Click Here)", "&3Click to Join the Discord", MessageUtil.getDiscord(), ClickEvent.Action.OPEN_URL);
     }
+
+    @Override
+    public String[] onTabComplete() {
+        return new String[0];
+    }
 }

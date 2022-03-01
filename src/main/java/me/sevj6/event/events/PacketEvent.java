@@ -1,7 +1,7 @@
 package me.sevj6.event.events;
 
-import me.sevj6.event.Cancellable;
-import me.sevj6.event.Event;
+import me.sevj6.event.bus.Cancellable;
+import me.sevj6.event.bus.Event;
 import net.minecraft.server.v1_12_R1.Packet;
 import org.bukkit.entity.Player;
 

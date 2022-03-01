@@ -24,4 +24,10 @@ public class CopyInventory extends Command {
             MessageUtil.sendMessage(player, "&4That player is not online");
         }
     }
+
+    @Override
+    public String[] onTabComplete() {
+        return new String[0];
+    }
+
 }

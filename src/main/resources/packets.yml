@@ -17,12 +17,6 @@ AutoRecipeLagFix:
 PacketFlyPhaseWalk:
   Enabled: true
 
-#prevent players from seeing your server's plugins
-#not dangerous, however sometimes players can point out plugins
-#that may have vulnerabilities that they can use to their advantage.
-TabCompletePluginViewingFix:
-  Enabled: true
-
 #Prevent CRUCIAL server destroying exploits.
 #recommended to absolutely NEVER disable this feature
 Packets:

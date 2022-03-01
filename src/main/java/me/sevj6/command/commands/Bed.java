@@ -22,4 +22,9 @@ public class Bed extends Command {
         }
         MessageUtil.sendMessage(player, "&3Your bed spawn location is at &r" + Utils.formatLocation(player.getBedSpawnLocation()));
     }
+
+    @Override
+    public String[] onTabComplete() {
+        return new String[0];
+    }
 }

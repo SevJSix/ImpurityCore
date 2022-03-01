@@ -1,8 +1,8 @@
 package me.sevj6.dev.serversided;
 
 import me.sevj6.Impurity;
-import me.sevj6.event.SevHandler;
-import me.sevj6.event.SevListener;
+import me.sevj6.event.bus.SevHandler;
+import me.sevj6.event.bus.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Bukkit;

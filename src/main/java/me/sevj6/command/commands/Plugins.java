@@ -32,4 +32,9 @@ public class Plugins extends Command {
 
         sendMessage(sender, "\n" + "&b&nhttps://github.com/SevJSix/ImpurityCore&r");
     }
+
+    @Override
+    public String[] onTabComplete() {
+        return new String[0];
+    }
 }
