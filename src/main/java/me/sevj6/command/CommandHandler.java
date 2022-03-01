@@ -29,10 +29,6 @@ public class CommandHandler {
         registerCommand(new Statistics(plugin));
     }
 
-    public static boolean isCommand(String command) {
-        return commands.stream().anyMatch(c -> c.getName().equalsIgnoreCase(command));
-    }
-
     public void registerCommand(Command... commands) {
         for (Command command : commands) {
             Bukkit.getServer().getCommandMap().register(command.getName(), new org.bukkit.command.Command(command.getName()) {

@@ -83,13 +83,16 @@ public class ImpurityEventFactory implements Listener, SevListener {
                 return;
             }
 
-            if (Utils.getAllowedCommandsAsListWithNoPrefix().stream().anyMatch(s -> s.equalsIgnoreCase(cmd))) {
-                this.completeMap.putIfAbsent(player, online);
+            if (cmd.contains(":")) {
+                event.setCancelled(true);
                 return;
             }
 
-            if (command == null) {
+            if (Utils.getAllowedCommandsAsListWithNoPrefix().stream().noneMatch(s -> s.equalsIgnoreCase(cmd))) {
                 event.setCancelled(true);
+                return;
+            } else if (command == null) {
+                this.completeMap.putIfAbsent(player, online);
                 return;
             }
 
@@ -114,7 +117,8 @@ public class ImpurityEventFactory implements Listener, SevListener {
     }
 
     /**
-     * @author netty injector for packet listeners
+     * @author SevJ6
+     * netty injector for packet listeners
      */
     @EventHandler
     public void onLogin(PlayerJoinEvent event) {
