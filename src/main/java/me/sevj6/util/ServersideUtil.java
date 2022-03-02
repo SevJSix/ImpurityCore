@@ -1,13 +1,10 @@
-package me.sevj6.dev.serversided;
+package me.sevj6.util;
 
 import me.sevj6.Impurity;
-import me.sevj6.util.MessageUtil;
-import me.sevj6.util.Utils;
 import net.minecraft.server.v1_12_R1.*;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Dispenser;
 import org.bukkit.block.Hopper;
@@ -18,26 +15,155 @@ import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * @author SevJ6
- * @since 12/29/21 / 2:57 AM
- */
-public class ServersidedAuto32k {
+public class ServersideUtil {
 
-    public void doPlace(Player player, BlockPosition pos) throws IOException {
-        if (pos == null) {
+    public static final int PLACE_RANGE = 3;
+
+    public static Location redstonePos(Location dispenserLocation, EnumDirection direction) {
+        if (isAir(clone(dispenserLocation, 0, 1, 0))) return clone(dispenserLocation, 0, 1, 0);
+
+        switch (direction) {
+            case NORTH:
+                if (isAir(clone(dispenserLocation, -1, 0, 0))) {
+                    return clone(dispenserLocation, -1, 0, 0);
+                } else if (isAir(clone(dispenserLocation, 1, 0, 0))) {
+                    return clone(dispenserLocation, 1, 0, 0);
+                } else if (isAir(clone(dispenserLocation, 0, 0, 1))) {
+                    return clone(dispenserLocation, 0, 0, 1);
+                }
+                break;
+            case SOUTH:
+                if (isAir(clone(dispenserLocation, -1, 0, 0))) {
+                    return clone(dispenserLocation, -1, 0, 0);
+                } else if (isAir(clone(dispenserLocation, 1, 0, 0))) {
+                    return clone(dispenserLocation, 1, 0, 0);
+                } else if (isAir(clone(dispenserLocation, 0, 0, -1))) {
+                    return clone(dispenserLocation, 0, 0, -1);
+                }
+                break;
+            case WEST:
+                if (isAir(clone(dispenserLocation, 1, 0, 0))) {
+                    return clone(dispenserLocation, 1, 0, 0);
+                } else if (isAir(clone(dispenserLocation, 0, 0, -1))) {
+                    return clone(dispenserLocation, 0, 0, -1);
+                } else if (isAir(clone(dispenserLocation, 0, 0, 1))) {
+                    return clone(dispenserLocation, 0, 0, 1);
+                }
+                break;
+            case EAST:
+                if (isAir(clone(dispenserLocation, -1, 0, 0))) {
+                    return clone(dispenserLocation, -1, 0, 0);
+                } else if (isAir(clone(dispenserLocation, 0, 0, -1))) {
+                    return clone(dispenserLocation, 0, 0, -1);
+                } else if (isAir(clone(dispenserLocation, 0, 0, 1))) {
+                    return clone(dispenserLocation, 0, 0, 1);
+                }
+                break;
+        }
+        return null;
+    }
+
+    public static boolean isAir(Location location) {
+        return location.getBlock().getType() == Material.AIR;
+    }
+
+    public static Location clone(Location location, int x, int y, int z) {
+        return location.clone().add(x, y, z);
+    }
+
+    public static Location getHopperLocation(Location dispenserLocation, EnumDirection direction) {
+        switch (direction) {
+            case EAST:
+                return dispenserLocation.clone().add(1, -1, 0);
+            case WEST:
+                return dispenserLocation.clone().add(-1, -1, 0);
+            case NORTH:
+                return dispenserLocation.clone().add(0, -1, -1);
+            case SOUTH:
+                return dispenserLocation.clone().add(0, -1, 1);
+            default:
+                throw new IllegalStateException("Unexpected value: " + direction);
+        }
+    }
+
+    // this method is slightly different because there was an issue with getting the exact shulker position
+    public static Location getShulkerLocation(Location dispenserLocation, EnumDirection direction) {
+        double toAdd;
+        double origX = dispenserLocation.getX();
+        double origY = dispenserLocation.getY();
+        double origZ = dispenserLocation.getZ();
+        World world = dispenserLocation.getWorld();
+        Location shulkerLoc;
+        switch (direction) {
+            case EAST:
+            case WEST:
+                toAdd = origX + 0.5;
+                shulkerLoc = new Location(world, toAdd, origY, origZ);
+                break;
+            case NORTH:
+            case SOUTH:
+                toAdd = origZ + 0.5;
+                shulkerLoc = new Location(world, origX, origY, toAdd);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + direction);
+        }
+        return shulkerLoc;
+    }
+
+    public static BlockPosition getAutoPlace32kPos(Player player) {
+        Location playerInitialLocation = player.getLocation();
+        EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+        EnumDirection facing = entityPlayer.getDirection();
+        EnumDirection opposite = facing.opposite();
+        List<BlockPosition> blockPositions = new ArrayList<>();
+
+        for (int x = playerInitialLocation.getBlockX() - PLACE_RANGE; x <= playerInitialLocation.getBlockX() + PLACE_RANGE; x++) {
+            for (int y = playerInitialLocation.getBlockY() - PLACE_RANGE; y <= playerInitialLocation.getBlockY() + PLACE_RANGE; y++) {
+                for (int z = playerInitialLocation.getBlockZ() - PLACE_RANGE; z <= playerInitialLocation.getBlockZ() + PLACE_RANGE; z++) {
+                    Location location = new Location(playerInitialLocation.getWorld(), x, y, z);
+                    if (isValidPlaceLocation(location, opposite)) {
+                        blockPositions.add(new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+                    }
+                }
+            }
+        }
+        return blockPositions.get(ThreadLocalRandom.current().nextInt(0, blockPositions.size()));
+    }
+
+    public static boolean isValidPlaceLocation(Location location, EnumDirection direction) {
+        Location obsidian = location.clone().add(0, 1, 0);
+        Location dispenser = obsidian.clone().add(0, 1, 0);
+        Location redstone = redstonePos(dispenser, direction);
+        Location hopper = getHopperLocation(dispenser, direction);
+        Location shulker = hopper.clone().add(0, 1, 0);
+        return location.getBlock().getType() != Material.AIR
+                && obsidian.getBlock().getType() == Material.AIR
+                && obsidian.getBlock().getType() != Material.REDSTONE_BLOCK
+                && dispenser.getBlock().getType() == Material.AIR
+                && (redstone != null && redstone.getBlock().getType() == Material.AIR)
+                && hopper.getBlock().getType() == Material.AIR
+                && shulker.getBlock().getType() == Material.AIR
+                && location.getNearbyPlayers(1.5).isEmpty();
+    }
+
+    /**
+     * Utils for placing 32ks
+     */
+    public static void placeAuto32k(Player player, BlockPosition placePos) {
+        if (placePos == null) {
             MessageUtil.sendMessage(player, "&cInvalid block position!");
             return;
         }
-        Block block = player.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
+        Block block = player.getWorld().getBlockAt(placePos.getX(), placePos.getY(), placePos.getZ());
         EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
         EnumDirection facing = entityPlayer.getDirection();
         Location looking = block.getLocation();
@@ -57,14 +183,6 @@ public class ServersidedAuto32k {
             MessageUtil.sendMessage(player, "&cMissing 32k shulker!");
             return;
         }
-
-        ItemStack sword = Arrays.stream(
-                ((ShulkerBox) ((BlockStateMeta) get32kShulkerFromInv(player).getItemMeta()).getBlockState()).getInventory().getContents())
-                .filter(itemStack -> itemStack != null && itemStack.getType() != Material.AIR)
-                .findFirst()
-                .orElse(Utils.gen32k()
-                );
-        System.out.println("brandon bart");
 
         //check if players have the materials needed for auto32k
         int obsidianSlot = getItemSlotFromInv(player, Material.OBSIDIAN);
@@ -118,9 +236,9 @@ public class ServersidedAuto32k {
         }
 
         dispenserLocation = obsidianLocation.clone().add(0, 1, 0);
-        shulkerLocation = CustomPayload.getShulkerLocation(dispenserLocation, opposite);
-        redstoneLocation = CustomPayload.redstonePos(dispenserLocation, opposite);
-        hopperLocation = CustomPayload.getHopperLocation(dispenserLocation, opposite);
+        shulkerLocation = ServersideUtil.getShulkerLocation(dispenserLocation, opposite);
+        redstoneLocation = ServersideUtil.redstonePos(dispenserLocation, opposite);
+        hopperLocation = ServersideUtil.getHopperLocation(dispenserLocation, opposite);
 
         if (doPlaceObsidian) {
             player.getInventory().setHeldItemSlot(obsidianSlot);
@@ -135,7 +253,7 @@ public class ServersidedAuto32k {
                 player.getWorld().getBlockAt(dispenserLocation).setType(Material.DISPENSER);
             }
             TileEntityDispenser tileEntityDispenser = (TileEntityDispenser) entityPlayer.world.getTileEntity(new BlockPosition(dispenserLocation.getBlockX(), dispenserLocation.getBlockY(), dispenserLocation.getBlockZ()));
-            rotateTileEntity(tileEntityDispenser, (CraftPlayer) player);
+            rotateDispenser(tileEntityDispenser, (CraftPlayer) player);
             IInventory dispInv = ((CraftInventory) ((Dispenser) dispenserLocation.getBlock().getState()).getInventory()).getInventory();
             entityPlayer.openContainer(dispInv);
             dispInv.setItem(5, CraftItemStack.asNMSCopy(get32kShulkerFromInv(player)));
@@ -178,29 +296,24 @@ public class ServersidedAuto32k {
         }
     }
 
-    private boolean isNotViablePlacePos(Location location) {
+    public static boolean isNotViablePlacePos(Location location) {
         Block block = location.getWorld().getBlockAt(location);
         return block != null && (block.getType().isSolid() || block.getType().isOccluding());
     }
 
-    private void setHandItem(CraftPlayer player, ItemStack itemStack) {
-        PlayerInventory inventory = player.getInventory();
-        if (inventory.getItemInMainHand() == null) {
-            player.getInventory().setItemInMainHand(itemStack);
-        } else {
-            if (inventory.firstEmpty() == -1) {
-                net.minecraft.server.v1_12_R1.ItemStack toThrow = CraftItemStack.asNMSCopy(inventory.getItem(inventory.getHeldItemSlot()));
-                player.getHandle().drop(toThrow, true);
-            } else {
-                int slot = inventory.firstEmpty();
-                inventory.setItem(slot, inventory.getItemInMainHand());
+    public static int getItemSlotFromInv(Player player, Material material) {
+        for (int i = 0; i < player.getInventory().getSize(); i++) {
+            if (player.getInventory().getItem(i) == null || player.getInventory().getItem(i).getType() == Material.AIR)
+                continue;
+            if (player.getInventory().getItem(i).getType() == material) {
+                return i;
             }
-            inventory.setItemInMainHand(itemStack);
         }
+        return -1;
     }
 
-    public ItemStack get32kShulkerFromInv(Player player) {
-        for (ItemStack itemStack : player.getInventory().getContents()) {
+    public static org.bukkit.inventory.ItemStack get32kShulkerFromInv(Player player) {
+        for (org.bukkit.inventory.ItemStack itemStack : player.getInventory().getContents()) {
             if (itemStack != null) {
                 if (itemStack.hasItemMeta()) {
                     if (itemStack.getItemMeta() instanceof BlockStateMeta && ((BlockStateMeta) itemStack.getItemMeta()).getBlockState() instanceof ShulkerBox) {
@@ -219,34 +332,23 @@ public class ServersidedAuto32k {
         return null;
     }
 
-    public int getItemSlotFromInv(Player player, Material material) {
-        for (int i = 0; i < player.getInventory().getSize(); i++) {
-            if (player.getInventory().getItem(i) == null || player.getInventory().getItem(i).getType() == Material.AIR)
-                continue;
-            if (player.getInventory().getItem(i).getType() == material) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public void playSoundAtLocation(Sound sound, Location location) {
+    public static void playSoundAtLocation(Sound sound, Location location) {
         location.getNearbyPlayers(10).forEach(p -> p.playSound(location, sound, 1.2F, 0.8F));
     }
 
-    public void placeBlock(Player player, Location location, EnumDirection direction) {
+    public static void placeBlock(Player player, Location location, EnumDirection direction) {
         EntityHuman human = ((CraftPlayer) player).getHandle();
         human.getItemInMainHand().placeItem(human, human.world, new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ()), EnumHand.MAIN_HAND, direction, 255.0F, 255.0F, 255.0F);
     }
 
-    public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, EnumDirection direction) {
+    public static void postPlace(net.minecraft.server.v1_12_R1.World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, EnumDirection direction) {
         TileEntity tile = world.getTileEntity(blockposition);
         if (tile instanceof TileEntityDispenser) {
             world.setTypeAndData(blockposition, iblockdata.set(BlockDirectional.FACING, direction), 0);
         }
     }
 
-    private void rotateTileEntity(TileEntity tile, CraftPlayer player) {
+    public static void rotateDispenser(TileEntity tile, CraftPlayer player) {
         EnumDirection direction = player.getHandle().getDirection();
         try {
             Method blockDataMethod = net.minecraft.server.v1_12_R1.Block.class.getDeclaredMethod("w", IBlockData.class);

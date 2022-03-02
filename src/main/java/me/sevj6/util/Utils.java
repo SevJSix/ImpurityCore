@@ -26,6 +26,10 @@ public class Utils implements Instance {
         return config.getStringList("CommandWhitelist.command-list");
     }
 
+    public static boolean is32k(ItemStack itemStack) {
+        return itemStack.getEnchantments().entrySet().stream().anyMatch(e -> e.getValue() > 50);
+    }
+
     public static String formatLocation(Location location) {
         double x = location.getX();
         double y = location.getY();

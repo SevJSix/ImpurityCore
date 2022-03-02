@@ -19,7 +19,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Bed;
 
-public class Meta113BedAura implements Listener {
+public class Meta116BedAura implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {

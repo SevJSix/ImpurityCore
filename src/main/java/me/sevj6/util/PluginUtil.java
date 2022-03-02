@@ -1,7 +1,6 @@
 package me.sevj6.util;
 
 import me.sevj6.Impurity;
-import me.sevj6.dev.serversided.CustomPayload;
 import me.sevj6.event.ImpurityEventFactory;
 import me.sevj6.event.bus.SevListener;
 import me.sevj6.listeners.dupe.LavaDupe;
@@ -11,8 +10,9 @@ import me.sevj6.listeners.misc.*;
 import me.sevj6.listeners.packet.*;
 import me.sevj6.listeners.patches.*;
 import me.sevj6.listeners.playtimes.PlaytimeListeners;
-import me.sevj6.listeners.pvp.Meta113BedAura;
-import me.sevj6.listeners.pvp.MetaFastCA;
+import me.sevj6.listeners.pvp.Auto32k;
+import me.sevj6.listeners.pvp.CrystalAura;
+import me.sevj6.listeners.pvp.Meta116BedAura;
 import me.sevj6.runnables.AutoRestart;
 import me.sevj6.runnables.EntityPerChunk;
 import me.sevj6.runnables.TabList;
@@ -74,11 +74,11 @@ public class PluginUtil extends Utils implements Data {
         nmsListeners.add(new BoatFly());
         nmsListeners.add(new PacketCreativeSlot());
         nmsListeners.add(new TeleportAcceptPackets());
-        nmsListeners.add(new CustomPayload());
         nmsListeners.add(new NBTLimitBan());
         nmsListeners.add(new AuraSpeedLimit());
-        nmsListeners.add(new SuperweaponExploits());
         nmsListeners.add(new MovementExploits());
+        nmsListeners.add(new Auto32k());
+        nmsListeners.add(new CrystalAura());
         return nmsListeners;
     }
 
@@ -110,11 +110,11 @@ public class PluginUtil extends Utils implements Data {
         bukkitListeners.add(new RandomSpawn());
         bukkitListeners.add(new SalC1Dupe());
         bukkitListeners.add(new NameColorJoinListener());
-        bukkitListeners.add(new MetaFastCA());
-        bukkitListeners.add(new Meta113BedAura());
+        bukkitListeners.add(new Meta116BedAura());
         bukkitListeners.add(new LavaDupe());
         bukkitListeners.add(new PlaytimeListeners(plugin));
         bukkitListeners.add(new ArmorStandAiDisable());
+        bukkitListeners.add(new Auto32k());
         return bukkitListeners;
     }
 }
