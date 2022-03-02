@@ -5,6 +5,7 @@ import me.sevj6.event.bus.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import net.minecraft.server.v1_12_R1.PacketPlayOutMapChunk;
+import net.minecraft.server.v1_12_R1.PacketPlayOutTileEntityData;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -14,11 +15,20 @@ public class NBTLimitBan implements SevListener {
 
     private final int MAX_SIZE = 2097152;
     private Field nbtF;
+    private Field tileNBT;
+    private Field tileByteSize;
+    private Field blockPos;
 
     public NBTLimitBan() {
         try {
             nbtF = PacketPlayOutMapChunk.class.getDeclaredField("e");
             nbtF.setAccessible(true);
+            tileNBT = PacketPlayOutTileEntityData.class.getDeclaredField("c");
+            tileNBT.setAccessible(true);
+            tileByteSize = PacketPlayOutTileEntityData.class.getDeclaredField("b");
+            tileByteSize.setAccessible(true);
+            blockPos = PacketPlayOutTileEntityData.class.getDeclaredField("a");
+            blockPos.setAccessible(true);
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -42,5 +52,4 @@ public class NBTLimitBan implements SevListener {
             }
         }
     }
-
 }

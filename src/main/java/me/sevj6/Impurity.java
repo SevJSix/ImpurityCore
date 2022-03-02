@@ -2,6 +2,7 @@ package me.sevj6;
 
 import me.sevj6.command.CommandHandler;
 import me.sevj6.event.bus.EventBus;
+import me.sevj6.listeners.illegals.IllegalItemManager;
 import me.sevj6.listeners.playtimes.PlaytimeManager;
 import me.sevj6.util.PluginUtil;
 import me.sevj6.util.Utils;
@@ -57,6 +58,7 @@ public final class Impurity extends JavaPlugin implements Instance {
         PluginUtil.startBukkitSchedulers();
         PluginUtil.setupEntityMap();
         PluginUtil.registerEventListeners();
+        IllegalItemManager.init();
         new CommandHandler(this);
         if (Bukkit.getOnlinePlayers().size() > 0) Bukkit.getOnlinePlayers().forEach(Utils::inject);
         service = Executors.newScheduledThreadPool(4);

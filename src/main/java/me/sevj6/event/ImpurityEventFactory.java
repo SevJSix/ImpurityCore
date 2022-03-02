@@ -27,6 +27,7 @@ public class ImpurityEventFactory implements Listener, SevListener {
 
     public static Field opCode;
     public static Field entityId;
+    public static Field velocityEntityId;
 
     static {
         try {
@@ -34,6 +35,8 @@ public class ImpurityEventFactory implements Listener, SevListener {
             opCode.setAccessible(true);
             entityId = PacketPlayOutEntityStatus.class.getDeclaredField("a");
             entityId.setAccessible(true);
+            velocityEntityId = PacketPlayOutEntityVelocity.class.getDeclaredField("a");
+            velocityEntityId.setAccessible(true);
         } catch (Throwable t) {
             t.printStackTrace();
         }
