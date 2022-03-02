@@ -66,7 +66,7 @@ public class Auto32k implements SevListener, Listener {
         }
 
         // Stop free roaming with 32ks
-        if (player.getOpenInventory().getType() != InventoryType.HOPPER && isPlayerHolding32k(player, hand)) {
+        if (player.getOpenInventory().getType() != InventoryType.HOPPER) {
             event.setCancelled(true);
             handleTask(() -> {
                 if (attacker.activeContainer != null) player.closeInventory();
@@ -76,7 +76,7 @@ public class Auto32k implements SevListener, Listener {
         }
 
         // Stop people from flying with an elytra with 32ks
-        if (player.isGliding() && isPlayerHolding32k(player, hand)) {
+        if (player.isGliding()) {
             event.setCancelled(true);
             handleTask(() -> {
                 if (attacker.activeContainer != null) player.closeInventory();
@@ -92,11 +92,6 @@ public class Auto32k implements SevListener, Listener {
 
     public ItemStack getActiveItem(Player player, EnumHand hand) {
         return (hand == EnumHand.OFF_HAND) ? player.getInventory().getItemInOffHand() : player.getInventory().getItemInMainHand();
-    }
-
-    public boolean isPlayerHolding32k(Player player, EnumHand hand) {
-        if (getActiveItem(player, hand) == null) return false;
-        return getActiveItem(player, hand).getEnchantments().entrySet().stream().anyMatch(e -> e.getValue() > 50);
     }
 
     public void revert(Player player, EnumHand hand) {
