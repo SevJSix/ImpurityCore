@@ -3,32 +3,23 @@ package me.sevj6.listeners.packet;
 import me.sevj6.event.bus.SevHandler;
 import me.sevj6.event.bus.SevListener;
 import me.sevj6.event.events.PacketEvent;
+import me.sevj6.util.ObjectChecker;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import net.minecraft.server.v1_12_R1.PacketPlayOutMapChunk;
-import net.minecraft.server.v1_12_R1.PacketPlayOutTileEntityData;
+import net.minecraft.server.v1_12_R1.PacketPlayOutSetSlot;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class NBTLimitBan implements SevListener {
 
-    private final int MAX_SIZE = 2097152;
-    private Field nbtF;
-    private Field tileNBT;
-    private Field tileByteSize;
-    private Field blockPos;
+    private Field itemF;
 
     public NBTLimitBan() {
         try {
-            nbtF = PacketPlayOutMapChunk.class.getDeclaredField("e");
-            nbtF.setAccessible(true);
-            tileNBT = PacketPlayOutTileEntityData.class.getDeclaredField("c");
-            tileNBT.setAccessible(true);
-            tileByteSize = PacketPlayOutTileEntityData.class.getDeclaredField("b");
-            tileByteSize.setAccessible(true);
-            blockPos = PacketPlayOutTileEntityData.class.getDeclaredField("a");
-            blockPos.setAccessible(true);
+            itemF = PacketPlayOutSetSlot.class.getDeclaredField("c");
+            itemF.setAccessible(true);
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -36,17 +27,17 @@ public class NBTLimitBan implements SevListener {
 
     @SevHandler
     public void onPacket(PacketEvent.ServerToClient event) {
-        if (event.getPacket() instanceof PacketPlayOutMapChunk) {
+        if (event.getPacket() instanceof PacketPlayOutSetSlot) {
             try {
-                PacketPlayOutMapChunk packet = (PacketPlayOutMapChunk) event.getPacket();
-                List<NBTTagCompound> tileEntities = (List<NBTTagCompound>) nbtF.get(packet);
-                double dataSize = tileEntities.stream().
-                        map(o -> o.toString().length()).
-                        collect(Collectors.toList()).
-                        stream().
-                        mapToDouble(Integer::doubleValue).
-                        sum();
-                if (dataSize >= MAX_SIZE) tileEntities.clear();
+                PacketPlayOutSetSlot packet = (PacketPlayOutSetSlot) event.getPacket();
+                ItemStack itemStack = CraftItemStack.asBukkitCopy((net.minecraft.server.v1_12_R1.ItemStack) itemF.get(packet));
+                ObjectChecker<ItemStack> item = new ObjectChecker<>(itemStack);
+                if (item.isTagSizeTooBig()) {
+                    net.minecraft.server.v1_12_R1.ItemStack copy = (net.minecraft.server.v1_12_R1.ItemStack) itemF.get(packet);
+                    copy.setTag(new NBTTagCompound());
+                    int index = ((CraftPlayer) event.getPlayer()).getHandle().inventory.itemInHandIndex;
+                    event.setPacket(new PacketPlayOutSetSlot(index, index, copy));
+                }
             } catch (Throwable t) {
                 t.printStackTrace();
             }

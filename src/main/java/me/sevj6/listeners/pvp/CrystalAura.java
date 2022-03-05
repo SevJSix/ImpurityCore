@@ -15,7 +15,7 @@ public class CrystalAura implements SevListener {
                 event.addCrystal(true, false);
             });
         } else {
-            event.explodeCrystal();
+            handleTask(event::explodeCrystal);
         }
     }
 

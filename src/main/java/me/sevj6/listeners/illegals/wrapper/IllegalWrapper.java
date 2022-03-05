@@ -7,14 +7,14 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class ObjectWrapper<T> extends IllegalCheck {
+public class IllegalWrapper<T> extends Check {
 
     private final T type;
     private final Object object;
 
-    public ObjectWrapper(Object object, T type) {
-        this.object = object;
+    public IllegalWrapper(T type) {
         this.type = type;
+        this.object = type;
     }
 
     public T getType() {
@@ -50,7 +50,7 @@ public class ObjectWrapper<T> extends IllegalCheck {
         ITEMSTACK,
         ENTITYEQUIPMENT;
 
-        public static ObjectType of(ObjectWrapper<?> objWrapper) {
+        public static ObjectType of(IllegalWrapper<?> objWrapper) {
             if (objWrapper == null) return null;
             Object classObj = objWrapper.getType();
             if (Inventory.class.equals(classObj)) {

@@ -1,7 +1,7 @@
 package me.sevj6.listeners.illegals.checks;
 
 import me.sevj6.listeners.illegals.CheckUtil;
-import me.sevj6.listeners.illegals.wrapper.ObjectWrapper;
+import me.sevj6.listeners.illegals.wrapper.IllegalWrapper;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +19,7 @@ public class EntityPickupItem implements Listener {
                 event.setCancelled(true);
                 event.getItem().remove();
             }
-            new ObjectWrapper<>(equipment, EntityEquipment.class).check();
+            new IllegalWrapper<>(equipment).check();
         }
     }
 }

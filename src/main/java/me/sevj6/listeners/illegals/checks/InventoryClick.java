@@ -1,6 +1,6 @@
 package me.sevj6.listeners.illegals.checks;
 
-import me.sevj6.listeners.illegals.wrapper.ObjectWrapper;
+import me.sevj6.listeners.illegals.wrapper.IllegalWrapper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -13,7 +13,7 @@ public class InventoryClick implements Listener {
     public void onClick(InventoryClickEvent event) {
         if (event.getClickedInventory() != null && event.getClickedInventory().getType() != InventoryType.HOPPER) {
             Inventory inventory = event.getClickedInventory();
-            new ObjectWrapper<>(inventory, Inventory.class).check();
+            new IllegalWrapper<>(inventory).check();
         }
     }
 }

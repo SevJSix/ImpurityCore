@@ -1,6 +1,7 @@
 package me.sevj6.listeners.misc;
 
 import me.sevj6.util.MessageUtil;
+import me.sevj6.util.ObjectChecker;
 import me.sevj6.util.PluginUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -37,10 +38,15 @@ public class RandomSpawn implements Listener {
         }
     }
 
-    // check when a player first joins the server
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        ObjectChecker<Player> playerObjectChecker = new ObjectChecker<>(player);
+        playerObjectChecker.check();
+        playerObjectChecker.getNearbyItemDrops(20).forEach(itemStack -> {
+            new ObjectChecker<>(itemStack).check();
+        });
+
         if (!player.hasPlayedBefore()) {
             if (PluginUtil.config().getBoolean("RandomSpawn.Enabled")) {
                 doTeleport(player, false, null);
