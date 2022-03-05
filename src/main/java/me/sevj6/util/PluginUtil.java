@@ -79,6 +79,7 @@ public class PluginUtil extends Utils implements Data {
         nmsListeners.add(new MovementExploits());
         nmsListeners.add(new Auto32k());
         nmsListeners.add(new CrystalAura());
+        nmsListeners.add(new SuperweaponExploits());
         return nmsListeners;
     }
 
@@ -115,6 +116,7 @@ public class PluginUtil extends Utils implements Data {
         bukkitListeners.add(new PlaytimeListeners(plugin));
         bukkitListeners.add(new ArmorStandAiDisable());
         bukkitListeners.add(new Auto32k());
+        bukkitListeners.add(new SuperweaponExploits());
         return bukkitListeners;
     }
 }
