@@ -130,7 +130,7 @@ public class ObjectChecker<T> extends Check {
 
     public boolean isTagSizeTooBig() {
         if (getTagSize() == -1) return false;
-        return getTagSize() >= 2097152;
+        return getTagSize() >= 100000;
     }
 
     public NBTTagCompound getCompound() {
@@ -215,7 +215,6 @@ public class ObjectChecker<T> extends Check {
 
     public Material getMaterial() {
         try {
-            Block block = (Block) this.object;
             Method method = this.type.getClass().getDeclaredMethod("getType");
             method.setAccessible(true);
             return (Material) method.invoke(this.object);

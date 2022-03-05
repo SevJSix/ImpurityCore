@@ -19,7 +19,7 @@ public class EntityPickupItem implements Listener {
                 event.setCancelled(true);
                 event.getItem().remove();
             }
-            new IllegalWrapper<>(equipment).check();
+            new IllegalWrapper<>(EntityEquipment.class, equipment).check();
         }
     }
 }

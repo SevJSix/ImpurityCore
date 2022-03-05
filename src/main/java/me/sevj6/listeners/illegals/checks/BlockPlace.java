@@ -12,7 +12,7 @@ public class BlockPlace implements Listener {
     public void onPlace(BlockPlaceEvent event) {
         if (event.getBlockPlaced().getState() instanceof Container) {
             Container container = (Container) event.getBlockPlaced().getState();
-            new IllegalWrapper<>(container).check();
+            new IllegalWrapper<>(Container.class, container).check();
         }
     }
 }

@@ -12,9 +12,9 @@ public class IllegalWrapper<T> extends Check {
     private final T type;
     private final Object object;
 
-    public IllegalWrapper(T type) {
+    public IllegalWrapper(T type, Object o) {
         this.type = type;
-        this.object = type;
+        this.object = o;
     }
 
     public T getType() {

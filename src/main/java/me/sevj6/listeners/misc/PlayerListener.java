@@ -1,23 +1,25 @@
 package me.sevj6.listeners.misc;
 
 import me.sevj6.Impurity;
-import me.sevj6.util.ObjectChecker;
+import me.sevj6.util.PlayerUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.logging.Level;
+
 public class PlayerListener implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
         Impurity.getPlugin().getViolationManagers().forEach(v -> v.remove(event.getPlayer().getUniqueId()));
-        ObjectChecker<Player> playerObjectChecker = new ObjectChecker<>(event.getPlayer());
-        playerObjectChecker.check();
-        playerObjectChecker.getNearbyItemDrops(20).forEach(itemStack -> {
-            new ObjectChecker<>(itemStack).check();
-        });
+        Player player = event.getPlayer();
+        boolean isInsideChunkban = PlayerUtil.checkForTooLargeNBTAroundPlayer(player);
+        if (isInsideChunkban) {
+            Impurity.getPlugin().getLogger().log(Level.WARNING, "Possible chunkban at " + player.getLocation());
+        }
     }
 
     @EventHandler

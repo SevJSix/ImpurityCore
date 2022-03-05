@@ -13,7 +13,7 @@ public class InventoryOpen implements Listener {
     public void onOpen(InventoryOpenEvent event) {
         Player player = (Player) event.getPlayer();
         Inventory inventory = event.getInventory();
-        new IllegalWrapper<>(player).check();
-        new IllegalWrapper<>(inventory).check();
+        new IllegalWrapper<>(Player.class, player).check();
+        new IllegalWrapper<>(Inventory.class, inventory).check();
     }
 }

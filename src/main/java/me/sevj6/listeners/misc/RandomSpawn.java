@@ -1,7 +1,8 @@
 package me.sevj6.listeners.misc;
 
+import me.sevj6.Impurity;
 import me.sevj6.util.MessageUtil;
-import me.sevj6.util.ObjectChecker;
+import me.sevj6.util.PlayerUtil;
 import me.sevj6.util.PluginUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,6 +17,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
 
 /**
  * @author SevJ6
@@ -41,11 +43,10 @@ public class RandomSpawn implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        ObjectChecker<Player> playerObjectChecker = new ObjectChecker<>(player);
-        playerObjectChecker.check();
-        playerObjectChecker.getNearbyItemDrops(20).forEach(itemStack -> {
-            new ObjectChecker<>(itemStack).check();
-        });
+        boolean isInsideChunkban = PlayerUtil.checkForTooLargeNBTAroundPlayer(player);
+        if (isInsideChunkban) {
+            Impurity.getPlugin().getLogger().log(Level.WARNING, "Possible chunkban at " + player.getLocation());
+        }
 
         if (!player.hasPlayedBefore()) {
             if (PluginUtil.config().getBoolean("RandomSpawn.Enabled")) {

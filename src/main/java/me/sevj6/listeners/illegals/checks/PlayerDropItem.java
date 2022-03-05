@@ -16,7 +16,7 @@ public class PlayerDropItem implements Listener {
             if (CheckUtil.isIllegal(event.getItemDrop().getItemStack())) {
                 event.setCancelled(true);
                 event.getItemDrop().remove();
-                new IllegalWrapper<>(player).check();
+                new IllegalWrapper<>(Player.class, player).check();
             }
         }
     }

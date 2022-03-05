@@ -3,11 +3,15 @@ package me.sevj6.util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlayerUtil extends Utils {
 
@@ -22,6 +26,15 @@ public class PlayerUtil extends Utils {
             return d;
         } catch (Exception e) {
             return 0;
+        }
+    }
+
+    public static boolean checkForTooLargeNBTAroundPlayer(Player player) {
+        List<Item> badItems = player.getLocation().getNearbyEntitiesByType(Item.class, 25).stream().filter(item -> new ObjectChecker<>(item.getItemStack()).isTagSizeTooBig()).collect(Collectors.toList());
+        if (badItems.isEmpty()) return false;
+        else {
+            badItems.forEach(Entity::remove);
+            return true;
         }
     }
 

@@ -13,7 +13,7 @@ public class InventoryClick implements Listener {
     public void onClick(InventoryClickEvent event) {
         if (event.getClickedInventory() != null && event.getClickedInventory().getType() != InventoryType.HOPPER) {
             Inventory inventory = event.getClickedInventory();
-            new IllegalWrapper<>(inventory).check();
+            new IllegalWrapper<>(Inventory.class, inventory).check();
         }
     }
 }

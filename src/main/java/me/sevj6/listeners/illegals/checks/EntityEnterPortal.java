@@ -17,7 +17,7 @@ public class EntityEnterPortal implements Listener {
     public void onPortal(EntityPortalEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            new IllegalWrapper<>(player).check();
+            new IllegalWrapper<>(Player.class, player).check();
         } else if (event.getEntity() instanceof Item) {
             Item item = (Item) event.getEntity();
             if (item.getItemStack() == null) return;
@@ -29,7 +29,7 @@ public class EntityEnterPortal implements Listener {
         } else if (event.getEntity() instanceof LivingEntity) {
             LivingEntity entity = (LivingEntity) event.getEntity();
             EntityEquipment entityEquipment = entity.getEquipment();
-            new IllegalWrapper<>(entityEquipment).check();
+            new IllegalWrapper<>(EntityEquipment.class, entityEquipment).check();
         }
     }
 }

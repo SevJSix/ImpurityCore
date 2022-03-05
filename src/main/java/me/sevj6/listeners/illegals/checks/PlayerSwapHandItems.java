@@ -11,6 +11,6 @@ public class PlayerSwapHandItems implements Listener {
     @EventHandler
     public void onSwap(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
-        new IllegalWrapper<>(player).check();
+        new IllegalWrapper<>(Player.class, player).check();
     }
 }
