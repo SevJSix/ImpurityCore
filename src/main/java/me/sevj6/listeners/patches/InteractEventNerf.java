@@ -28,37 +28,51 @@ public class InteractEventNerf extends ViolationManager implements Listener, Ins
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        ObjectChecker<Block> block = new ObjectChecker<>(event.getClickedBlock());
-        ObjectChecker<ItemStack> handItem = new ObjectChecker<>((event.getHand() == EquipmentSlot.OFF_HAND) ? player.getInventory().getItemInOffHand() : player.getInventory().getItemInMainHand());
-
-        if (block.isTagSizeTooBig()) {
-            event.setCancelled(true);
-            block.check();
-        }
-
-        if (handItem.isMaterialType(Material.MAP)) {
-            if (mapTimer.hasReached(10000)) {
-                event.setCancelled(true);
-                mapTimer.reset();
-            } else {
-                event.setCancelled(true);
-            }
-        }
-
-        if (block.isBlockAndContainsBlockEntityTag()) {
-            increment(player.getUniqueId());
-            if (getVLS(player.getUniqueId()) > 6 || getVLS(player.getUniqueId()) > 3 && block.isBlockContainingBookNBT()) {
-                event.setCancelled(true);
-                player.kickPlayer("Slow down while interacting with containers with large NBT Tags");
-            }
-        }
-
-        if (block.isMaterialType(Material.LEVER)) {
-            if (block.getBlocksInRadius(4).stream().anyMatch(b -> b.getType() == Material.REDSTONE_WIRE)) {
-                increment(player.getUniqueId());
-                if (getVLS(player.getUniqueId()) > 8) {
+        ItemStack handItem = (event.getHand() == EquipmentSlot.OFF_HAND) ? player.getInventory().getItemInOffHand() : player.getInventory().getItemInMainHand();
+        if (handItem != null) {
+            if (handItem.getType().equals(Material.MAP) || handItem.getType().equals(Material.EMPTY_MAP)) {
+                if (mapTimer.hasReached(5000)) {
                     event.setCancelled(true);
-                    player.kickPlayer("Kicked for exceedingly fast lever interaction (possible lag attempt?)");
+                    mapTimer.reset();
+                } else {
+                    event.setCancelled(true);
+                }
+            }
+        }
+
+        if (event.getClickedBlock() != null) {
+            ObjectChecker<Block> block = new ObjectChecker<>(event.getClickedBlock());
+            if (block.isTagSizeTooBig()) {
+                event.setCancelled(true);
+                block.check();
+                return;
+            }
+
+            if (block.isBlockContainingBookNBT() || block.getTags().toString().contains("generation")) {
+                increment(player.getUniqueId());
+                if (getVLS(player.getUniqueId()) > 4) {
+                    event.setCancelled(true);
+                    player.kickPlayer("Slow down while interacting with containers with books in them");
+                }
+                return;
+            }
+
+            if (block.isBlockAndContainsBlockEntityTag()) {
+                increment(player.getUniqueId());
+                if (getVLS(player.getUniqueId()) > 6) {
+                    event.setCancelled(true);
+                    player.kickPlayer("Slow down while interacting with containers with large NBT Tags");
+                }
+                return;
+            }
+
+            if (block.isMaterialType(Material.LEVER)) {
+                if (block.getBlocksInRadius(4).stream().anyMatch(b -> b.getType() == Material.REDSTONE_WIRE)) {
+                    increment(player.getUniqueId());
+                    if (getVLS(player.getUniqueId()) > 8) {
+                        event.setCancelled(true);
+                        player.kickPlayer("Kicked for exceedingly fast lever interaction (possible lag attempt?)");
+                    }
                 }
             }
         }
