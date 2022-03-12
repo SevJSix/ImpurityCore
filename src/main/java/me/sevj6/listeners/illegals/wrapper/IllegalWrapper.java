@@ -43,6 +43,12 @@ public class IllegalWrapper<T> extends Check {
         }
     }
 
+    public enum Strictness {
+        NON_STRICT,
+        SEMI_STRICT,
+        VERY_STRICT
+    }
+
     public enum ObjectType {
         INVENTORY,
         CONTAINER,

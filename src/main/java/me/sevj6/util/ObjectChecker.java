@@ -130,7 +130,7 @@ public class ObjectChecker<T> extends Check {
 
     public boolean isTagSizeTooBig() {
         if (getTagSize() == -1) return false;
-        return getTagSize() >= 100000;
+        return getTagSize() >= 2200000;
     }
 
     public NBTTagCompound getCompound() {

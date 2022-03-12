@@ -18,6 +18,12 @@ Plugin:
   discord-link: "https://discord.gg/hFYgcWVFhu"
   use-kill-command: true
 
+#modify the strictness of the anti illegal
+# NON_STRICT - only reverts over enchanted items, and illegally stacked items
+# SEMI_STRICT - reverts illegally named, lored, unbreakable, unobtainable blocks, and nested shulkers
+# VERY_STRICT - reverts almost all illegally created items, as well as attribute modifiers, illegal potions, books, and more
+IllegalStrictness: "VERY_STRICT"
+
 Exploits:
   #stop players from using boatfly modules.
   boatfly: true

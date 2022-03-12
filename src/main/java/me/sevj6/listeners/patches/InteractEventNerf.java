@@ -32,7 +32,6 @@ public class InteractEventNerf extends ViolationManager implements Listener, Ins
         if (handItem != null) {
             if (handItem.getType().equals(Material.MAP) || handItem.getType().equals(Material.EMPTY_MAP)) {
                 if (mapTimer.hasReached(5000)) {
-                    event.setCancelled(true);
                     mapTimer.reset();
                 } else {
                     event.setCancelled(true);
@@ -48,7 +47,7 @@ public class InteractEventNerf extends ViolationManager implements Listener, Ins
                 return;
             }
 
-            if (block.isBlockContainingBookNBT() || block.getTags().toString().contains("generation")) {
+            if (block.isBlockContainingBookNBT() || block.getTags() != null && block.getTags().toString().contains("generation")) {
                 increment(player.getUniqueId());
                 if (getVLS(player.getUniqueId()) > 4) {
                     event.setCancelled(true);

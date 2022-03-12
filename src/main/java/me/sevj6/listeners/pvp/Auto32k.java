@@ -4,10 +4,7 @@ import me.sevj6.Impurity;
 import me.sevj6.event.bus.SevHandler;
 import me.sevj6.event.bus.SevListener;
 import me.sevj6.event.events.PlayerAttemptUse32kEvent;
-import me.sevj6.event.events.PlayerServerSide32kEvent;
 import me.sevj6.listeners.patches.SuperweaponExploits;
-import me.sevj6.util.MessageUtil;
-import me.sevj6.util.ServersideUtil;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.EnumHand;
 import org.bukkit.Bukkit;
@@ -26,17 +23,17 @@ public class Auto32k implements SevListener, Listener {
 
     public static final HashMap<Player, Inventory> inventoryHashMap = new HashMap<>();
 
-    @SevHandler
-    public void onAuto32k(PlayerServerSide32kEvent event) {
-        if (event.getPlacePos() == null) {
-            event.setCancelled(true);
-            MessageUtil.sendMessage(event.getPlayer(), "&cInvalid BlockPos");
-        } else {
-            handleTask(() -> {
-                ServersideUtil.placeAuto32k(event.getPlayer(), event.getPlacePos());
-            });
-        }
-    }
+//    @SevHandler
+//    public void onAuto32k(PlayerServerSide32kEvent event) {
+//        if (event.getPlacePos() == null) {
+//            event.setCancelled(true);
+//            MessageUtil.sendMessage(event.getPlayer(), "&cInvalid BlockPos");
+//        } else {
+//            handleTask(() -> {
+//                ServersideUtil.placeAuto32k(event.getPlayer(), event.getPlacePos());
+//            });
+//        }
+//    }
 
     @SevHandler
     public void on32kHit(PlayerAttemptUse32kEvent event) {
