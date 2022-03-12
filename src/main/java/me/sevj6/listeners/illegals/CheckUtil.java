@@ -15,10 +15,18 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class CheckUtil {
 
     private static final IllegalWrapper.Strictness strictness = IllegalWrapper.Strictness.valueOf(Impurity.getPlugin().getConfig().getString("IllegalStrictness"));
+    private static final List<Material> unobtainable = Arrays.asList(Material.BEDROCK, Material.LONG_GRASS, Material.MOB_SPAWNER, Material.SOIL,
+            Material.COMMAND, Material.COMMAND_REPEATING, Material.COMMAND_CHAIN, Material.COMMAND_MINECART, Material.BARRIER, Material.GRASS_PATH,
+            Material.STRUCTURE_BLOCK, Material.STRUCTURE_VOID, Material.MONSTER_EGGS, Material.MONSTER_EGG, Material.KNOWLEDGE_BOOK);
+    private static final List<Material> noTagIllegals = Arrays.asList(Material.POTION, Material.SPLASH_POTION, Material.WRITTEN_BOOK, Material.FIREWORK, Material.TIPPED_ARROW, Material.LINGERING_POTION);
 
     public static void checkItemStack(ItemStack itemStack) {
         if (itemStack == null || itemStack.getType() == Material.AIR) return;
@@ -46,6 +54,7 @@ public class CheckUtil {
         if (hasItemFlags(itemStack)) removeItemFlags(itemStack);
         if (isColoredNamed(itemStack)) removeColorFromName(itemStack);
         if (hasLore(itemStack)) removeLore(itemStack);
+        if (isUnobtainable(itemStack)) itemStack.setAmount(0);
     }
 
     private static void doVeryStrictCheck(ItemStack itemStack) {
@@ -53,6 +62,8 @@ public class CheckUtil {
         if (hasAttributes(itemStack)) itemStack.setAmount(0);
         if (isNestedShulker(itemStack)) itemStack.setAmount(0);
         if (hasBlockEntityTagIllegally(itemStack)) itemStack.setAmount(0);
+        if (hasNoTag(itemStack)) itemStack.setAmount(0);
+        removeIllegalPotionEffectsIfAnyExist(itemStack);
     }
 
     public static void checkPlayer(Player player) {
@@ -78,9 +89,11 @@ public class CheckUtil {
         for (ItemStack content : container.getInventory().getContents()) {
             if (content != null) {
                 checkItemStack(content);
-                if (container instanceof ShulkerBox) {
-                    if (content.getItemMeta() instanceof BlockStateMeta && ((BlockStateMeta) content.getItemMeta()).getBlockState() instanceof ShulkerBox) {
-                        container.getInventory().remove(content);
+                if (!strictness.equals(IllegalWrapper.Strictness.NON_STRICT)) {
+                    if (container instanceof ShulkerBox) {
+                        if (content.getItemMeta() instanceof BlockStateMeta && ((BlockStateMeta) content.getItemMeta()).getBlockState() instanceof ShulkerBox) {
+                            container.getInventory().remove(content);
+                        }
                     }
                 }
             }
@@ -92,9 +105,11 @@ public class CheckUtil {
         for (ItemStack content : inventory.getContents()) {
             if (content != null) {
                 checkItemStack(content);
-                if (inventory.getType() == InventoryType.SHULKER_BOX) {
-                    if (content.getItemMeta() instanceof BlockStateMeta && ((BlockStateMeta) content.getItemMeta()).getBlockState() instanceof ShulkerBox) {
-                        inventory.remove(content);
+                if (!strictness.equals(IllegalWrapper.Strictness.NON_STRICT)) {
+                    if (inventory.getType() == InventoryType.SHULKER_BOX) {
+                        if (content.getItemMeta() instanceof BlockStateMeta && ((BlockStateMeta) content.getItemMeta()).getBlockState() instanceof ShulkerBox) {
+                            inventory.remove(content);
+                        }
                     }
                 }
             }
@@ -204,11 +219,33 @@ public class CheckUtil {
         return copy.getTag().hasKey("BlockEntityTag");
     }
 
+    public static void removeIllegalPotionEffectsIfAnyExist(ItemStack itemStack) {
+        if (itemStack.hasItemMeta()) {
+            if (itemStack.getItemMeta() instanceof PotionMeta) {
+                PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+                meta.clearCustomEffects();
+                itemStack.setItemMeta(meta);
+            }
+        }
+    }
+
     private static boolean isShulker(ItemStack itemStack) {
         if (itemStack != null) {
             if (itemStack.hasItemMeta()) {
                 return itemStack.getItemMeta() instanceof BlockStateMeta && ((BlockStateMeta) itemStack.getItemMeta()).getBlockState() instanceof ShulkerBox;
             }
+        }
+        return false;
+    }
+
+    public static boolean isUnobtainable(ItemStack itemStack) {
+        return unobtainable.contains(itemStack.getType());
+    }
+
+    public static boolean hasNoTag(ItemStack itemStack) {
+        if (noTagIllegals.contains(itemStack.getType())) {
+            net.minecraft.server.v1_12_R1.ItemStack copy = CraftItemStack.asNMSCopy(itemStack);
+            return copy.getTag() == null || copy.getTag().isEmpty();
         }
         return false;
     }
