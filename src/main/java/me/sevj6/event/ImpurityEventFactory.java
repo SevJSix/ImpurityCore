@@ -15,6 +15,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -60,6 +61,15 @@ public class ImpurityEventFactory implements Listener, SevListener {
                 Impurity.EVENT_BUS.post(new PlayerServerSide32kEvent(event.getPlayer(), serializer));
             }
         }
+    }
+
+    /**
+     * @author SevJ6
+     * Listener to post AsyncDeathEvent
+     */
+    @EventHandler
+    public void onDeath(PlayerDeathEvent event) {
+        Impurity.EVENT_BUS.post(new AsyncDeathEvent(event.getEntity()));
     }
 
     /**

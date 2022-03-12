@@ -1,10 +1,12 @@
 package me.sevj6.listeners.packet;
 
+import me.sevj6.Impurity;
 import me.sevj6.event.bus.SevHandler;
 import me.sevj6.event.bus.SevListener;
 import me.sevj6.event.events.PacketEvent;
 import me.sevj6.util.ViolationManager;
 import net.minecraft.server.v1_12_R1.PacketPlayInTeleportAccept;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 public class TeleportAcceptPackets extends ViolationManager implements SevListener {
@@ -20,7 +22,9 @@ public class TeleportAcceptPackets extends ViolationManager implements SevListen
             if (getVLS(event.getPlayer().getUniqueId()) > 30) {
                 Location location = event.getPlayer().getLocation();
                 event.setCancelled(true);
-                event.getPlayer().teleport(location);
+                Bukkit.getScheduler().runTask(Impurity.getPlugin(), () -> {
+                    event.getPlayer().teleport(location);
+                });
             }
         }
     }
