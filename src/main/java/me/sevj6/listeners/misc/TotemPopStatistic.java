@@ -18,7 +18,7 @@ public class TotemPopStatistic implements SevListener {
 
     @SevHandler
     public void onPop(TotemPopEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+        UUID uuid = event.getLarper().getUniqueId();
         if (config.contains(uuid.toString())) {
             config.write(uuid.toString(), (config.getLong(uuid.toString()) + 1L));
         } else {

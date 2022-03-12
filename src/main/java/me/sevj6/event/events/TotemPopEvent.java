@@ -5,13 +5,13 @@ import org.bukkit.entity.Player;
 
 public class TotemPopEvent extends Event {
 
-    private final Player player;
+    private final Player larper;
 
-    public TotemPopEvent(Player player) {
-        this.player = player;
+    public TotemPopEvent(Player larper) {
+        this.larper = larper;
     }
 
-    public Player getPlayer() {
-        return player;
+    public Player getLarper() {
+        return larper;
     }
 }

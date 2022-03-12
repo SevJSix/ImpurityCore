@@ -13,6 +13,7 @@ import me.sevj6.listeners.playtimes.PlaytimeListeners;
 import me.sevj6.listeners.pvp.Auto32k;
 import me.sevj6.listeners.pvp.CrystalAura;
 import me.sevj6.listeners.pvp.Meta116BedAura;
+import me.sevj6.listeners.pvp.TotemPopNotify;
 import me.sevj6.runnables.AutoRestart;
 import me.sevj6.runnables.EntityPerChunk;
 import me.sevj6.runnables.TabList;
@@ -80,6 +81,7 @@ public class PluginUtil extends Utils implements Data {
         nmsListeners.add(new Auto32k());
         nmsListeners.add(new CrystalAura());
         nmsListeners.add(new SuperweaponExploits());
+        nmsListeners.add(new TotemPopNotify());
         return nmsListeners;
     }
 
@@ -117,6 +119,7 @@ public class PluginUtil extends Utils implements Data {
         bukkitListeners.add(new ArmorStandAiDisable());
         bukkitListeners.add(new Auto32k());
         bukkitListeners.add(new SuperweaponExploits());
+        bukkitListeners.add(new TotemPopNotify());
         return bukkitListeners;
     }
 }
