@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Larper {
@@ -29,24 +30,40 @@ public class Larper {
         this.larper.spawnParticle(Particle.EXPLOSION_HUGE, larper.getLocation(), Integer.MAX_VALUE, 1, 1, 1);
     }
 
+    public void crashLarperWithExplosionPackets() {
+        EntityPlayer ep = ((CraftPlayer) larper).getHandle();
+        BlockPosition pos = new BlockPosition(larper.getLocation().getBlockX(), larper.getLocation().getBlockY(), larper.getLocation().getBlockZ());
+        for (int i = 0; i < 50; i++) {
+            ep.playerConnection.sendPacket(new PacketPlayOutExplosion(pos.getX(), pos.getY(), pos.getZ(), Float.MAX_VALUE, Collections.singletonList(pos), new Vec3D(pos)));
+        }
+    }
+
     public void earrape() {
-        Arrays.stream(Sound.values()).forEach(sound -> getLarper().playSound(larper.getLocation(), sound, 100.0F, 50.0F));
+        Arrays.stream(Sound.values()).forEach(sound -> getLarper().playSound(larper.getLocation(), sound, 100.0F, 0.1F));
         for (EntityEffect value : EntityEffect.values()) {
             larper.playEffect(value);
         }
     }
 
     public void giveSevereDementia() {
-        larper.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10, 100, true, true));
-        larper.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10, 100, true, true));
-        larper.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 4, true, true));
-        larper.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 10, 100, true, true));
+        larper.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 30, 100, true, true));
+        larper.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 30, 100, true, true));
+        larper.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 30, 4, true, true));
+        larper.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 30, 100, true, true));
     }
 
     public void threaten() {
         larper.sendTitle(new Title(ChatColor.DARK_RED + "I AM INSIDE YOUR WALLS", ChatColor.BOLD + "SevJ6 is COMING FOR YOU", 5, 60, 5));
         for (int i = 0; i < 30; i++) {
             MessageUtil.sendMessage(larper, "&4&lFUCK YOU. YOU ARE A LARPER");
+        }
+    }
+
+    public void fakeVoidBlocks() {
+        EntityPlayer ep = ((CraftPlayer) larper).getHandle();
+        for (BlockPosition pos : getPositionsInRadius(50)) {
+            ep.playerConnection.sendPacket(new PacketPlayOutBlockBreakAnimation(1, pos, 1));
+            ep.playerConnection.sendPacket(new PacketPlayOutBlockChange(ep.world, pos));
         }
     }
 
