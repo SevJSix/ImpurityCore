@@ -14,10 +14,6 @@ import me.sevj6.listeners.pvp.Auto32k;
 import me.sevj6.listeners.pvp.CrystalAura;
 import me.sevj6.listeners.pvp.Meta116BedAura;
 import me.sevj6.listeners.pvp.TotemPopNotify;
-import me.sevj6.runnables.AutoRestart;
-import me.sevj6.runnables.EntityPerChunk;
-import me.sevj6.runnables.TabList;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Listener;
@@ -45,17 +41,6 @@ public class PluginUtil extends Utils implements Data {
             entityMap.put(EntityType.WITHER_SKULL, config().getInt("EntityLimit.wither-skull"));
             entityMap.put(EntityType.FALLING_BLOCK, config().getInt("EntityLimit.falling-block"));
         }
-    }
-
-    public static void startBukkitSchedulers() {
-        if (config.getBoolean("WitherSkullHandling.Enabled") && config.getBoolean("WitherSkullHandling.DeleteAllOnStartup.Enabled")) {
-            Bukkit.getScheduler().runTaskLater(plugin, new WitherSkullRemover(), config.getLong("WitherSkullHandling.DeleteAllOnStartup.delay-on-start") * 20);
-        }
-        // run the auto restart runnable every 60 seconds to check if its a new day, then restart the server if it is.
-        Bukkit.getScheduler().runTaskTimer(plugin, new AutoRestart(), 20L, (20L * 60L));
-
-        Bukkit.getScheduler().runTaskTimer(plugin, new TabList(), 20L, 20L);
-        Bukkit.getScheduler().runTaskTimer(plugin, new EntityPerChunk(), 20L, (20L * 30L));
     }
 
     public static FileConfiguration config() {

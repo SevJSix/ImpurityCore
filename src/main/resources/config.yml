@@ -68,10 +68,6 @@ WitherSkullHandling:
     log-console: true
     amount-per-console-log: 400 #amount of skulls to be deleted to notify console
     time-limit: 30 #in seconds
-  DeleteAllOnStartup:
-    Enabled: true
-    log-console: true #probably shouldn't turn console logging off, makes it easier to notice bugs
-    delay-on-start: 5 #in seconds, recommended to not change to not cause issues with worlds loading on startup
 
 #Entity limit shit
 EntityLimit:

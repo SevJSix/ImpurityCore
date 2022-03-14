@@ -2,14 +2,14 @@ package me.sevj6.runnables;
 
 import me.sevj6.Impurity;
 import me.sevj6.Instance;
+import me.sevj6.runnables.scheduler.ScheduledTask;
+import me.sevj6.runnables.scheduler.TaskForce;
 import me.sevj6.util.MessageUtil;
 import me.sevj6.util.TimerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import java.util.TimerTask;
-
-public class AutoRestart extends TimerTask implements Instance {
+public class AutoRestart implements TaskForce, Instance {
 
     TimerUtil time = new TimerUtil();
 
@@ -17,8 +17,8 @@ public class AutoRestart extends TimerTask implements Instance {
         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', MessageUtil.getPrefix() + msg));
     }
 
-    @Override
-    public void run() {
+    @ScheduledTask
+    public void restart() {
         long millis = (System.currentTimeMillis() - Impurity.startTime);
         if (millis < 43200000) return;
         Thread t = new Thread(() -> {

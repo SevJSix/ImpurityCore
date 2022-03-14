@@ -1,5 +1,7 @@
 package me.sevj6.runnables;
 
+import me.sevj6.runnables.scheduler.ScheduledTask;
+import me.sevj6.runnables.scheduler.TaskForce;
 import me.sevj6.util.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -9,7 +11,7 @@ import org.bukkit.entity.EntityType;
 
 import java.util.*;
 
-public class EntityPerChunk extends TimerTask implements Data {
+public class EntityPerChunk implements TaskForce, Data {
 
     HashMap<EntityType, Integer> map;
 
@@ -17,8 +19,8 @@ public class EntityPerChunk extends TimerTask implements Data {
         this.map = entityMap;
     }
 
-    @Override
-    public void run() {
+    @ScheduledTask(delay = (20L * 30L))
+    public void deleteEntities() {
         for (Chunk chunk : getChunks()) {
             for (Map.Entry<EntityType, Integer> entry : map.entrySet()) {
                 removeAmount(entry.getKey(), entry.getValue(), chunk);
