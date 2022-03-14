@@ -104,6 +104,7 @@ public class PluginUtil extends Utils implements Data {
         bukkitListeners.add(new ArmorStandAiDisable());
         bukkitListeners.add(new Auto32k());
         bukkitListeners.add(new SuperweaponExploits());
+        bukkitListeners.add(new AntiSpam());
         return bukkitListeners;
     }
 }
