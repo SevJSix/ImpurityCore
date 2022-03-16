@@ -38,9 +38,7 @@ public class EntityPerChunk implements TaskForce, Data {
 
     private void removeAmount(EntityType type, int maxAmount, Chunk chunk) {
         List<Entity> correctType = new ArrayList<>();
-        Arrays.stream(chunk.getEntities()).forEach(entity -> {
-            if (entity.getType() == type) correctType.add(entity);
-        });
+        Arrays.stream(chunk.getEntities()).filter(entity -> entity.getType() == type).forEach(correctType::add);
         int entityAmount = correctType.size();
         if (entityAmount <= maxAmount) return;
         List<Entity> sized = correctType.subList(0, entityAmount - maxAmount);

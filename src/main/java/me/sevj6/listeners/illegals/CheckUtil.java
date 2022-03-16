@@ -213,7 +213,7 @@ public class CheckUtil {
     }
 
     public static boolean hasBlockEntityTagIllegally(ItemStack itemStack) {
-        if (isShulker(itemStack)) return false;
+        if (isShulker(itemStack)) return false; // all shulker boxes have block entity tags
         net.minecraft.server.v1_12_R1.ItemStack copy = CraftItemStack.asNMSCopy(itemStack);
         if (copy.getTag() == null) return false;
         return copy.getTag().hasKey("BlockEntityTag");
