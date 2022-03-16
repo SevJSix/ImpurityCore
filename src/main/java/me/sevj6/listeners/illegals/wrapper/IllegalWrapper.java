@@ -1,13 +1,14 @@
 package me.sevj6.listeners.illegals.wrapper;
 
-import me.sevj6.listeners.illegals.CheckUtil;
+import me.sevj6.listeners.illegals.check.Check;
+import me.sevj6.listeners.illegals.check.CheckUtil;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class IllegalWrapper<T> extends Check {
+public class IllegalWrapper<T> implements Check {
 
     private final T type;
     private final Object object;

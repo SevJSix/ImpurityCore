@@ -1,4 +1,4 @@
-package me.sevj6.listeners.illegals;
+package me.sevj6.listeners.illegals.check;
 
 import me.sevj6.Impurity;
 import me.sevj6.listeners.illegals.wrapper.IllegalWrapper;

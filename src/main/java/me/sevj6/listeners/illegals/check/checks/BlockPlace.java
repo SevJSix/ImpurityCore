@@ -1,4 +1,4 @@
-package me.sevj6.listeners.illegals.checks;
+package me.sevj6.listeners.illegals.check.checks;
 
 import me.sevj6.listeners.illegals.wrapper.IllegalWrapper;
 import org.bukkit.block.Container;

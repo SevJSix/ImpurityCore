@@ -1,15 +1,20 @@
 package me.sevj6.util;
 
-import me.sevj6.listeners.illegals.wrapper.Check;
+import me.sevj6.listeners.illegals.check.Check;
+import net.minecraft.server.v1_12_R1.BlockPosition;
 import net.minecraft.server.v1_12_R1.IInventory;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.TileEntity;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Container;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftInventory;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -22,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ObjectChecker<T> extends Check {
+public class ObjectChecker<T> implements Check {
 
     private final Object object;
     private final T type;
@@ -34,6 +39,28 @@ public class ObjectChecker<T> extends Check {
 
     public T getType() {
         return type;
+    }
+
+    public void clearTag() {
+        if (this.object instanceof Block) {
+            Block block = (Block) this.object;
+            if (block.getState() instanceof Container) {
+                Location location = block.getLocation();
+                TileEntity tile = ((CraftWorld) location.getWorld()).getHandle().getTileEntity(new BlockPosition(location.getX(), location.getY(), location.getZ()));
+                if (tile != null) {
+                    NBTTagCompound emptyTag = new NBTTagCompound();
+                    tile.load(emptyTag);
+                    tile.save(emptyTag);
+                    tile.update();
+                }
+            }
+        } else if (this.object instanceof net.minecraft.server.v1_12_R1.ItemStack) {
+            net.minecraft.server.v1_12_R1.ItemStack itemStack = (net.minecraft.server.v1_12_R1.ItemStack) this.object;
+            itemStack.setTag(new NBTTagCompound());
+        } else if (this.object instanceof Entity) {
+            net.minecraft.server.v1_12_R1.Entity e = ((CraftEntity) this.object).getHandle();
+            e.save(new NBTTagCompound());
+        }
     }
 
     public List<Block> getBlocksInRadius(int radius) {

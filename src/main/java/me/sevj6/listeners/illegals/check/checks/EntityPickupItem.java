@@ -1,6 +1,6 @@
-package me.sevj6.listeners.illegals.checks;
+package me.sevj6.listeners.illegals.check.checks;
 
-import me.sevj6.listeners.illegals.CheckUtil;
+import me.sevj6.listeners.illegals.check.CheckUtil;
 import me.sevj6.listeners.illegals.wrapper.IllegalWrapper;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;

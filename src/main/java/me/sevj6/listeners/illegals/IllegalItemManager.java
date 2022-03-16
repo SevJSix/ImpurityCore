@@ -1,7 +1,7 @@
 package me.sevj6.listeners.illegals;
 
 import me.sevj6.Impurity;
-import me.sevj6.listeners.illegals.checks.*;
+import me.sevj6.listeners.illegals.check.checks.*;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
