@@ -2,7 +2,7 @@ package me.sevj6.command.commands;
 
 import me.sevj6.Impurity;
 import me.sevj6.command.Command;
-import me.sevj6.listeners.playtimes.PlaytimeManager;
+import me.sevj6.listener.playtimes.PlaytimeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;

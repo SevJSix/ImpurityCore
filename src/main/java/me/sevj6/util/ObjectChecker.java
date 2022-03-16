@@ -1,6 +1,6 @@
 package me.sevj6.util;
 
-import me.sevj6.listeners.illegals.check.Check;
+import me.sevj6.listener.illegals.check.Check;
 import net.minecraft.server.v1_12_R1.BlockPosition;
 import net.minecraft.server.v1_12_R1.IInventory;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;

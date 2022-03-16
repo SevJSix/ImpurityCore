@@ -2,9 +2,9 @@ package me.sevj6;
 
 import me.sevj6.command.CommandHandler;
 import me.sevj6.event.bus.EventBus;
-import me.sevj6.listeners.illegals.IllegalItemManager;
-import me.sevj6.listeners.playtimes.PlaytimeManager;
-import me.sevj6.runnables.scheduler.TaskManager;
+import me.sevj6.listener.illegals.IllegalItemManager;
+import me.sevj6.listener.playtimes.PlaytimeManager;
+import me.sevj6.task.scheduler.TaskManager;
 import me.sevj6.util.PluginUtil;
 import me.sevj6.util.Utils;
 import me.sevj6.util.ViolationManager;

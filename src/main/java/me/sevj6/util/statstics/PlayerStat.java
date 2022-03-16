@@ -1,6 +1,6 @@
 package me.sevj6.util.statstics;
 
-import me.sevj6.listeners.misc.TotemPopStatistic;
+import me.sevj6.listener.misc.TotemPopStatistic;
 import me.sevj6.util.Utils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;

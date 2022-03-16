@@ -1,0 +1,44 @@
+# ______                                              __    __                 ______
+# /      |                                            /  |  /  |               /      \
+# $$$$$$/  _____  ____    ______   __    __   ______  $$/  _$$ |_    __    __ /$$$$$$  |  ______    ______    ______
+# $$ |  /     \/    \  /      \ /  |  /  | /      \ /  |/ $$   |  /  |  /  |$$ |  $$/  /      \  /      \  /      \
+# $$ |  $$$$$$ $$$$  |/$$$$$$  |$$ |  $$ |/$$$$$$  |$$ |$$$$$$/   $$ |  $$ |$$ |      /$$$$$$  |/$$$$$$  |/$$$$$$  |
+# $$ |  $$ | $$ | $$ |$$ |  $$ |$$ |  $$ |$$ |  $$/ $$ |  $$ | __ $$ |  $$ |$$ |   __ $$ |  $$ |$$ |  $$/ $$    $$ |
+# _$$ |_ $$ | $$ | $$ |$$ |__$$ |$$ \__$$ |$$ |      $$ |  $$ |/  |$$ \__$$ |$$ \__/  |$$ \__$$ |$$ |      $$$$$$$$/
+# / $$   |$$ | $$ | $$ |$$    $$/ $$    $$/ $$ |      $$ |  $$  $$/ $$    $$ |$$    $$/ $$    $$/ $$ |      $$       |
+# $$$$$$/ $$/  $$/  $$/ $$$$$$$/   $$$$$$/  $$/       $$/    $$$$/   $$$$$$$ | $$$$$$/   $$$$$$/  $$/        $$$$$$$/
+# $$ |                                        /  \__$$ |
+# $$ |                                        $$    $$/
+# $$/                                          $$$$$$/
+# ImpurityCore Minecraft 1.12.2 Bukkit Plugin For Anarchy Servers
+
+Plugin:
+  discord_link: "YOUR DISCORD LINK HERE"
+  use_prefix: true
+  prefix: "&6[&r&7ImpurityCore&r&6]&r"
+
+Exploit:
+  movement:
+    boatfly: true
+    desync_godmode: true
+    teleport_coord_log: true
+    remount_elytra_fly: true
+    end_gateway_crash: true
+  physics:
+    redstone:
+      piston_tps_disable: 17
+      redstone_tps_disable: 15
+      limit_redstone_per_chunk: true
+    gravity:
+      falling_block_tps_disable: 12
+      limit_falling_blocks: true
+    block:
+      min_max_dispense_height: [ 1, 255 ]
+      tile_entity:
+        limit_tiles_per_chunk: true
+        max_tiles: 512
+        max_per_type: 125
+        nbt:
+          prevent_abusive_tiles: true
+          blacklisted_tags: [ "run_command", "EntityTag" ]
+    entity:
