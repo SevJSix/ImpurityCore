@@ -6,12 +6,15 @@ import me.sevj6.task.scheduler.ScheduledTask;
 import me.sevj6.task.scheduler.TaskForce;
 import me.sevj6.util.MessageUtil;
 import me.sevj6.util.TimerUtil;
+import me.sevj6.util.fileutil.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 public class AutoRestart implements TaskForce, Instance {
 
     TimerUtil time = new TimerUtil();
+
+    private final Setting<Long> timeTill = Setting.getLong("auto_restart.time_till_restart");
 
     private void broadCast(String msg) {
         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', MessageUtil.getPrefix() + msg));
@@ -20,7 +23,7 @@ public class AutoRestart implements TaskForce, Instance {
     @ScheduledTask
     public void restart() {
         long millis = (System.currentTimeMillis() - Impurity.startTime);
-        if (millis < 43200000) return;
+        if (millis < timeTill.getValue()) return;
         Thread t = new Thread(() -> {
             broadCast("&eServer restarting in 1 minute...");
             time.delay(30000);

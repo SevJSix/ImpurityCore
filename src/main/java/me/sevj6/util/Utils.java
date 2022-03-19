@@ -4,15 +4,19 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import me.sevj6.Instance;
 import me.sevj6.event.bus.NettyInjector;
+import me.sevj6.util.fileutil.ConfigManager;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class Utils implements Instance {
 
@@ -29,6 +33,9 @@ public class Utils implements Instance {
     public static boolean is32k(ItemStack itemStack) {
         return itemStack.getEnchantments().entrySet().stream().anyMatch(e -> e.getValue() > 50);
     }
+
+    public static List<EntityType> neutralEntities = Arrays.asList(EntityType.LLAMA, EntityType.WOLF, EntityType.IRON_GOLEM, EntityType.BAT, EntityType.OCELOT, EntityType.CHICKEN, EntityType.COW, EntityType.DONKEY, EntityType.HORSE, EntityType.MUSHROOM_COW, EntityType.MULE, EntityType.PARROT, EntityType.PIG, EntityType.RABBIT, EntityType.SHEEP, EntityType.SKELETON_HORSE, EntityType.SNOWMAN, EntityType.SQUID, EntityType.VILLAGER);
+    public static List<EntityType> hostileEntities = Arrays.asList(EntityType.CAVE_SPIDER, EntityType.ENDERMAN, EntityType.SPIDER, EntityType.BLAZE, EntityType.CREEPER, EntityType.ELDER_GUARDIAN, EntityType.ENDERMITE, EntityType.EVOKER, EntityType.GHAST, EntityType.GUARDIAN, EntityType.HUSK, EntityType.MAGMA_CUBE, EntityType.SHULKER, EntityType.SILVERFISH, EntityType.SKELETON, EntityType.WITHER_SKELETON, EntityType.SLIME, EntityType.STRAY, EntityType.VEX, EntityType.VINDICATOR, EntityType.WITCH, EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER);
 
     public static String formatLocation(Location location) {
         double x = location.getX();
@@ -78,19 +85,45 @@ public class Utils implements Instance {
         return count;
     }
 
-    public static ItemStack gen32k() {
-        org.bukkit.inventory.ItemStack item = new org.bukkit.inventory.ItemStack(Material.DIAMOND_SWORD);
-        ItemMeta meta = item.getItemMeta();
-        item.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 32767);
-        item.addUnsafeEnchantment(Enchantment.KNOCKBACK, 10);
-        item.addUnsafeEnchantment(Enchantment.FIRE_ASPECT, 32767);
-        item.addUnsafeEnchantment(Enchantment.LOOT_BONUS_MOBS, 10);
-        item.addUnsafeEnchantment(Enchantment.SWEEPING_EDGE, 3);
-        item.addUnsafeEnchantment(Enchantment.DURABILITY, 32767);
-        item.addUnsafeEnchantment(Enchantment.MENDING, 1);
-        item.addUnsafeEnchantment(Enchantment.VANISHING_CURSE, 1);
-        meta.setDisplayName("Alpha's Stacked 32k's");
-        item.setItemMeta(meta);
-        return item;
+    public static Integer getMin(Integer[] inputArray) {
+        int minValue = inputArray[0];
+        for (int i = 1; i < inputArray.length; i++) {
+            if (inputArray[i] < minValue) {
+                minValue = inputArray[i];
+            }
+        }
+        return minValue;
+    }
+
+    public static Integer getMax(Integer[] inputArray) {
+        int maxValue = inputArray[0];
+        for (int i = 1; i < inputArray.length; i++) {
+            if (inputArray[i] > maxValue) {
+                maxValue = inputArray[i];
+            }
+        }
+        return maxValue;
+    }
+
+    public static String getFormattedPlaytime(UUID player) {
+        if (ConfigManager.configManager.getPlaytimes().contains(player.toString())) {
+            return Utils.getFormattedInterval(ConfigManager.configManager.getPlaytimes().getLong(player.toString()));
+        } else return "none";
+    }
+
+    public static void fixLightUpdateQueueing() {
+        int time = 300;
+        String ver = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        try {
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            Class<?> lightQueue = Class.forName("net.minecraft.server." + ver + ".PaperLightingQueue");
+            Field maxTimeF = lightQueue.getDeclaredField("MAX_TIME");
+            maxTimeF.setAccessible(true);
+            modifiersField.setInt(maxTimeF, maxTimeF.getModifiers() & ~Modifier.FINAL);
+            maxTimeF.set(null, (long) (time / 20 * 1.15));
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
     }
 }

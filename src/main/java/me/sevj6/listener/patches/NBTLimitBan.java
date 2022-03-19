@@ -1,4 +1,4 @@
-package me.sevj6.listener.packet;
+package me.sevj6.listener.patches;
 
 import me.sevj6.event.bus.SevHandler;
 import me.sevj6.event.bus.SevListener;

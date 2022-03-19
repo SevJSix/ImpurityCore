@@ -1,6 +1,7 @@
 package me.sevj6.listener.patches;
 
 import me.sevj6.Instance;
+import me.sevj6.util.fileutil.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,9 +14,11 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class TeleportCoordLog implements Listener, Instance {
 
+    private final Setting<Boolean> checkTpCoordLog = Setting.getBoolean("teleport_coord_log");
+
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
-        if (config.getBoolean("Exploits.tp-coord-log")) {
+        if (checkTpCoordLog.getValue()) {
             try {
                 PlayerTeleportEvent.TeleportCause cause = event.getCause();
                 double distance = event.getFrom().distance(event.getTo());

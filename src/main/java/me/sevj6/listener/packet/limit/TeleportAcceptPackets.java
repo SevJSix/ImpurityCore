@@ -1,9 +1,10 @@
-package me.sevj6.listener.packet;
+package me.sevj6.listener.packet.limit;
 
 import me.sevj6.Impurity;
 import me.sevj6.event.bus.SevHandler;
 import me.sevj6.event.bus.SevListener;
 import me.sevj6.event.events.PacketEvent;
+import me.sevj6.listener.packet.PacketLimit;
 import me.sevj6.util.ViolationManager;
 import net.minecraft.server.v1_12_R1.PacketPlayInTeleportAccept;
 import org.bukkit.Bukkit;
@@ -12,7 +13,7 @@ import org.bukkit.Location;
 public class TeleportAcceptPackets extends ViolationManager implements SevListener {
 
     public TeleportAcceptPackets() {
-        super(1, 10);
+        super(PacketLimit.getIncrementation(PacketPlayInTeleportAccept.class), PacketLimit.getDecrementation(PacketPlayInTeleportAccept.class));
     }
 
     @SevHandler

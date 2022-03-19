@@ -1,6 +1,7 @@
 package me.sevj6.util;
 
 import me.sevj6.Impurity;
+import me.sevj6.util.fileutil.Setting;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -14,18 +15,19 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 public class MessageUtil extends Utils {
     public static String getPrefix() {
-        return PluginUtil.config().getString("Plugin.plugin-prefix");
+        return Setting.getString("plugin_prefix").getValue();
     }
 
     public static String getDiscord() {
-        return PluginUtil.config().getString("Plugin.discord-link");
+        return Setting.getString("discord_link").getValue();
     }
 
     public static void log(String message) {
-        System.out.println(ChatColor.translateAlternateColorCodes('&', getPrefix() + message));
+        Impurity.getPlugin().getLogger().log(Level.INFO, ChatColor.translateAlternateColorCodes('&', message));
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.isOp()) {
                 sendMessage(player, message);
@@ -43,11 +45,6 @@ public class MessageUtil extends Utils {
         }
     }
 
-    /**
-     * JSON hover text message method
-     *
-     * @author 254n_m
-     */
     public static void sendClickableMessage(Player player, String message, String hoverText, String cmd, ClickEvent.Action action) {
         TextComponent msg = new TextComponent(net.md_5.bungee.api.ChatColor.translateAlternateColorCodes('&', message));
         msg.setClickEvent(new ClickEvent(action, cmd));

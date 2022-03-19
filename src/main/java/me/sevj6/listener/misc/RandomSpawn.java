@@ -1,9 +1,10 @@
 package me.sevj6.listener.misc;
 
 import me.sevj6.Impurity;
+import me.sevj6.Instance;
 import me.sevj6.util.MessageUtil;
 import me.sevj6.util.PlayerUtil;
-import me.sevj6.util.PluginUtil;
+import me.sevj6.util.fileutil.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,18 +24,15 @@ import java.util.logging.Level;
  * @author SevJ6
  */
 
-public class RandomSpawn implements Listener {
-    private final int range;
-    private final String worldName;
+public class RandomSpawn implements Listener, Instance {
 
-    public RandomSpawn() {
-        this.range = PluginUtil.config().getInt("RandomSpawn.spawn-range");
-        this.worldName = PluginUtil.config().getString("RandomSpawn.world");
-    }
+    private final Setting<Boolean> enabled = Setting.getBoolean("random_spawn.enabled");
+    private final Setting<String> worldName = Setting.getString("random_spawn.world");
+    private final Setting<Integer> range = Setting.getInt("random_spawn.range");
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRespawn(PlayerRespawnEvent event) {
-        if (PluginUtil.config().getBoolean("RandomSpawn.Enabled")) {
+        if (enabled.getValue()) {
             if (event.isBedSpawn()) return;
             doTeleport(event.getPlayer(), true, event);
         }
@@ -49,7 +47,7 @@ public class RandomSpawn implements Listener {
         }
 
         if (!player.hasPlayedBefore()) {
-            if (PluginUtil.config().getBoolean("RandomSpawn.Enabled")) {
+            if (enabled.getValue()) {
                 doTeleport(player, false, null);
                 MessageUtil.sendMessage(player, "&aThis is your first time joining Impurity." +
                         "\n" +
@@ -79,8 +77,8 @@ public class RandomSpawn implements Listener {
     }
 
     private Location calcSpawnLocation(boolean lastAttempt) {
-        int x = ThreadLocalRandom.current().nextInt(-this.range, this.range), z = ThreadLocalRandom.current().nextInt(-this.range, this.range);
-        World world = Bukkit.getWorld(this.worldName);
+        int x = ThreadLocalRandom.current().nextInt(-this.range.getValue(), this.range.getValue()), z = ThreadLocalRandom.current().nextInt(-this.range.getValue(), this.range.getValue());
+        World world = Bukkit.getWorld(this.worldName.getValue());
         int y = world.getHighestBlockYAt(x, z);
         if (!lastAttempt) {
             Block blockAt = world.getBlockAt(x, y, z);

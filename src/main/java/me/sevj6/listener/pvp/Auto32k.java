@@ -8,6 +8,7 @@ import me.sevj6.event.events.PlayerServerSide32kEvent;
 import me.sevj6.listener.patches.SuperweaponExploits;
 import me.sevj6.util.MessageUtil;
 import me.sevj6.util.ServersideUtil;
+import me.sevj6.util.fileutil.Setting;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.EnumHand;
 import org.bukkit.Bukkit;
@@ -21,22 +22,36 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Auto32k implements SevListener, Listener {
 
     public static final HashMap<Player, Inventory> inventoryHashMap = new HashMap<>();
+    private final Setting<Boolean> serverSideA32k = Setting.getBoolean("serverside_auto32k.enabled");
+    private final Setting<Boolean> whitelistOnly = Setting.getBoolean("serverside_auto32k.whitelist_only");
+    private final Setting<List<String>> whitelist = Setting.getStringList("serverside_auto32k.whitelist");
 
     @SevHandler
     public void onAuto32k(PlayerServerSide32kEvent event) {
-        if (event.getPlayer().getName().equalsIgnoreCase("SevJ6")) {
-            if (event.getPlacePos() == null) {
-                event.setCancelled(true);
-                MessageUtil.sendMessage(event.getPlayer(), "&cInvalid BlockPos");
+        if (serverSideA32k.getValue()) {
+            if (whitelistOnly.getValue()) {
+                if (whitelist.getValue().contains(event.getPlayer().getName())) {
+                    doPlace(event);
+                }
             } else {
-                handleTask(() -> {
-                    ServersideUtil.placeAuto32k(event.getPlayer(), event.getPlacePos());
-                });
+                doPlace(event);
             }
+        }
+    }
+
+    private void doPlace(PlayerServerSide32kEvent event) {
+        if (event.getPlacePos() == null) {
+            event.setCancelled(true);
+            MessageUtil.sendMessage(event.getPlayer(), "&cInvalid BlockPos");
+        } else {
+            handleTask(() -> {
+                ServersideUtil.placeAuto32k(event.getPlayer(), event.getPlacePos());
+            });
         }
     }
 

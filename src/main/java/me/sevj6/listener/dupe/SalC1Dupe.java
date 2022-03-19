@@ -2,6 +2,7 @@ package me.sevj6.listener.dupe;
 
 import me.sevj6.Instance;
 import me.sevj6.util.TimerUtil;
+import me.sevj6.util.fileutil.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -22,32 +23,30 @@ import java.util.logging.Level;
 
 public class SalC1Dupe implements Listener, Instance {
 
+    private final Setting<Boolean> enabled = Setting.getBoolean("dupe.piston_dupe");
     TimerUtil timer = new TimerUtil();
-
 
     @EventHandler
     public void onVehicleEnter(PlayerInteractAtEntityEvent event) {
-        if (config.getBoolean("SalC1Dupe.Enabled")) {
+        if (enabled.getValue()) {
             if (event.getRightClicked() instanceof Llama || event.getRightClicked() instanceof Mule || event.getRightClicked() instanceof Donkey) {
                 if ((event.getPlayer().getInventory().getItemInMainHand().getType() == Material.CHEST) || (event.getPlayer().getInventory().getItemInOffHand().getType() == Material.CHEST)) {
-                    if (config.getBoolean("SalC1Dupe.addDelay") && timer.hasReached(config.getLong("SalC1Dupe.delay"))) {
-                        PlayerDupeEvent playerDupeEvent = new PlayerDupeEvent(event.getPlayer(), event.getPlayer().getChunk(), event.getRightClicked());
-                        Bukkit.getServer().getPluginManager().callEvent(playerDupeEvent);
-                        timer.reset();
-                        ChestedHorse entity = (ChestedHorse) event.getRightClicked();
-                        if (entity.getPassenger() == null) {
-                            entity.setPassenger(event.getPlayer());
-                        }
-                        event.setCancelled(true);
-                        for (ItemStack item : entity.getInventory().getContents()) {
-                            if (item != null) {
-                                if (!(item.getType() == Material.SADDLE)) {
-                                    entity.getWorld().dropItemNaturally(entity.getLocation(), item);
-                                }
+                    PlayerDupeEvent playerDupeEvent = new PlayerDupeEvent(event.getPlayer(), event.getPlayer().getChunk(), event.getRightClicked());
+                    Bukkit.getServer().getPluginManager().callEvent(playerDupeEvent);
+                    timer.reset();
+                    ChestedHorse entity = (ChestedHorse) event.getRightClicked();
+                    if (entity.getPassenger() == null) {
+                        entity.setPassenger(event.getPlayer());
+                    }
+                    event.setCancelled(true);
+                    for (ItemStack item : entity.getInventory().getContents()) {
+                        if (item != null) {
+                            if (!(item.getType() == Material.SADDLE)) {
+                                entity.getWorld().dropItemNaturally(entity.getLocation(), item);
                             }
                         }
-                        entity.setCarryingChest(false);
                     }
+                    entity.setCarryingChest(false);
                 }
             }
         }

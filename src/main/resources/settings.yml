@@ -16,14 +16,106 @@ Plugin:
   discord_link: "YOUR DISCORD LINK HERE"
   use_prefix: true
   prefix: "&6[&r&7ImpurityCore&r&6]&r"
+  auto_restart:
+    enabled: true
+    time_till_restart: 43200000
+
+Utility:
+  pvp:
+    totem_pop_notify:
+      enabled: true
+      broadcast_on_death: true
+    1.16_bed_placements: true
+    crystal_aura:
+      break_crystal: true
+    serverside_auto32k:
+      enabled: true
+      whitelist_only: false
+      whitelist: [ "SevJ6" ]
+  world:
+    random_spawn:
+      enabled: true
+      world: "world"
+      range: 400
+  session:
+    checkIfChunkIsChunkbanned: true
+    disable_join_leave_messages: false
+  anvil:
+    allow_colored_named_items: true
+  dupe:
+    piston_dupe: false
+    salc1_dupe: true
+    lava_dupe: false
+  tablist:
+    text:
+      Header:
+        - ""
+        - "&bimpurity"
+        - "&r"
+      Footer:
+        - ""
+        - "  %tps% &3tps — &b%ping% &3ping — &b%players% &3players — &b%uptime% &3uptime  "
+        - ""
+        - "&7Server Age: %age%"
+        - ""
+  chat:
+    anti_spam: true
+    color_formatting:
+      green_text: true
+      translate_color_codes: true
+    command_process:
+      enable_kill_command: true
+      command_whitelist:
+        enabled: true
+        commands:
+          unknown-command: "&4Bad Command. Type /help for all server commands."
+          command_list:
+            - "help"
+            - "tps"
+            - "ignore"
+            - "ignorelist"
+            - "w"
+            - "msg"
+            - "tell"
+            - "r"
+            - "reply"
+            - "whisper"
+            - "l"
+            - "last"
+            - "pm"
+            - "tell"
+            - "togglewhispering"
+            - "jd"
+            - "togglechat"
+            - "worldstats"
+            - "toggletells"
+            - "stats"
+            - "kill"
+            - "ping"
+            - "bed"
+            - "discord"
+            - "nc"
+            - "toptimes"
+            - "playtime"
+            - "serverinfo"
+            - "impurityplugins"
 
 Exploit:
   movement:
     boatfly: true
     desync_godmode: true
     teleport_coord_log: true
-    remount_elytra_fly: true
-    end_gateway_crash: true
+    elytra:
+      remount_elytra_fly: true
+      nether_roof_no_fly: true
+    gateway:
+      prevent_gateway_crash: true
+      kick_message: "Kicked for coming to close to an end gateway whilst riding an entity"
+    distance:
+      check_too_far: true
+      threshold: 0.55
+    self_fill:
+      check_burrowed_players: true
   physics:
     redstone:
       piston_tps_disable: 17
@@ -34,11 +126,99 @@ Exploit:
       limit_falling_blocks: true
     block:
       min_max_dispense_height: [ 1, 255 ]
+      prevent_end_portal_grief: true
+      block_break:
+        checkNBT:
+          enabled: true
+          clear_nbt_if_tag_too_big: true
       tile_entity:
         limit_tiles_per_chunk: true
         max_tiles: 512
         max_per_type: 125
         nbt:
           prevent_abusive_tiles: true
-          blacklisted_tags: [ "run_command", "EntityTag" ]
+          blacklisted_tags: [ "run_command", "clickEvent" ]
     entity:
+      projectiles:
+        launched_entities:
+          traveled_too_far: true
+          entity_types: [ "THROWN_EXP_BOTTLE", "SNOWBALL" ]
+          velocity:
+            max_velocity: 11
+            kick:
+              doKick: true
+              message: "Opp detected, arrow deflected"
+        wither_skulls:
+          delete_on_chunkload: true
+          skulls_traveled_too_far: true
+          log_to_console: false
+          travel_distance:
+            skulls_traveled_too_far: true
+            time_limit: 30
+        armor_stand:
+          disable_ai: true
+          spawn_limit_per_chunk: 25
+      portals:
+        stop_rideable_entities: false
+        blacklisted_entities: [ "EXPERIENCE_ORB", "FALLING_BLOCK", "PRIMED_TNT" ]
+      chunk:
+        entity_per_chunk_limit:
+          enabled: true
+          entities:
+            animals: 25
+            mobs: 20
+            withers: 3
+            dropped_items: 50
+            ender_crystals: 20
+            armor_stands: 20
+            primed_tnt: 40
+            wither_skulls: 2
+            falling_block: 4
+    client:
+      combat:
+        attack:
+          enabled: true
+          max_range: 7
+          32k:
+            patch_freeroam: true
+            prevent_efly_with_32ks: true
+        packetfly_patch:
+          enabled: true
+      nocom:
+        enabled: true
+        serverside:
+          sPacketBlockChange:
+            max_distance: 16
+        clientside:
+          cPacketBlockDig:
+            max_distance: 16
+      interact:
+        maps:
+          enabled: true
+          rate_limit_ms: 5000
+        block:
+          check_tile_tag_size: true
+        lever_flick:
+          enabled: true
+          check_if_powering_redstone: true
+      packet:
+        use_entity:
+          vlID: [ 1, 200 ]
+          maxVLS: 400
+        window_click:
+          vlID: [ 1, 5 ]
+          maxVLS: 50
+        block_dig:
+          vlID: [ 1, 8 ]
+          maxVLS: 50
+        block_place:
+          vlID: [ 1, 35 ]
+          maxVLS: 90
+        auto_recipe:
+          vlID: [ 1, 1 ]
+          maxVLS: 30
+        teleport_accept:
+          vlID: [ 1, 5 ]
+          maxVLS: 25
+
+

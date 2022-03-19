@@ -1,8 +1,8 @@
 package me.sevj6.task;
 
+import me.sevj6.Instance;
 import me.sevj6.task.scheduler.ScheduledTask;
 import me.sevj6.task.scheduler.TaskForce;
-import me.sevj6.util.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -11,9 +11,9 @@ import org.bukkit.entity.EntityType;
 
 import java.util.*;
 
-public class EntityPerChunk implements TaskForce, Data {
+public class EntityPerChunk implements TaskForce, Instance {
 
-    HashMap<EntityType, Integer> map;
+    private final HashMap<EntityType, Integer> map;
 
     public EntityPerChunk() {
         this.map = entityMap;

@@ -1,6 +1,7 @@
 package me.sevj6.listener.pvp;
 
 import me.sevj6.Impurity;
+import me.sevj6.util.fileutil.Setting;
 import net.minecraft.server.v1_12_R1.World;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Material;
@@ -21,37 +22,41 @@ import org.bukkit.material.Bed;
 
 public class Meta116BedAura implements Listener {
 
+    private final Setting<Boolean> doPlacements = Setting.getBoolean("1.16_bed_placements");
+
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-        if (!checkValidity(event)) return;
-        Player player = event.getPlayer();
-        BlockFace blockFace = event.getBlockFace();
-        Location location = event.getClickedBlock().getLocation();
-        ItemStack handItem = (event.getHand() == EquipmentSlot.HAND) ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
-        Block blockInteractedWith = location.getBlock();
-        short bedColor = getColor(handItem);
-        Block blockToSet = null;
-        switch (blockFace) {
-            case UP:
-                blockToSet = blockInteractedWith.getRelative(BlockFace.UP);
-                break;
-            case NORTH:
-                blockToSet = blockInteractedWith.getRelative(BlockFace.NORTH);
-                break;
-            case EAST:
-                blockToSet = blockInteractedWith.getRelative(BlockFace.EAST);
-                break;
-            case SOUTH:
-                blockToSet = blockInteractedWith.getRelative(BlockFace.SOUTH);
-                break;
-            case WEST:
-                blockToSet = blockInteractedWith.getRelative(BlockFace.WEST);
-                break;
-            case DOWN:
-                blockToSet = blockInteractedWith.getRelative(BlockFace.DOWN);
-                break;
+        if (doPlacements.getValue()) {
+            if (!checkValidity(event)) return;
+            Player player = event.getPlayer();
+            BlockFace blockFace = event.getBlockFace();
+            Location location = event.getClickedBlock().getLocation();
+            ItemStack handItem = (event.getHand() == EquipmentSlot.HAND) ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
+            Block blockInteractedWith = location.getBlock();
+            short bedColor = getColor(handItem);
+            Block blockToSet = null;
+            switch (blockFace) {
+                case UP:
+                    blockToSet = blockInteractedWith.getRelative(BlockFace.UP);
+                    break;
+                case NORTH:
+                    blockToSet = blockInteractedWith.getRelative(BlockFace.NORTH);
+                    break;
+                case EAST:
+                    blockToSet = blockInteractedWith.getRelative(BlockFace.EAST);
+                    break;
+                case SOUTH:
+                    blockToSet = blockInteractedWith.getRelative(BlockFace.SOUTH);
+                    break;
+                case WEST:
+                    blockToSet = blockInteractedWith.getRelative(BlockFace.WEST);
+                    break;
+                case DOWN:
+                    blockToSet = blockInteractedWith.getRelative(BlockFace.DOWN);
+                    break;
+            }
+            handlePlace(player, blockToSet, handItem, bedColor);
         }
-        handlePlace(player, blockToSet, handItem, bedColor);
     }
 
     public boolean checkValidity(PlayerInteractEvent event) {

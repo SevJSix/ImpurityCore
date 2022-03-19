@@ -1,17 +1,18 @@
-package me.sevj6.listener.patches;
+package me.sevj6.listener.packet.limit;
 
 import me.sevj6.Instance;
 import me.sevj6.event.bus.SevHandler;
 import me.sevj6.event.bus.SevListener;
 import me.sevj6.event.events.PacketEvent;
+import me.sevj6.listener.packet.PacketLimit;
 import me.sevj6.util.ViolationManager;
 import net.minecraft.server.v1_12_R1.PacketPlayInUseEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class AuraSpeedLimit extends ViolationManager implements SevListener, Instance {
-    public AuraSpeedLimit() {
-        super(1, 200);
+public class PacketUseEntity extends ViolationManager implements SevListener, Instance {
+    public PacketUseEntity() {
+        super(PacketLimit.getIncrementation(PacketPlayInUseEntity.class), PacketLimit.getDecrementation(PacketPlayInUseEntity.class));
     }
 
     @SevHandler
@@ -21,7 +22,7 @@ public class AuraSpeedLimit extends ViolationManager implements SevListener, Ins
             if (packet.a().equals(PacketPlayInUseEntity.EnumEntityUseAction.ATTACK)) {
                 Player player = event.getPlayer();
                 increment(player.getUniqueId());
-                if (getVLS(player.getUniqueId()) > 450) {
+                if (getVLS(player.getUniqueId()) > PacketLimit.getMaxVLS(PacketPlayInUseEntity.class)) {
                     remove(player.getUniqueId());
                     event.setCancelled(true);
                     Bukkit.getScheduler().runTask(plugin, () -> {

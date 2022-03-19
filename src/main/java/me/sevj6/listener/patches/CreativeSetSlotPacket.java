@@ -1,4 +1,4 @@
-package me.sevj6.listener.packet;
+package me.sevj6.listener.patches;
 
 import me.sevj6.Instance;
 import me.sevj6.event.bus.SevHandler;
@@ -8,7 +8,7 @@ import me.sevj6.util.PlayerUtil;
 import net.minecraft.server.v1_12_R1.PacketPlayInSetCreativeSlot;
 import org.bukkit.GameMode;
 
-public class PacketCreativeSlot implements SevListener, Instance {
+public class CreativeSetSlotPacket implements SevListener, Instance {
 
     @SevHandler
     public void on(PacketEvent.ClientToServer event) {

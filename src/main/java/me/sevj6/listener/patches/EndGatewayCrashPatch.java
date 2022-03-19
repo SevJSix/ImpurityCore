@@ -3,6 +3,7 @@ package me.sevj6.listener.patches;
 import me.sevj6.Instance;
 import me.sevj6.util.MessageUtil;
 import me.sevj6.util.Utils;
+import me.sevj6.util.fileutil.Setting;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -20,9 +21,13 @@ import org.bukkit.event.vehicle.VehicleMoveEvent;
  */
 
 public class EndGatewayCrashPatch implements Listener, Instance {
+
+    private final Setting<String> kickMsg = Setting.getString("gateway.kick_message");
+    private final Setting<Boolean> fixGatewayCrash = Setting.getBoolean("prevent_gateway_crash");
+
     @EventHandler
     public void onVehicleMove(VehicleMoveEvent event) {
-        if (config.getBoolean("Exploits.end-gateway-crash-fix")) {
+        if (fixGatewayCrash.getValue()) {
             Vehicle vehicle = event.getVehicle();
             if (!(vehicle.getLocation().getWorld().getEnvironment() == World.Environment.THE_END)) return;
             if (isNearGateway(vehicle) && vehicle.getPassengers().isEmpty()) {
@@ -33,7 +38,7 @@ public class EndGatewayCrashPatch implements Listener, Instance {
                     if (entity instanceof Player) {
                         Player player = (Player) entity;
                         vehicle.remove();
-                        player.kickPlayer(config.getString("Exploits.gateway-crash-kick-msg"));
+                        player.kickPlayer(kickMsg.getValue());
                         MessageUtil.log("&3Prevented an entity in " + Utils.formatLocation(vehicle.getLocation()) + "&r&3 from going through a gateway. Attempt by&r&a " + player.getName());
                     }
                 });

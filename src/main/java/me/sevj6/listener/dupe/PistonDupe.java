@@ -1,7 +1,8 @@
 package me.sevj6.listener.dupe;
 
-import me.sevj6.util.PluginUtil;
+import me.sevj6.Instance;
 import me.sevj6.util.Utils;
+import me.sevj6.util.fileutil.Setting;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,11 +20,13 @@ import org.bukkit.inventory.ItemStack;
  * @author SevJ6
  */
 
-public class PistonDupe implements Listener {
+public class PistonDupe implements Listener, Instance {
+
+    private final Setting<Boolean> enabled = Setting.getBoolean("dupe.piston_dupe");
 
     @EventHandler
     public void onHangingBreak(HangingBreakEvent event) {
-        if (PluginUtil.config().getBoolean("PistonDupe.Enabled")
+        if (enabled.getValue()
                 && event.getEntity().getType() == EntityType.ITEM_FRAME
                 && event.getCause() == HangingBreakEvent.RemoveCause.PHYSICS
         ) {

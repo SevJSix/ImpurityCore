@@ -1,6 +1,7 @@
 package me.sevj6.listener.dupe;
 
 import me.sevj6.Impurity;
+import me.sevj6.util.fileutil.Setting;
 import net.minecraft.server.v1_12_R1.BlockPosition;
 import net.minecraft.server.v1_12_R1.TileEntityHopper;
 import org.bukkit.Bukkit;
@@ -16,9 +17,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LavaDupe implements Listener {
 
+    private final Setting<Boolean> enabled = Setting.getBoolean("dupe.lava_dupe");
+
     @EventHandler
     public void onEntityDamageEvent(EntityDamageEvent event) {
-        if (!Impurity.getPlugin().getConfig().getBoolean("LavaDupe.Enabled")) return;
+        if (!enabled.getValue()) return;
         if (!(event.getEntity() instanceof Item)) return;
         EntityDamageEvent.DamageCause cause = event.getCause();
         Item item = (Item) event.getEntity();

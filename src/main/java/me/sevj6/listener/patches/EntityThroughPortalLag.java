@@ -1,7 +1,11 @@
 package me.sevj6.listener.patches;
 
+import me.sevj6.Instance;
+import me.sevj6.util.fileutil.Setting;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
@@ -9,16 +13,22 @@ import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.entity.EntityPortalExitEvent;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
 
-public class EntityThroughPortalLag implements Listener {
+public class EntityThroughPortalLag implements Listener, Instance {
 
-    /**
-     * @author SevJ6
-     * not configurable but who cares
-     */
+    private final Setting<Boolean> stopRidableEntities = Setting.getBoolean("portals.stop_rideable_entities");
+    private final Setting<List<String>> blacklistedEntityTypes = Setting.getStringList("portals.blacklisted_entities");
 
     @EventHandler
     public void onPortal(EntityPortalEvent event) {
+        if (stopRidableEntities.getValue()) {
+            if (event.getEntity().isInsideVehicle()) {
+                event.setCancelled(true);
+                return;
+            }
+        }
         if (checkEntity(event.getEntity())) {
             event.setCancelled(true);
             event.getEntity().remove();
@@ -31,6 +41,12 @@ public class EntityThroughPortalLag implements Listener {
 
     @EventHandler
     public void onPortalExit(EntityPortalExitEvent event) {
+        if (stopRidableEntities.getValue()) {
+            if (event.getEntity().isInsideVehicle()) {
+                event.setCancelled(true);
+                return;
+            }
+        }
         if (checkEntity(event.getEntity())) {
             event.setCancelled(true);
             event.getEntity().remove();
@@ -51,6 +67,13 @@ public class EntityThroughPortalLag implements Listener {
     }
 
     private boolean checkEntity(Entity entity) {
-        return entity instanceof ExperienceOrb || entity instanceof FallingBlock || entity instanceof Explosive;
+        try {
+            for (String s : blacklistedEntityTypes.getValue()) {
+                return EntityType.valueOf(s).equals(entity.getType());
+            }
+        } catch (Throwable t) {
+            plugin.getLogger().log(Level.SEVERE, "Invalid entity type! check your blacklisted_entities config in settings.yml");
+        }
+        return false;
     }
 }

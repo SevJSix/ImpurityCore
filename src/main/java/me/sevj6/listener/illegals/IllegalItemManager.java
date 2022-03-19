@@ -6,7 +6,6 @@ import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 public class IllegalItemManager {
 
@@ -24,7 +23,6 @@ public class IllegalItemManager {
         registerIllegalCheck(new PlayerPickupItem());
         registerIllegalCheck(new PlayerSwapHandItems());
         IllegalItemManager.illegalListeners.forEach(listener -> plugin.getServer().getPluginManager().registerEvents(listener, plugin));
-        plugin.getLogger().log(Level.INFO, "Registered Illegal Item Listeners");
     }
 
     public static void registerIllegalCheck(Listener listener) {
