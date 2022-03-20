@@ -266,7 +266,7 @@ public class CheckUtil {
         return false;
     }
 
-    private static boolean isShulker(ItemStack itemStack) {
+    public static boolean isShulker(ItemStack itemStack) {
         if (itemStack != null) {
             if (itemStack.hasItemMeta()) {
                 return itemStack.getItemMeta() instanceof BlockStateMeta && ((BlockStateMeta) itemStack.getItemMeta()).getBlockState() instanceof ShulkerBox;

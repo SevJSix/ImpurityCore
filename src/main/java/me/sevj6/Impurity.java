@@ -59,16 +59,18 @@ public final class Impurity extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        initializeManagers();
+        if (!getDataFolder().exists()) getDataFolder().mkdirs();
+        ConfigManager manager = new ConfigManager(this);
+        manager.init();
         if (Bukkit.getOnlinePlayers().size() > 0) Bukkit.getOnlinePlayers().forEach(Utils::inject);
         Executors.newScheduledThreadPool(4).scheduleAtFixedRate(() -> violationManagers.forEach(ViolationManager::decrementAll), 0, 1, TimeUnit.SECONDS);
+        initializeManagers();
         startTime = System.currentTimeMillis();
     }
 
     public void initializeManagers() {
-        managers.add(new ConfigManager(this));
-        managers.add(new ListenerManager(this));
         managers.add(new TaskManager(this));
+        managers.add(new ListenerManager(this));
         managers.forEach(Manager::init);
         new CommandHandler(this);
     }
@@ -81,7 +83,6 @@ public final class Impurity extends JavaPlugin {
                 Bukkit.getOnlinePlayers().forEach(Utils::removeHook);
             }
             ConfigManager.configManager.getConfigs().forEach(Configuration::saveConfig);
-            this.reloadConfig();
         } catch (Throwable t) {
             t.printStackTrace();
         }

@@ -5,10 +5,12 @@ import me.sevj6.listener.patches.DispenserExploits;
 import me.sevj6.util.fileutil.Setting;
 import org.bukkit.block.Block;
 import org.bukkit.block.Dispenser;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 
 public class BlockDispense implements Listener {
 
@@ -27,9 +29,23 @@ public class BlockDispense implements Listener {
             if (block.getState() instanceof Dispenser) {
                 Dispenser dispenser = (Dispenser) block.getState();
                 for (ItemStack stack : dispenser.getInventory()) {
-                    if (CheckUtil.isIllegal(stack)) {
-                        DispenserExploits.clearTileEntityInventory(dispenser.getLocation());
-                        break;
+                    if (stack != null) {
+                        if (CheckUtil.isIllegal(stack)) {
+                            event.setCancelled(true);
+                            DispenserExploits.clearTileEntityInventory(dispenser.getLocation());
+                            break;
+                        } else if (CheckUtil.isShulker(stack)) {
+                            ShulkerBox shulkerBox = (ShulkerBox) ((BlockStateMeta) stack.getItemMeta()).getBlockState();
+                            for (ItemStack shulkerStack : shulkerBox.getInventory()) {
+                                if (shulkerStack != null) {
+                                    if (CheckUtil.isIllegal(shulkerStack)) {
+                                        event.setCancelled(true);
+                                        DispenserExploits.clearTileEntityInventory(dispenser.getLocation());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
