@@ -40,7 +40,7 @@ public class BlockDispense implements Listener {
                                 if (shulkerStack != null) {
                                     if (CheckUtil.isIllegal(shulkerStack)) {
                                         event.setCancelled(true);
-                                        DispenserExploits.clearTileEntityInventory(dispenser.getLocation());
+                                        dispenser.getInventory().clear();
                                         break;
                                     }
                                 }
