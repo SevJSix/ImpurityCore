@@ -6,7 +6,7 @@
 
     <groupId>me.sevj6</groupId>
     <artifactId>ImpurityCore</artifactId>
-    <version>2.0.0</version>
+    <version>3.0-REWRITE</version>
     <packaging>jar</packaging>
 
     <name>ImpurityCore</name>
