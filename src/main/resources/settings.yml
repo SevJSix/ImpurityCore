@@ -13,7 +13,7 @@
 # ImpurityCore Minecraft 1.12.2 Bukkit Plugin For Anarchy Servers
 
 Plugin:
-  discord_link: "YOUR DISCORD LINK HERE"
+  discord_link: "https://discord.gg/hFYgcWVFhu"
   use_prefix: true
   prefix: "&6[&r&7ImpurityCore&r&6]&r"
   auto_restart:

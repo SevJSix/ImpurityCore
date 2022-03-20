@@ -13,7 +13,7 @@ import me.sevj6.listener.pvp.Auto32k;
 import me.sevj6.listener.pvp.CrystalAura;
 import me.sevj6.listener.pvp.Meta116BedAura;
 import me.sevj6.listener.pvp.TotemPopNotify;
-import me.sevj6.util.PluginUtil;
+import me.sevj6.util.EntityUtil;
 import me.sevj6.util.Utils;
 
 public class ListenerManager extends Manager {
@@ -81,6 +81,6 @@ public class ListenerManager extends Manager {
         // Other initializers
         IllegalItemManager.init();
         Utils.fixLightUpdateQueueing();
-        PluginUtil.setupEntityMap();
+        EntityUtil.setupEntityMap();
     }
 }
