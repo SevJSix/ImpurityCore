@@ -33,6 +33,7 @@ public class PluginUtil extends Utils implements Instance {
     private static final Setting<Integer> wither_skulls = Setting.getInt("entities.wither_skulls");
     private static final Setting<Integer> falling_block = Setting.getInt("entities.falling_block");
     private static final Setting<Integer> dropped_items = Setting.getInt("entities.dropped_items");
+    private static final Setting<Boolean> entityLimitEnabled = Setting.getBoolean("entity_per_chunk_limit.enabled");
 
     public static void registerEventListeners() {
         plugin.getLogger().info("Registering Events...");
@@ -42,7 +43,7 @@ public class PluginUtil extends Utils implements Instance {
     }
 
     public static void setupEntityMap() {
-        if (config.getBoolean("EntityLimit.Enabled")) {
+        if (entityLimitEnabled.getValue()) {
             for (EntityType neutralEntity : Utils.neutralEntities) {
                 entityMap.put(neutralEntity, animals.getValue());
             }

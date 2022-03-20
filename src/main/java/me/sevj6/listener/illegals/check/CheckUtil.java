@@ -1,7 +1,7 @@
 package me.sevj6.listener.illegals.check;
 
-import me.sevj6.Impurity;
 import me.sevj6.listener.illegals.wrapper.IllegalWrapper;
+import me.sevj6.util.fileutil.Setting;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Container;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class CheckUtil {
 
-    private static final IllegalWrapper.Strictness strictness = IllegalWrapper.Strictness.valueOf(Impurity.getPlugin().getConfig().getString("IllegalStrictness"));
+    private static final Setting<IllegalWrapper.Strictness> strictness = Setting.getIllegalStrictness("IllegalItems.strictness");
     private static final List<Material> unobtainable = Arrays.asList(Material.BEDROCK, Material.LONG_GRASS, Material.MOB_SPAWNER, Material.SOIL,
             Material.COMMAND, Material.COMMAND_REPEATING, Material.COMMAND_CHAIN, Material.COMMAND_MINECART, Material.BARRIER, Material.GRASS_PATH,
             Material.STRUCTURE_BLOCK, Material.STRUCTURE_VOID, Material.MONSTER_EGGS, Material.MONSTER_EGG, Material.KNOWLEDGE_BOOK);
@@ -30,7 +30,7 @@ public class CheckUtil {
 
     public static void checkItemStack(ItemStack itemStack) {
         if (itemStack == null || itemStack.getType() == Material.AIR) return;
-        switch (strictness) {
+        switch (strictness.getValue()) {
             case NON_STRICT:
                 doNonStrictCheck(itemStack);
                 break;
@@ -63,7 +63,7 @@ public class CheckUtil {
         if (isNestedShulker(itemStack)) itemStack.setAmount(0);
         if (hasBlockEntityTagIllegally(itemStack)) itemStack.setAmount(0);
         if (hasNoTag(itemStack)) itemStack.setAmount(0);
-        removeIllegalPotionEffectsIfAnyExist(itemStack);
+        if (isIllegalPotion(itemStack)) removeIllegalPotionEffects(itemStack);
     }
 
     public static void checkPlayer(Player player) {
@@ -89,7 +89,7 @@ public class CheckUtil {
         for (ItemStack content : container.getInventory().getContents()) {
             if (content != null) {
                 checkItemStack(content);
-                if (!strictness.equals(IllegalWrapper.Strictness.NON_STRICT)) {
+                if (!strictness.getValue().equals(IllegalWrapper.Strictness.NON_STRICT)) {
                     if (container instanceof ShulkerBox) {
                         if (content.getItemMeta() instanceof BlockStateMeta && ((BlockStateMeta) content.getItemMeta()).getBlockState() instanceof ShulkerBox) {
                             container.getInventory().remove(content);
@@ -105,7 +105,7 @@ public class CheckUtil {
         for (ItemStack content : inventory.getContents()) {
             if (content != null) {
                 checkItemStack(content);
-                if (!strictness.equals(IllegalWrapper.Strictness.NON_STRICT)) {
+                if (!strictness.getValue().equals(IllegalWrapper.Strictness.NON_STRICT)) {
                     if (inventory.getType() == InventoryType.SHULKER_BOX) {
                         if (content.getItemMeta() instanceof BlockStateMeta && ((BlockStateMeta) content.getItemMeta()).getBlockState() instanceof ShulkerBox) {
                             inventory.remove(content);
@@ -145,7 +145,34 @@ public class CheckUtil {
     }
 
     public static boolean isIllegal(ItemStack itemStack) {
-        return isOverstacked(itemStack) || isOverEnchanted(itemStack) || isUnbreakable(itemStack);
+        switch (strictness.getValue()) {
+            case NON_STRICT:
+                return isOverstacked(itemStack)
+                        || isOverEnchanted(itemStack)
+                        || isUnbreakable(itemStack);
+            case SEMI_STRICT:
+                return isOverstacked(itemStack)
+                        || isOverEnchanted(itemStack)
+                        || isUnbreakable(itemStack)
+                        || hasItemFlags(itemStack)
+                        || isColoredNamed(itemStack)
+                        || hasLore(itemStack)
+                        || isUnobtainable(itemStack);
+            case VERY_STRICT:
+                return isOverstacked(itemStack)
+                        || isOverEnchanted(itemStack)
+                        || isUnbreakable(itemStack)
+                        || hasItemFlags(itemStack)
+                        || isColoredNamed(itemStack)
+                        || hasLore(itemStack)
+                        || isUnobtainable(itemStack)
+                        || hasAttributes(itemStack)
+                        || isNestedShulker(itemStack)
+                        || hasBlockEntityTagIllegally(itemStack)
+                        || hasNoTag(itemStack)
+                        || isIllegalPotion(itemStack);
+        }
+        return false;
     }
 
     public static boolean hasItemFlags(ItemStack itemStack) {
@@ -219,7 +246,7 @@ public class CheckUtil {
         return copy.getTag().hasKey("BlockEntityTag");
     }
 
-    public static void removeIllegalPotionEffectsIfAnyExist(ItemStack itemStack) {
+    public static void removeIllegalPotionEffects(ItemStack itemStack) {
         if (itemStack.hasItemMeta()) {
             if (itemStack.getItemMeta() instanceof PotionMeta) {
                 PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
@@ -227,6 +254,16 @@ public class CheckUtil {
                 itemStack.setItemMeta(meta);
             }
         }
+    }
+
+    public static boolean isIllegalPotion(ItemStack itemStack) {
+        if (itemStack.hasItemMeta()) {
+            if (itemStack.getItemMeta() instanceof PotionMeta) {
+                PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
+                return meta.hasCustomEffects();
+            }
+        }
+        return false;
     }
 
     private static boolean isShulker(ItemStack itemStack) {

@@ -15,6 +15,7 @@ public class AutoRestart implements TaskForce, Instance {
     TimerUtil time = new TimerUtil();
 
     private final Setting<Long> timeTill = Setting.getLong("auto_restart.time_till_restart");
+    private final Setting<Boolean> enabled = Setting.getBoolean("auto_restart.enabled");
 
     private void broadCast(String msg) {
         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', MessageUtil.getPrefix() + msg));
@@ -22,6 +23,7 @@ public class AutoRestart implements TaskForce, Instance {
 
     @ScheduledTask
     public void restart() {
+        if (!enabled.getValue()) return;
         long millis = (System.currentTimeMillis() - Impurity.startTime);
         if (millis < timeTill.getValue()) return;
         Thread t = new Thread(() -> {

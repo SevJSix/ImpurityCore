@@ -1,6 +1,7 @@
 package me.sevj6.util.fileutil;
 
 import me.sevj6.Instance;
+import me.sevj6.listener.illegals.wrapper.IllegalWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,20 @@ public class Setting<T> implements Instance {
             }
         }
         return new Setting<>(0);
+    }
+
+    public static Setting<IllegalWrapper.Strictness> getIllegalStrictness(String key) {
+        for (String settingsKey : settings.getKeys(true)) {
+            if (settingsKey.contains(key)) {
+                try {
+                    return new Setting<>(IllegalWrapper.Strictness.valueOf(settings.getString(settingsKey)));
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+        }
+        return new Setting<>(IllegalWrapper.Strictness.NON_STRICT);
     }
 
     public static Setting<Long> getLong(String key) {

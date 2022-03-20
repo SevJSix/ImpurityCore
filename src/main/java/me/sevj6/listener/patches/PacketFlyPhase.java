@@ -53,7 +53,7 @@ public class PacketFlyPhase implements SevListener, Instance {
     @SevHandler
     public void onMove(PacketEvent.ClientToServer event) {
         if (packetFlyPatch.getValue()) {
-            if (event.getPacket() instanceof PacketPlayInFlying && exploits.getBoolean("PacketFlyPhaseWalk.Enabled")) {
+            if (event.getPacket() instanceof PacketPlayInFlying) {
                 Player player = event.getPlayer();
                 if (set.contains(player)) {
                     set.remove(player);

@@ -22,6 +22,7 @@ public class IllegalItemManager {
         registerIllegalCheck(new PlayerDropItem());
         registerIllegalCheck(new PlayerPickupItem());
         registerIllegalCheck(new PlayerSwapHandItems());
+        registerIllegalCheck(new BlockDispense());
         IllegalItemManager.illegalListeners.forEach(listener -> plugin.getServer().getPluginManager().registerEvents(listener, plugin));
     }
 

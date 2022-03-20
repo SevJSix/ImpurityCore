@@ -4,7 +4,6 @@ import me.sevj6.Impurity;
 import me.sevj6.Instance;
 import me.sevj6.command.Command;
 import me.sevj6.util.MessageUtil;
-import me.sevj6.util.fileutil.Configuration;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class NameColor extends Command implements Instance {
-    private final Configuration NC = fileConfig.getNamecolor();
     private final String AVAILABLE_COLORS = "&4dark_red &cred &6gold &eyellow &2dark_green &agreen &baqua &3dark_aqua &1dark_blue &9blue &dlight_purple &5dark_purple &7gray &8dark_gray &0black&r &lbold&r &mstrikethrough&r &nunderline&r &oitalic&r random reset";
 
     public NameColor(Impurity plugin) {
@@ -66,9 +64,9 @@ public class NameColor extends Command implements Instance {
                     break;
                 case "reset":
                     player.setDisplayName(null);
-                    NC.set(String.valueOf(player.getUniqueId()), "null");
-                    NC.saveConfig();
-                    NC.reloadConfig();
+                    namecolor.set(String.valueOf(player.getUniqueId()), "null");
+                    namecolor.saveConfig();
+                    namecolor.reloadConfig();
                     MessageUtil.sendMessage(player, "&6Your username has been reset.");
                     break;
                 default:
@@ -105,8 +103,8 @@ public class NameColor extends Command implements Instance {
         name = name.replace("§k", "") + ChatColor.RESET;
         MessageUtil.sendMessage(player, "&3Your name is now: &r" + name);
         player.setDisplayName(name);
-        NC.set(String.valueOf(player.getUniqueId()), name);
-        NC.saveConfig();
-        NC.reloadConfig();
+        namecolor.set(String.valueOf(player.getUniqueId()), name);
+        namecolor.saveConfig();
+        namecolor.reloadConfig();
     }
 }

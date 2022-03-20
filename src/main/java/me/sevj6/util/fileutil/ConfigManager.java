@@ -12,8 +12,6 @@ public class ConfigManager extends Manager {
     public static ConfigManager configManager;
     private final List<Configuration> configs = new ArrayList<>();
     private Configuration namecolor;
-    private Configuration tablist;
-    private Configuration exploits;
     private Configuration settings;
     private Configuration playtimes;
     private Configuration totempops;
@@ -27,11 +25,9 @@ public class ConfigManager extends Manager {
     public void init() {
         settings = new Configuration("settings.yml", plugin);
         namecolor = new Configuration("namecolor.yml", plugin);
-        tablist = new Configuration("tablist.yml", plugin);
-        exploits = new Configuration("packets.yml", plugin);
         totempops = new Configuration("totempops.yml", plugin);
         playtimes = new Configuration("playtimes.yml", plugin);
-        configs.addAll(Arrays.asList(settings, namecolor, tablist, exploits, totempops, playtimes));
+        configs.addAll(Arrays.asList(settings, namecolor, totempops, playtimes));
     }
 
     public Configuration getPlaytimes() {
@@ -48,14 +44,6 @@ public class ConfigManager extends Manager {
 
     public List<Configuration> getConfigs() {
         return configs;
-    }
-
-    public Configuration getTablist() {
-        return tablist;
-    }
-
-    public Configuration getExploits() {
-        return exploits;
     }
 
     public Configuration getNamecolor() {

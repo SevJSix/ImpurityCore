@@ -5,6 +5,7 @@ import io.netty.channel.ChannelPipeline;
 import me.sevj6.Instance;
 import me.sevj6.event.bus.NettyInjector;
 import me.sevj6.util.fileutil.ConfigManager;
+import me.sevj6.util.fileutil.Setting;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
@@ -21,13 +22,14 @@ import java.util.UUID;
 public class Utils implements Instance {
 
     private static final DecimalFormat format = new DecimalFormat("#.##");
+    private static final Setting<List<String>> whitelistedCommands = Setting.getStringList("commands.command_list");
 
     public static String[] getAllowedCommands() {
-        return config.getStringList("CommandWhitelist.command-list").stream().map(s -> "/" + s).toArray(String[]::new);
+        return whitelistedCommands.getValue().stream().map(s -> "/" + s).toArray(String[]::new);
     }
 
     public static List<String> getAllowedCommandsAsListWithNoPrefix() {
-        return config.getStringList("CommandWhitelist.command-list");
+        return whitelistedCommands.getValue();
     }
 
     public static boolean is32k(ItemStack itemStack) {

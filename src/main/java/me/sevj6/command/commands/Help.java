@@ -4,15 +4,18 @@ import me.sevj6.Impurity;
 import me.sevj6.Instance;
 import me.sevj6.command.Command;
 import me.sevj6.util.MessageUtil;
+import me.sevj6.util.fileutil.Setting;
 import net.md_5.bungee.api.chat.ClickEvent;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
 public class Help extends Command implements Instance {
-    private static final String line = ChatColor.translateAlternateColorCodes('&', config.getString("HelpCommand.lines"));
+
+    private final Setting<String> lines = Setting.getString("help.lines");
+    private final Setting<String> hoverText = Setting.getString("help.hover_text");
+    private final Setting<List<String>> message = Setting.getStringList("help.help_message");
 
     public Help(Impurity plugin) {
         super("help", "&4Usage: &c/help", plugin);
@@ -21,14 +24,14 @@ public class Help extends Command implements Instance {
     @Override
     public void execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        List<String> help = config.getStringList("HelpCommand.help-message");
-        player.sendMessage(line);
+        List<String> help = message.getValue();
+        sendMessage(player, lines.getValue()); // top of msg
         help.forEach(s -> {
             String cmd = s.split(" ")[0];
             cmd = cmd.substring(cmd.indexOf("/"));
-            MessageUtil.sendClickableMessage(player, s, config.getString("HelpCommand.hover-text").replace("%cmd%", cmd), cmd, ClickEvent.Action.SUGGEST_COMMAND);
+            MessageUtil.sendClickableMessage(player, s, hoverText.getValue().replace("%cmd%", cmd), cmd, ClickEvent.Action.SUGGEST_COMMAND);
         });
-        player.sendMessage(line);
+        sendMessage(player, lines.getValue()); // bottom of msg
     }
 
     @Override

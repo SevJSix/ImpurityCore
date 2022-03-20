@@ -19,7 +19,7 @@ import java.util.List;
 
 public class WitherSkullRemover implements Listener, Instance {
 
-    private final int maxPerLog = config.getInt("WitherSkullHandling.TraveledTooLong.amount-per-console-log");
+    private final Setting<Integer> maxPerLog = Setting.getInt("wither_skulls.max_per_log");
     private final Setting<Boolean> deleteOnChunkLoad = Setting.getBoolean("delete_on_chunkload");
     private final Setting<Boolean> checkTravelDistanceTooFar = Setting.getBoolean("skulls_traveled_too_far");
     private final Setting<Boolean> logToConsole = Setting.getBoolean("wither_skulls.log_to_console");
@@ -51,8 +51,8 @@ public class WitherSkullRemover implements Listener, Instance {
                     event.getEntity().remove();
                     if (logToConsole.getValue()) {
                         amount++;
-                        if (amount == maxPerLog) {
-                            amount -= maxPerLog;
+                        if (amount == maxPerLog.getValue()) {
+                            amount -= maxPerLog.getValue();
                             plugin.getLogger().info("Routinely removed flying WitherSkulls that were traveling for too long.");
                         }
                     }

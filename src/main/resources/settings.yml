@@ -20,6 +20,43 @@ Plugin:
     enabled: true
     time_till_restart: 43200000
 
+Command:
+  help:
+    hover_text: "&3Click to suggest &b%cmd%"
+    lines: "&6-----------------------------------------------------"
+    help_message:
+      - "&b/ignore <name> &3— ignore a player."
+      - "&b/ignorelist &3— list ignored players."
+      - "&b/r &3— reply to the last person who messaged you."
+      - "&b/l &3— pm a player you last messaged."
+      - "&b/tell &3— pm a player."
+      - "&b/togglechat &3— toggle the default chat."
+      - "&b/toggletells &3— toggle all incoming pms."
+      - "&b/kill &3— commit suicide"
+      - "&b/ping <name> &3— show your, or another player's ping."
+      - "&b/bed &3— get coordinates to your bed location."
+      - "&b/jd <name> &3— get a player's joindate."
+      - "&b/stats &3— see the world size, age, and unique joins."
+      - "&b/serverinfo &3— get some information about the server."
+      - "&b/playtime &3— get a players playime"
+      - "&b/toptimes &3— see who has the most playtimes."
+      - "&b/nc &3— change your name color."
+
+IllegalItems:
+  enabled: true
+  strictness: "NON_STRICT"
+  events:
+    BlockPlace: true
+    EntityEnterPortal: true
+    EntityPickupItem: true
+    InventoryClick: true
+    InventoryClose: true
+    InventoryOpen: true
+    PlayerDropItem: true
+    PlayerPickupItem: true
+    PlayerSwapHandItems: true
+    BlockDispense: false
+
 Utility:
   pvp:
     totem_pop_notify:
@@ -60,6 +97,7 @@ Utility:
         - ""
   chat:
     anti_spam: true
+    spam_denied_message: "&4You were detected spamming, or sending similar messages."
     color_formatting:
       green_text: true
       translate_color_codes: true
@@ -152,6 +190,7 @@ Exploit:
           delete_on_chunkload: true
           skulls_traveled_too_far: true
           log_to_console: false
+          max_per_log: 400
           travel_distance:
             skulls_traveled_too_far: true
             time_limit: 30
