@@ -3,16 +3,13 @@ package me.sevj6.listener.pvp;
 import me.sevj6.Impurity;
 import me.sevj6.event.bus.SevHandler;
 import me.sevj6.event.bus.SevListener;
-import me.sevj6.event.events.PlayerAttemptUse32kEvent;
 import me.sevj6.event.events.PlayerServerSide32kEvent;
 import me.sevj6.listener.patches.SuperweaponExploits;
 import me.sevj6.util.MessageUtil;
 import me.sevj6.util.ServersideUtil;
 import me.sevj6.util.fileutil.Setting;
-import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.EnumHand;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -51,54 +48,6 @@ public class Auto32k implements SevListener, Listener {
         } else {
             handleTask(() -> {
                 ServersideUtil.placeAuto32k(event.getPlayer(), event.getPlacePos());
-            });
-        }
-    }
-
-    @SevHandler
-    public void on32kHit(PlayerAttemptUse32kEvent event) {
-        Player player = event.getPlayer();
-        EntityPlayer attacker = ((CraftPlayer) player).getHandle();
-        Player victim = event.getVictim();
-        EnumHand hand = event.getHand();
-
-        // Check for blink 32k tp
-        if (inventoryHashMap.containsKey(player) && inventoryHashMap.get(player).getType() == InventoryType.HOPPER) {
-            Inventory inventory = inventoryHashMap.get(player);
-            double attackerDistanceToHopper = inventory.getLocation().distance(player.getLocation());
-            double victimDistanceToHopper = inventory.getLocation().distance(victim.getLocation());
-            boolean tooFar = attackerDistanceToHopper > 8.0D
-                    || victimDistanceToHopper > 12.5D
-                    || !attacker.activeContainer.checkReachable
-                    || event.getAttackRange() > 6.5;
-            if (tooFar) {
-                event.setCancelled(true);
-                handleTask(() -> {
-                    if (attacker.activeContainer != null) player.closeInventory();
-                    revert(player, hand);
-                });
-                inventoryHashMap.remove(player);
-                return;
-            }
-        }
-
-        // Stop free roaming with 32ks
-        if (player.getOpenInventory().getType() != InventoryType.HOPPER) {
-            event.setCancelled(true);
-            handleTask(() -> {
-                if (attacker.activeContainer != null) player.closeInventory();
-                revert(player, hand);
-            });
-            return;
-        }
-
-        // Stop people from flying with an elytra with 32ks
-        if (player.isGliding()) {
-            event.setCancelled(true);
-            handleTask(() -> {
-                if (attacker.activeContainer != null) player.closeInventory();
-                revert(player, hand);
-                player.setGliding(false);
             });
         }
     }
