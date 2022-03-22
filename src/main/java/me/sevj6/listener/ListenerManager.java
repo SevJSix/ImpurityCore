@@ -7,7 +7,7 @@ import me.sevj6.listener.dupe.PistonDupe;
 import me.sevj6.listener.dupe.SalC1Dupe;
 import me.sevj6.listener.illegals.IllegalItemManager;
 import me.sevj6.listener.misc.*;
-import me.sevj6.listener.packet.limit.*;
+import me.sevj6.listener.packet.PacketLimit;
 import me.sevj6.listener.patches.*;
 import me.sevj6.listener.pvp.Auto32k;
 import me.sevj6.listener.pvp.CrystalAura;
@@ -57,17 +57,13 @@ public class ListenerManager extends Manager {
         plugin.registerListener(new SalC1Dupe());
 
         // Sev Listeners
+        plugin.registerSevListener(new PacketLimit());
         plugin.registerSevListener(new TotemPopStatistic());
         plugin.registerSevListener(new NBTLimitBan());
         plugin.registerSevListener(new NocomExploit());
-        plugin.registerSevListener(new PacketAutoRecipe());
-        plugin.registerSevListener(new PacketBlockDig());
-        plugin.registerSevListener(new PacketBlockPlace());
         plugin.registerSevListener(new CreativeSetSlotPacket());
         plugin.registerSevListener(new PacketFlyPhase());
-        plugin.registerSevListener(new PacketWindowClick());
-        plugin.registerSevListener(new TeleportAcceptPackets());
-        plugin.registerSevListener(new PacketUseEntity());
+        plugin.registerSevListener(new InvalidSlotClick());
         plugin.registerSevListener(new TotemPopNotify());
         plugin.registerSevListener(new CrystalAura());
 

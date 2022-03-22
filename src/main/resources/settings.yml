@@ -241,23 +241,12 @@ Exploit:
           enabled: true
           check_if_powering_redstone: true
       packet:
-        use_entity:
-          vlID: [ 1, 200 ]
-          maxVLS: 400
-        window_click:
-          vlID: [ 1, 5 ]
-          maxVLS: 50
-        block_dig:
-          vlID: [ 1, 8 ]
-          maxVLS: 50
-        block_place:
-          vlID: [ 1, 35 ]
-          maxVLS: 90
-        auto_recipe:
-          vlID: [ 1, 1 ]
-          maxVLS: 30
-        teleport_accept:
-          vlID: [ 1, 5 ]
-          maxVLS: 25
+        packet_limit:
+          increment: 1
+          decrement: 200
+          violations:
+            maxVLS: 200
+            kick_message: "You were sending too many packets"
+
 
 
