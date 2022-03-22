@@ -137,6 +137,8 @@ Utility:
             - "playtime"
             - "serverinfo"
             - "impurityplugins"
+            - "pstats"
+            - "reg"
 
 Exploit:
   movement:

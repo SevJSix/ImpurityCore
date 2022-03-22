@@ -19,7 +19,7 @@ public class CommandWhitelist implements Listener, Instance {
 
     private final Setting<Boolean> enabled = Setting.getBoolean("command_whitelist.enabled");
     private final Setting<Boolean> killCommand = Setting.getBoolean("enable_kill_command");
-    private final Setting<String> unknown_command = Setting.getString("commands.unknown_command");
+    private final Setting<String> unknown_command = Setting.getString("commands.unknown-command");
     private final Setting<List<String>> commands = Setting.getStringList("commands.command_list");
 
     @EventHandler(priority = EventPriority.HIGHEST)
