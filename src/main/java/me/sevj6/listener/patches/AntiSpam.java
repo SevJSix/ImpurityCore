@@ -38,11 +38,13 @@ public class AntiSpam extends ViolationManager implements Listener {
             Player player = event.getPlayer();
             if (lastMessage.containsKey(player)) {
                 if (isSimilar(message, lastMessage.get(player))) {
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < 6; i++) {
                         increment(player.getUniqueId());
                     }
                 } else if (isRegex(message)) {
-                    increment(player.getUniqueId());
+                    for (int i = 0; i < 3; i++) {
+                        increment(player.getUniqueId());
+                    }
                 }
                 lastMessage.replace(player, message);
             } else {

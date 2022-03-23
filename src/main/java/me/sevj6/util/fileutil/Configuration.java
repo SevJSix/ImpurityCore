@@ -19,10 +19,12 @@ public class Configuration extends YamlConfiguration {
 
     private final String resourceName;
     private final Plugin plugin;
+    private final boolean dataFolder;
 
-    public Configuration(String resourceName, Plugin plugin) {
+    public Configuration(String resourceName, Plugin plugin, boolean dataFolder) {
         this.resourceName = resourceName;
         this.plugin = plugin;
+        this.dataFolder = dataFolder;
         try {
             loadConfiguration();
         } catch (FileNotFoundException e) {
@@ -36,7 +38,12 @@ public class Configuration extends YamlConfiguration {
 
     private void loadConfiguration() throws FileNotFoundException {
         try {
-            File file = new File(plugin.getDataFolder(), resourceName);
+            File file;
+            if (dataFolder) {
+                File dataFolder = new File(plugin.getDataFolder() + "/data");
+                if (!dataFolder.exists()) dataFolder.mkdirs();
+            }
+            file = new File(plugin.getDataFolder(), resourceName);
             if (!file.exists()) {
                 InputStream is = getClass().getClassLoader().getResourceAsStream(resourceName);
                 if (is == null) throw new FileNotFoundException("Resource " + resourceName);

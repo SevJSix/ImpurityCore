@@ -1,6 +1,6 @@
 package me.sevj6;
 
-import me.sevj6.command.CommandHandler;
+import me.sevj6.command.CommandManager;
 import me.sevj6.event.bus.EventBus;
 import me.sevj6.event.bus.SevListener;
 import me.sevj6.listener.ListenerManager;
@@ -60,8 +60,6 @@ public final class Impurity extends JavaPlugin {
     @Override
     public void onEnable() {
         if (!getDataFolder().exists()) getDataFolder().mkdirs();
-        ConfigManager manager = new ConfigManager(this);
-        manager.init();
         if (Bukkit.getOnlinePlayers().size() > 0) Bukkit.getOnlinePlayers().forEach(Utils::inject);
         Executors.newScheduledThreadPool(4).scheduleAtFixedRate(() -> violationManagers.forEach(ViolationManager::decrementAll), 0, 1, TimeUnit.SECONDS);
         initializeManagers();
@@ -69,10 +67,11 @@ public final class Impurity extends JavaPlugin {
     }
 
     public void initializeManagers() {
+        managers.add(new ConfigManager(this));
         managers.add(new TaskManager(this));
         managers.add(new ListenerManager(this));
+        managers.add(new CommandManager(this));
         managers.forEach(Manager::init);
-        new CommandHandler(this);
     }
 
     @Override

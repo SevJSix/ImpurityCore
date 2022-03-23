@@ -1,21 +1,18 @@
 package me.sevj6.command.commands;
 
-import me.sevj6.Impurity;
-import me.sevj6.command.Command;
+import me.sevj6.util.MessageUtil;
 import me.sevj6.util.PlayerUtil;
 import me.sevj6.util.statstics.PlayerStat;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Statistics extends Command {
-    public Statistics(Impurity plugin) {
-        super("pstats", "&4test", plugin);
-    }
-
+public class PlayerStatisticsCommand implements CommandExecutor {
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             OfflinePlayer of;
@@ -43,16 +40,11 @@ public class Statistics extends Command {
                         .append("&7Totems Popped: &b").append(stat.getTotemPops())
                         .append("\n")
                         .append("&5&l---------------------------");
-                sendMessage(player, builder.toString());
+                MessageUtil.sendMessage(player, builder.toString());
             } catch (Throwable t) {
-                sendMessage(player, "&4That player has not joined before");
+                MessageUtil.sendMessage(player, "&4That player has not joined before");
             }
         }
+        return true;
     }
-
-    @Override
-    public String[] onTabComplete() {
-        return new String[0];
-    }
-
 }

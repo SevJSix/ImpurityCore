@@ -67,7 +67,7 @@ Utility:
       break_crystal: true
     serverside_auto32k:
       enabled: true
-      whitelist_only: false
+      whitelist_only: true
       whitelist: [ "SevJ6" ]
   world:
     random_spawn:
@@ -87,13 +87,14 @@ Utility:
     text:
       Header:
         - ""
-        - "&bimpurity"
+        - "&4impurity&3.me"
         - "&r"
       Footer:
         - ""
-        - "  %tps% &3tps — &b%ping% &3ping — &b%players% &3players — &b%uptime% &3uptime  "
+        - "   &8TPS &r&l%tps% &r&8ping &r&l%ping% &r&8players &r&l%players% &r&8uptime &r&l%uptime%&r   "
         - ""
-        - "&7Server Age: %age%"
+        - "&7contact: SevJ6#2521"
+        - "&7server age: %age%"
         - ""
   chat:
     anti_spam: true

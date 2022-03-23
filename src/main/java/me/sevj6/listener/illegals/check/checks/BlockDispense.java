@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 
 public class BlockDispense implements Listener {
 
-    private final Setting<Boolean> enabled = Setting.getBoolean("events.BlockPlace");
+    private final Setting<Boolean> enabled = Setting.getBoolean("events.BlockDispense");
 
     @EventHandler
     public void onDispense(BlockDispenseEvent event) {

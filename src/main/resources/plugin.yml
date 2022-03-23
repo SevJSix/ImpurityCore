@@ -4,3 +4,40 @@ main: me.sevj6.Impurity
 authors: [ SevJ6 ]
 description: plugin for Impurity
 load: POSTWORLD
+commands:
+  serverinfo:
+    description: shows info about the server
+  bed:
+    description: shows where your bed spawn is
+  copyinventory:
+    description: copy someones inventory
+    aliases: [ "ci", "copyinv" ]
+  discord:
+    description: shows the servers discord link
+  help:
+    description: shows all helpful commands
+  joindate:
+    description: shows a players join date
+    aliases: [ "jd" ]
+  namecolor:
+    description: change your name color
+    aliases: [ "nc" ]
+  openinventory:
+    description: open somebody's inventory
+    aliases: [ "openinv", "inv" ]
+  ping:
+    description: show somebody's ping
+  playtime:
+    description: show somebody's playtime
+    aliases: [ "pt" ]
+  regear:
+    description: regear your inventory
+    aliases: [ "reg" ]
+  playerstats:
+    description: view your player statistics
+    aliases: [ "pstats" ]
+  toptimes:
+    description: see the top 10 most playtimes on the server
+    aliases: [ "topt", "mostplaytime", "mostplayed" ]
+  troll:
+    description: troll someone

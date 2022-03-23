@@ -23,10 +23,10 @@ public class ConfigManager extends Manager {
 
     @Override
     public void init() {
-        settings = new Configuration("settings.yml", plugin);
-        namecolor = new Configuration("namecolor.yml", plugin);
-        totempops = new Configuration("totempops.yml", plugin);
-        playtimes = new Configuration("playtimes.yml", plugin);
+        settings = new Configuration("settings.yml", plugin, false);
+        namecolor = new Configuration("data/namecolor.yml", plugin, true);
+        totempops = new Configuration("data/totempops.yml", plugin, true);
+        playtimes = new Configuration("data/playtimes.yml", plugin, true);
         configs.addAll(Arrays.asList(settings, namecolor, totempops, playtimes));
     }
 

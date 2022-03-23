@@ -1,11 +1,12 @@
 package me.sevj6.command.commands;
 
-import me.sevj6.Impurity;
-import me.sevj6.command.Command;
 import me.sevj6.util.MessageUtil;
+import me.sevj6.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -15,48 +16,22 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
-public class About extends Command {
-    public About(Impurity plugin) {
-        super("serverinfo", "&4/about", plugin);
-    }
-
-    public static String getJoinDate(Object object) {
-        DateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM dd, yyyy");
-        String jd = null;
-        if (object instanceof Player) {
-            Player player = (Player) object;
-            Date date = new Date(player.getFirstPlayed());
-            jd = dateFormat.format(date);
-        } else if (object instanceof OfflinePlayer) {
-            OfflinePlayer player = (OfflinePlayer) object;
-            Date date = new Date(player.getFirstPlayed());
-            jd = dateFormat.format(date);
-        }
-        return jd;
-    }
+public class ServerInfoCommand implements CommandExecutor {
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         MessageUtil.sendMessage(sender, "&3Impurity.me is a server with a history of map resets. The map has been reset a total of 7 times throughout it's history." +
                 " Impurity is known mostly for it's unique pvp meta with 32k weapons. Although the map has been reset multiple times, we do not plan on ever resetting it again." +
                 " You can join the community discord at " + MessageUtil.getDiscord());
         String link = getPasteBinLink((Player) sender);
         MessageUtil.sendMessage(sender, "&bYou can view all of the players who have ever joined at this link: " + link);
+        return true;
     }
-
-    @Override
-    public String[] onTabComplete() {
-        return new String[0];
-    }
-
 
     private String getPasteBinLink(Player player) {
         try {
@@ -72,7 +47,7 @@ public class About extends Command {
             arguments.put("api_option", "paste");
             StringBuilder sb = new StringBuilder();
             for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
-                sb.append(offlinePlayer.getName()).append(" - Joined ").append(getJoinDate(offlinePlayer)).append("\n");
+                sb.append(offlinePlayer.getName()).append(" - Joined ").append(PlayerUtil.getJoinDate(offlinePlayer)).append("\n");
             }
             arguments.put("api_paste_code", sb.toString());
             arguments.put("api_paste_name", "Unique Joins On Impurity Requested By " + player.getName());

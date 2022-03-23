@@ -1,21 +1,17 @@
 package me.sevj6.command.commands;
 
-import me.sevj6.Impurity;
-import me.sevj6.command.Command;
 import me.sevj6.util.MessageUtil;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class OpenInventory extends Command {
-    public OpenInventory(Impurity plugin) {
-        super("inv", "&4Usage: &c/inv <player>", plugin);
-    }
-
+public class OpenInventoryCommand implements CommandExecutor {
     @Override
-    public void execute(CommandSender sender, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender.isOp() && sender instanceof Player) {
             EntityPlayer player = ((CraftPlayer) sender).getHandle();
             if (args.length > 0) {
@@ -30,12 +26,6 @@ public class OpenInventory extends Command {
                 MessageUtil.sendMessage(sender, "&4Specify a player");
             }
         }
+        return true;
     }
-
-    @Override
-    public String[] onTabComplete() {
-        return new String[0];
-    }
-
-
 }

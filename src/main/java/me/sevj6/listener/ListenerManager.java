@@ -1,6 +1,7 @@
 package me.sevj6.listener;
 
 import me.sevj6.Impurity;
+import me.sevj6.command.TabCompletion;
 import me.sevj6.event.ImpurityEventFactory;
 import me.sevj6.listener.dupe.LavaDupe;
 import me.sevj6.listener.dupe.PistonDupe;
@@ -66,6 +67,7 @@ public class ListenerManager extends Manager {
         plugin.registerSevListener(new InvalidSlotClick());
         plugin.registerSevListener(new TotemPopNotify());
         plugin.registerSevListener(new CrystalAura());
+        plugin.registerSevListener(new TabCompletion());
 
         // Register both as Sev Listener and Bukkit Listener
         plugin.registerBoth(new ImpurityEventFactory());

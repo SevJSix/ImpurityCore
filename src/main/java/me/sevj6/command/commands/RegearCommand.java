@@ -1,12 +1,13 @@
 package me.sevj6.command.commands;
 
-import me.sevj6.Impurity;
-import me.sevj6.command.Command;
+import me.sevj6.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.ShulkerBox;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,54 +15,54 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class SevJ6Regear extends Command {
+public class RegearCommand implements TabExecutor {
 
     private final HashMap<Player, ItemStack[]> map = new HashMap<>();
 
-    public SevJ6Regear(Impurity plugin) {
-        super("reg", "&4/reg", plugin);
-    }
-
     @Override
-    public void execute(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
-        if (player.isOp() || isInLocation(player)) {
-            ItemStack[] array;
-            if (args.length > 0) {
-                if (args[0].equalsIgnoreCase("set")) {
-                    if (map.containsKey(player)) {
-                        map.replace(player, player.getInventory().getContents());
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (player.isOp() || isInLocation(player)) {
+                ItemStack[] array;
+                if (args.length > 0) {
+                    if (args[0].equalsIgnoreCase("set")) {
+                        if (map.containsKey(player)) {
+                            map.replace(player, player.getInventory().getContents());
+                        } else {
+                            map.put(player, player.getInventory().getContents());
+                        }
+                        MessageUtil.sendMessage(player, "&6Updated your regear inventory set");
+                        return true;
                     } else {
-                        map.put(player, player.getInventory().getContents());
+                        MessageUtil.sendMessage(player, "&4do /reg set");
                     }
-                    sendMessage(player, "&6Updated your regear inventory set");
-                    return;
-                } else {
-                    sendMessage(player, "&4do /reg set");
                 }
-            }
-            if (map.containsKey(player)) {
-                array = map.get(player);
+                if (map.containsKey(player)) {
+                    array = map.get(player);
+                } else {
+                    array = generateContents();
+                }
+                player.getInventory().setContents(array);
+                player.updateInventory();
+                if (player.isOp()) {
+                    player.teleport(new Location(Bukkit.getWorld("world_nether"), 0, 15, 0));
+                }
             } else {
-                array = generateContents();
+                player.sendMessage("You are not in range to use /reg");
             }
-            player.getInventory().setContents(array);
-            player.updateInventory();
-            if (player.isOp()) {
-                player.teleport(new Location(Bukkit.getWorld("world_nether"), 0, 15, 0));
-            }
-        } else {
-            player.sendMessage("You are not in range to use /reg");
         }
+        return true;
     }
 
     @Override
-    public String[] onTabComplete() {
-        return new String[]{"set" };
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return Collections.singletonList("set");
     }
 
     public boolean isInLocation(Player player) {
