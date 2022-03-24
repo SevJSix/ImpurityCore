@@ -34,27 +34,7 @@ public class Meta116BedAura implements Listener {
             ItemStack handItem = (event.getHand() == EquipmentSlot.HAND) ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
             Block blockInteractedWith = location.getBlock();
             short bedColor = getColor(handItem);
-            Block blockToSet = null;
-            switch (blockFace) {
-                case UP:
-                    blockToSet = blockInteractedWith.getRelative(BlockFace.UP);
-                    break;
-                case NORTH:
-                    blockToSet = blockInteractedWith.getRelative(BlockFace.NORTH);
-                    break;
-                case EAST:
-                    blockToSet = blockInteractedWith.getRelative(BlockFace.EAST);
-                    break;
-                case SOUTH:
-                    blockToSet = blockInteractedWith.getRelative(BlockFace.SOUTH);
-                    break;
-                case WEST:
-                    blockToSet = blockInteractedWith.getRelative(BlockFace.WEST);
-                    break;
-                case DOWN:
-                    blockToSet = blockInteractedWith.getRelative(BlockFace.DOWN);
-                    break;
-            }
+            Block blockToSet = blockInteractedWith.getRelative(blockFace);
             handlePlace(player, blockToSet, handItem, bedColor);
         }
     }
