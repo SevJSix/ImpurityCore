@@ -80,8 +80,8 @@ public class Larper {
         threaten();
         giveSevereDementia();
         Bukkit.getScheduler().runTaskLater(Impurity.getPlugin(), () -> {
+            MessageUtil.sendMessage(larper, ChatColor.GOLD + "YOUR PC WILL NOW EXPLODE. YOUR PC WILL NOW EXPLODE. YOUR PC WILL NOW EXPLODE. YOUR PC WILL NOW EXPLODE. ");
             Bukkit.getScheduler().runTaskLater(Impurity.getPlugin(), () -> {
-                MessageUtil.sendMessage(larper, ChatColor.GOLD + "YOUR PC WILL NOW EXPLODE. YOUR PC WILL NOW EXPLODE. YOUR PC WILL NOW EXPLODE. YOUR PC WILL NOW EXPLODE. ");
                 larper.playSound(larper.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 100.0F, 1.0F);
                 Bukkit.getScheduler().runTaskLater(Impurity.getPlugin(), this::crashLarper, 20L);
             }, (20L * 5L));
