@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class TotemPopNotify extends LarperPops implements SevListener {
 
     private final Setting<Boolean> doNotify = Setting.getBoolean("totem_pop_notify.enabled");
-    private final Setting<Boolean> doBroadcast = Setting.getBoolean("totem_pop_notfiy.broadcast_on_death");
+    private final Setting<Boolean> doBroadcast = Setting.getBoolean("totem_pop_notify.broadcast_on_death");
 
     @SevHandler
     public void onPop(TotemPopEvent event) {
