@@ -23,7 +23,7 @@ import java.util.logging.Level;
 
 public class SalC1Dupe implements Listener, Instance {
 
-    private final Setting<Boolean> enabled = Setting.getBoolean("dupe.piston_dupe");
+    private final Setting<Boolean> enabled = Setting.getBoolean("dupe.salc1_dupe");
     TimerUtil timer = new TimerUtil();
 
     @EventHandler
