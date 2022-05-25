@@ -5,6 +5,7 @@ import me.sevj6.event.bus.EventBus;
 import me.sevj6.event.bus.SevListener;
 import me.sevj6.listener.ListenerManager;
 import me.sevj6.listener.Manager;
+import me.sevj6.task.AutoRestart;
 import me.sevj6.task.scheduler.TaskManager;
 import me.sevj6.util.Utils;
 import me.sevj6.util.ViolationManager;
@@ -64,6 +65,7 @@ public final class Impurity extends JavaPlugin {
         Executors.newScheduledThreadPool(4).scheduleAtFixedRate(() -> violationManagers.forEach(ViolationManager::decrementAll), 0, 1, TimeUnit.SECONDS);
         initializeManagers();
         startTime = System.currentTimeMillis();
+        new AutoRestart();
     }
 
     public void initializeManagers() {

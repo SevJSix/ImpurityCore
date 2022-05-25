@@ -3,6 +3,7 @@ package me.sevj6.listener;
 import me.sevj6.Impurity;
 import me.sevj6.command.TabCompletion;
 import me.sevj6.event.ImpurityEventFactory;
+import me.sevj6.listener.dupe.EndPortalDonkeyDupe;
 import me.sevj6.listener.dupe.LavaDupe;
 import me.sevj6.listener.dupe.PistonDupe;
 import me.sevj6.listener.dupe.SalC1Dupe;
@@ -26,6 +27,7 @@ public class ListenerManager extends Manager {
     @Override
     public void init() {
         // Bukkit Listeners
+        plugin.registerListener(new EndPortalDonkeyDupe());
         plugin.registerListener(new Meta116BedAura());
         plugin.registerListener(new PlaytimeListeners(plugin));
         plugin.registerListener(new AntiSpam());
@@ -56,6 +58,7 @@ public class ListenerManager extends Manager {
         plugin.registerListener(new LavaDupe());
         plugin.registerListener(new PistonDupe());
         plugin.registerListener(new SalC1Dupe());
+        plugin.registerListener(new VampyLizardOwnerAbuseGrief());
 
         // Sev Listeners
         plugin.registerSevListener(new PacketLimit());

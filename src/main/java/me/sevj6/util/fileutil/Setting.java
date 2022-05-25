@@ -1,19 +1,16 @@
 package me.sevj6.util.fileutil;
 
+import lombok.AllArgsConstructor;
 import me.sevj6.Instance;
 import me.sevj6.listener.illegals.wrapper.IllegalWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor
 public class Setting<T> implements Instance {
-    private final T defaultValue;
-    private T value;
 
-    public Setting(T defaultValue) {
-        this.defaultValue = defaultValue;
-        this.value = defaultValue;
-    }
+    private T value;
 
     public static Setting<Integer> getInt(String key) {
         for (String settingsKey : settings.getKeys(true)) {
@@ -98,9 +95,5 @@ public class Setting<T> implements Instance {
 
     public void setValue(T value) {
         this.value = value;
-    }
-
-    public T getDefaultValue() {
-        return defaultValue;
     }
 }

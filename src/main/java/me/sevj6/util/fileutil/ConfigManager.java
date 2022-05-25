@@ -1,5 +1,6 @@
 package me.sevj6.util.fileutil;
 
+import lombok.Getter;
 import me.sevj6.Impurity;
 import me.sevj6.listener.Manager;
 
@@ -9,11 +10,17 @@ import java.util.List;
 
 public class ConfigManager extends Manager {
 
+    @Getter
     public static ConfigManager configManager;
+    @Getter
     private final List<Configuration> configs = new ArrayList<>();
+    @Getter
     private Configuration namecolor;
+    @Getter
     private Configuration settings;
+    @Getter
     private Configuration playtimes;
+    @Getter
     private Configuration totempops;
 
     public ConfigManager(Impurity plugin) {
@@ -28,26 +35,6 @@ public class ConfigManager extends Manager {
         totempops = new Configuration("data/totempops.yml", plugin, true);
         playtimes = new Configuration("data/playtimes.yml", plugin, true);
         configs.addAll(Arrays.asList(settings, namecolor, totempops, playtimes));
-    }
-
-    public Configuration getPlaytimes() {
-        return playtimes;
-    }
-
-    public Configuration getTotempops() {
-        return totempops;
-    }
-
-    public Configuration getSettings() {
-        return settings;
-    }
-
-    public List<Configuration> getConfigs() {
-        return configs;
-    }
-
-    public Configuration getNamecolor() {
-        return namecolor;
     }
 
 }

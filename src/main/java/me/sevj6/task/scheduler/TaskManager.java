@@ -2,7 +2,6 @@ package me.sevj6.task.scheduler;
 
 import me.sevj6.Impurity;
 import me.sevj6.listener.Manager;
-import me.sevj6.task.AutoRestart;
 import me.sevj6.task.EntityPerChunk;
 import me.sevj6.task.TabList;
 import org.bukkit.Bukkit;
@@ -24,7 +23,6 @@ public class TaskManager extends Manager {
     public void init() {
         registerTask(new TabList());
         registerTask(new EntityPerChunk());
-        registerTask(new AutoRestart());
         tasks.forEach((task, methods) -> {
             methods.forEach(m -> {
                 Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {

@@ -1,31 +1,27 @@
 package me.sevj6.task;
 
-import me.sevj6.Impurity;
 import me.sevj6.Instance;
-import me.sevj6.task.scheduler.ScheduledTask;
-import me.sevj6.task.scheduler.TaskForce;
 import me.sevj6.util.MessageUtil;
 import me.sevj6.util.TimerUtil;
 import me.sevj6.util.fileutil.Setting;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-public class AutoRestart implements TaskForce, Instance {
+public class AutoRestart implements Instance {
 
+    private final Setting<Boolean> enabled = Setting.getBoolean("auto_restart.enabled");
     TimerUtil time = new TimerUtil();
 
-    private final Setting<Long> timeTill = Setting.getLong("auto_restart.time_till_restart");
-    private final Setting<Boolean> enabled = Setting.getBoolean("auto_restart.enabled");
+    public AutoRestart() {
+        Bukkit.getScheduler().runTaskLater(plugin, this::restart, 864000L);
+    }
 
     private void broadCast(String msg) {
         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', MessageUtil.getPrefix() + msg));
     }
 
-    @ScheduledTask
     public void restart() {
         if (!enabled.getValue()) return;
-        long millis = (System.currentTimeMillis() - Impurity.startTime);
-        if (millis < timeTill.getValue()) return;
         Thread t = new Thread(() -> {
             broadCast("&eServer restarting in 1 minute...");
             time.delay(30000);

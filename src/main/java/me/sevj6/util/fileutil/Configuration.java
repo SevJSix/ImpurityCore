@@ -1,5 +1,6 @@
 package me.sevj6.util.fileutil;
 
+import lombok.Getter;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -15,10 +16,14 @@ import java.nio.file.Files;
  * modified by SevJ6
  */
 
+
 public class Configuration extends YamlConfiguration {
 
+    @Getter
     private final String resourceName;
+    @Getter
     private final Plugin plugin;
+    @Getter
     private final boolean dataFolder;
 
     public Configuration(String resourceName, Plugin plugin, boolean dataFolder) {
@@ -30,10 +35,6 @@ public class Configuration extends YamlConfiguration {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    public Plugin getPlugin() {
-        return plugin;
     }
 
     private void loadConfiguration() throws FileNotFoundException {

@@ -1,5 +1,6 @@
 package me.sevj6.command;
 
+import lombok.Getter;
 import me.sevj6.Impurity;
 import me.sevj6.command.commands.*;
 import me.sevj6.listener.Manager;
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class CommandManager extends Manager {
 
+    @Getter
     public static List<CommandExecutor> commands = new ArrayList<>();
 
     public CommandManager(Impurity plugin) {

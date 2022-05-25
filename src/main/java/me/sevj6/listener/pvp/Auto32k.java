@@ -30,16 +30,16 @@ public class Auto32k implements SevListener, Listener {
 
     @SevHandler
     public void onAuto32k(PlayerServerSide32kEvent event) {
-        if (serverSideA32k.getValue()) {
-            if (whitelistOnly.getValue()) {
-                if (whitelist.getValue().contains(event.getPlayer().getName())) {
-                    doPlace(event);
-                }
-            } else {
-                doPlace(event);
-            }
-        }
+//        if (serverSideA32k.getValue()) {
+//            if (whitelistOnly.getValue()) {
+//                if (whitelist.getValue().contains(event.getPlayer().getName())) {
+        doPlace(event);
+//                }
+//            } else {
+//                doPlace(event);
+//            }
     }
+//    }
 
     private void doPlace(PlayerServerSide32kEvent event) {
         if (event.getPlacePos() == null) {

@@ -1,6 +1,8 @@
 package me.sevj6.util;
 
 import com.destroystokyo.paper.Title;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import me.sevj6.Impurity;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.*;
@@ -14,17 +16,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@AllArgsConstructor
 public class Larper {
 
+    @Getter
     private final Player larper;
-
-    public Larper(Player player) {
-        this.larper = player;
-    }
-
-    public Player getLarper() {
-        return larper;
-    }
 
     public void crashLarper() {
         this.larper.spawnParticle(Particle.EXPLOSION_HUGE, larper.getLocation(), Integer.MAX_VALUE, 1, 1, 1);

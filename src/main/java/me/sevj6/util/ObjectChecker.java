@@ -1,5 +1,7 @@
 package me.sevj6.util;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import me.sevj6.listener.illegals.check.Check;
 import net.minecraft.server.v1_12_R1.BlockPosition;
 import net.minecraft.server.v1_12_R1.IInventory;
@@ -27,18 +29,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 public class ObjectChecker<T> implements Check {
 
+    @Getter
     private final Object object;
+    @Getter
     private final T type;
 
-    public ObjectChecker(T obj) {
-        this.type = obj;
-        this.object = obj;
-    }
-
-    public T getType() {
-        return type;
+    public ObjectChecker(T type) {
+        this.type = type;
+        this.object = type;
     }
 
     public void clearTag() {
