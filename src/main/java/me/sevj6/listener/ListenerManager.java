@@ -2,21 +2,13 @@ package me.sevj6.listener;
 
 import me.sevj6.Impurity;
 import me.sevj6.command.TabCompletion;
-import me.sevj6.event.ImpurityEventFactory;
-import me.sevj6.listener.dupe.EndPortalDonkeyDupe;
-import me.sevj6.listener.dupe.LavaDupe;
-import me.sevj6.listener.dupe.PistonDupe;
-import me.sevj6.listener.dupe.SalC1Dupe;
 import me.sevj6.listener.illegals.IllegalItemManager;
+import me.sevj6.listener.misc.CommandWhitelist;
 import me.sevj6.listener.misc.*;
-import me.sevj6.listener.packet.PacketLimit;
 import me.sevj6.listener.patches.*;
-import me.sevj6.listener.pvp.Auto32k;
-import me.sevj6.listener.pvp.CrystalAura;
 import me.sevj6.listener.pvp.Meta116BedAura;
-import me.sevj6.listener.pvp.TotemPopNotify;
 import me.sevj6.util.EntityUtil;
-import me.sevj6.util.Utils;
+import net.minecraft.server.v1_12_R1.*;
 
 public class ListenerManager extends Manager {
 
@@ -27,7 +19,6 @@ public class ListenerManager extends Manager {
     @Override
     public void init() {
         // Bukkit Listeners
-        plugin.registerListener(new EndPortalDonkeyDupe());
         plugin.registerListener(new Meta116BedAura());
         plugin.registerListener(new PlaytimeListeners(plugin));
         plugin.registerListener(new AntiSpam());
@@ -55,33 +46,14 @@ public class ListenerManager extends Manager {
         plugin.registerListener(new PlayerListener());
         plugin.registerListener(new RandomSpawn());
         plugin.registerListener(new WitherSkullRemover());
-        plugin.registerListener(new LavaDupe());
-        plugin.registerListener(new PistonDupe());
-        plugin.registerListener(new SalC1Dupe());
-        plugin.registerListener(new VampyLizardOwnerAbuseGrief());
-
-        // Sev Listeners
-        plugin.registerSevListener(new PacketLimit());
-        plugin.registerSevListener(new TotemPopStatistic());
-        plugin.registerSevListener(new NBTLimitBan());
-        plugin.registerSevListener(new NocomExploit());
-        plugin.registerSevListener(new CreativeSetSlotPacket());
-        plugin.registerSevListener(new PacketFlyPhase());
-        plugin.registerSevListener(new InvalidSlotClick());
-        plugin.registerSevListener(new TotemPopNotify());
-        plugin.registerSevListener(new CrystalAura());
-        plugin.registerSevListener(new TabCompletion());
-
-        // Register both as Sev Listener and Bukkit Listener
-        plugin.registerBoth(new ImpurityEventFactory());
-        plugin.registerBoth(new Auto32k());
-        plugin.registerBoth(new MovementExploits());
-        plugin.registerBoth(new SuperweaponExploits());
-        plugin.registerBoth(new BoatFly());
-
+        // Packet Listeners
+        plugin.registerPacketListener(new NocomExploit(), PacketPlayInBlockDig.class, PacketPlayOutBlockChange.class);
+        plugin.registerPacketListener(new InvalidSlotClick(), PacketPlayInWindowClick.class);
+        plugin.registerPacketListener(new TabCompletion(), PacketPlayInTabComplete.class, PacketPlayOutTabComplete.class);
+        plugin.registerPacketListener(new MovementExploits(), PacketPlayInTeleportAccept.class, PacketPlayInFlying.class);
+        plugin.registerPacketListener(new BoatFly(), PacketPlayInUseEntity.class);
         // Other initializers
         IllegalItemManager.init();
-        Utils.fixLightUpdateQueueing();
         EntityUtil.setupEntityMap();
     }
 }

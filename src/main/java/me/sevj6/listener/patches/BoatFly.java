@@ -1,10 +1,9 @@
 package me.sevj6.listener.patches;
 
-import me.sevj6.event.bus.SevHandler;
-import me.sevj6.event.bus.SevListener;
-import me.sevj6.event.events.PacketEvent;
 import me.sevj6.util.ViolationManager;
 import me.sevj6.util.fileutil.Setting;
+import me.txmc.protocolapi.PacketEvent;
+import me.txmc.protocolapi.PacketListener;
 import net.minecraft.server.v1_12_R1.Entity;
 import net.minecraft.server.v1_12_R1.EntityBoat;
 import net.minecraft.server.v1_12_R1.PacketPlayInUseEntity;
@@ -20,7 +19,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.ArrayList;
 
-public class BoatFly extends ViolationManager implements SevListener, Listener {
+public class BoatFly extends ViolationManager implements PacketListener, Listener {
 
     private final ArrayList<Player> players;
     private final Setting<Boolean> patchBoatfly = Setting.getBoolean("boatfly");
@@ -29,28 +28,6 @@ public class BoatFly extends ViolationManager implements SevListener, Listener {
     public BoatFly() {
         super(1, 5);
         this.players = new ArrayList<>();
-    }
-
-    // patch boatfly bypass
-    @SevHandler
-    public void onPacket(PacketEvent.ClientToServer event) {
-        if (patchBoatfly.getValue()) {
-            if (event.getPacket() instanceof PacketPlayInUseEntity) {
-                PacketPlayInUseEntity packet = (PacketPlayInUseEntity) event.getPacket();
-                Player player = event.getPlayer();
-                World world = ((CraftWorld) player.getWorld()).getHandle();
-                PacketPlayInUseEntity.EnumEntityUseAction action = packet.a();
-                Entity entity = packet.a(world);
-                if (entity == null) return;
-                if (entity instanceof EntityBoat && (action.equals(PacketPlayInUseEntity.EnumEntityUseAction.INTERACT_AT) || action.equals(PacketPlayInUseEntity.EnumEntityUseAction.INTERACT))) {
-                    increment(player.getUniqueId());
-                    if (getVLS(player.getUniqueId()) > 15) {
-                        event.setCancelled(true);
-                        entity.die();
-                    }
-                }
-            }
-        }
     }
 
     // patch regular boatfly
@@ -94,5 +71,31 @@ public class BoatFly extends ViolationManager implements SevListener, Listener {
                 }
             }
         }
+    }
+
+    @Override
+    public void incoming(PacketEvent.Incoming event) throws Throwable {
+        if (patchBoatfly.getValue()) {
+            if (event.getPacket() instanceof PacketPlayInUseEntity) {
+                PacketPlayInUseEntity packet = (PacketPlayInUseEntity) event.getPacket();
+                Player player = event.getPlayer();
+                World world = ((CraftWorld) player.getWorld()).getHandle();
+                PacketPlayInUseEntity.EnumEntityUseAction action = packet.a();
+                Entity entity = packet.a(world);
+                if (entity == null) return;
+                if (entity instanceof EntityBoat && (action.equals(PacketPlayInUseEntity.EnumEntityUseAction.INTERACT_AT) || action.equals(PacketPlayInUseEntity.EnumEntityUseAction.INTERACT))) {
+                    increment(player.getUniqueId());
+                    if (getVLS(player.getUniqueId()) > 15) {
+                        event.setCancelled(true);
+                        entity.die();
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void outgoing(PacketEvent.Outgoing outgoing) throws Throwable {
+
     }
 }

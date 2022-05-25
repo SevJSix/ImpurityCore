@@ -1,8 +1,7 @@
 package me.sevj6;
 
+import lombok.Getter;
 import me.sevj6.command.CommandManager;
-import me.sevj6.event.bus.EventBus;
-import me.sevj6.event.bus.SevListener;
 import me.sevj6.listener.ListenerManager;
 import me.sevj6.listener.Manager;
 import me.sevj6.task.AutoRestart;
@@ -11,11 +10,10 @@ import me.sevj6.util.Utils;
 import me.sevj6.util.ViolationManager;
 import me.sevj6.util.fileutil.ConfigManager;
 import me.sevj6.util.fileutil.Configuration;
-import me.txmc.rtmixin.CallbackInfo;
+import me.txmc.protocolapi.PacketEventDispatcher;
+import me.txmc.protocolapi.PacketListener;
 import me.txmc.rtmixin.RtMixin;
-import me.txmc.rtmixin.mixin.At;
-import me.txmc.rtmixin.mixin.Inject;
-import me.txmc.rtmixin.mixin.MethodInfo;
+import net.minecraft.server.v1_12_R1.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,10 +32,11 @@ import java.util.logging.Level;
 public final class Impurity extends JavaPlugin {
 
     public static long startTime;
-    public static EventBus EVENT_BUS = new EventBus();
     private final List<ViolationManager> violationManagers = new ArrayList<>();
-    private Instrumentation instrumentation;
     private final List<Manager> managers = new ArrayList<>();
+    private Instrumentation instrumentation;
+    @Getter
+    private PacketEventDispatcher dispatcher;
 
     public static Impurity getPlugin() {
         return getPlugin(Impurity.class);
@@ -56,34 +55,21 @@ public final class Impurity extends JavaPlugin {
         getServer().getPluginManager().registerEvents(listener, this);
     }
 
-    public void registerSevListener(SevListener sevListener) {
-        EVENT_BUS.subscribe(sevListener);
-    }
-
-    public void registerBoth(Object listener) {
-        getServer().getPluginManager().registerEvents((Listener) listener, this);
-        EVENT_BUS.subscribe((SevListener) listener);
+    @SafeVarargs
+    public final void registerPacketListener(PacketListener listener, Class<? extends Packet<?>>... classes) {
+        dispatcher.register(listener, classes);
     }
 
     @Override
     public void onLoad() {
         Instrumentation inst = RtMixin.attachAgent().orElseThrow(RuntimeException::new);
         instrumentation = inst;
-        RtMixin.processMixins(Impurity.class);
-    }
-
-    @Inject(info = @MethodInfo(_class = Impurity.class, name = "onEnable", rtype = void.class), at = @At(pos = At.Position.HEAD))
-    public static void testGayness(CallbackInfo ci) {
-        for (int i = 0; i < 20; i++) {
-            System.out.println("Sev is gay");
-        }
-        ci.cancel();
     }
 
     @Override
     public void onEnable() {
         if (!getDataFolder().exists()) getDataFolder().mkdirs();
-        if (Bukkit.getOnlinePlayers().size() > 0) Bukkit.getOnlinePlayers().forEach(Utils::inject);
+        dispatcher = new PacketEventDispatcher(this);
         Executors.newScheduledThreadPool(4).scheduleAtFixedRate(() -> violationManagers.forEach(ViolationManager::decrementAll), 0, 1, TimeUnit.SECONDS);
         initializeManagers();
         startTime = System.currentTimeMillis();
