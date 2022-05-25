@@ -1,6 +1,7 @@
+
+IntelliJ IDEA
 # User-specific stuff
 .idea/
-META-INF/
 
 *.iml
 *.ipr
@@ -8,6 +9,10 @@ META-INF/
 
 # IntelliJ
 out/
+
+#Gradle
+build/
+.gradle/
 
 # Compiled class file
 *.class

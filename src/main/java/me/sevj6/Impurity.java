@@ -11,10 +11,16 @@ import me.sevj6.util.Utils;
 import me.sevj6.util.ViolationManager;
 import me.sevj6.util.fileutil.ConfigManager;
 import me.sevj6.util.fileutil.Configuration;
+import me.txmc.rtmixin.CallbackInfo;
+import me.txmc.rtmixin.RtMixin;
+import me.txmc.rtmixin.mixin.At;
+import me.txmc.rtmixin.mixin.Inject;
+import me.txmc.rtmixin.mixin.MethodInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.instrument.Instrumentation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -30,6 +36,7 @@ public final class Impurity extends JavaPlugin {
     public static long startTime;
     public static EventBus EVENT_BUS = new EventBus();
     private final List<ViolationManager> violationManagers = new ArrayList<>();
+    private Instrumentation instrumentation;
     private final List<Manager> managers = new ArrayList<>();
 
     public static Impurity getPlugin() {
@@ -56,6 +63,21 @@ public final class Impurity extends JavaPlugin {
     public void registerBoth(Object listener) {
         getServer().getPluginManager().registerEvents((Listener) listener, this);
         EVENT_BUS.subscribe((SevListener) listener);
+    }
+
+    @Override
+    public void onLoad() {
+        Instrumentation inst = RtMixin.attachAgent().orElseThrow(RuntimeException::new);
+        instrumentation = inst;
+        RtMixin.processMixins(Impurity.class);
+    }
+
+    @Inject(info = @MethodInfo(_class = Impurity.class, name = "onEnable", rtype = void.class), at = @At(pos = At.Position.HEAD))
+    public static void testGayness(CallbackInfo ci) {
+        for (int i = 0; i < 20; i++) {
+            System.out.println("Sev is gay");
+        }
+        ci.cancel();
     }
 
     @Override
